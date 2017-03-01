@@ -3,10 +3,11 @@
 namespace App\Http\Controllers\Auth;
 
 
+use App\Exceptions\ValidationErrorException;
 use App\Http\Controllers\ParentController;
 use App\Http\Response;
 use App\Libs\Auth\Auth;
-use App\Repositories\UsersRepository;
+use Repositories\UsersRepository;
 use Models\User;
 use Requests\FbLoginRequest;
 use Requests\LoginRequest;
@@ -32,17 +33,19 @@ class AuthController extends ParentController
     public function fblogin(FbLoginRequest $request)
     {
         try{
-            $existingUser = $this->usersRep->findByEmail($request->user()->getEmail());
+            $existingUser = $this->usersRep->findByEmail($request->newUser()->getEmail());
             if($existingUser){
                 return $this->response->respond(['data'=>[
-                    'user'=>Auth::login($existingUser)
+                    'user'=>Auth::login($existingUser)->toJson()
                 ]]);
             }else{
-                $this->usersRep->store($request->user());
+                $this->usersRep->store($request->newUser());
                 return $this->response->respond(['data'=>[
-                    'user'=>$request->user()
+                    'user'=>$request->newUser()->toJson()
                 ]]);
             }
+        }catch (ValidationErrorException $e){
+            return $this->response->respondValidationFails([$e->getMessage()]);
         }catch (\Exception $e){
             return $this->response->respondInternalServerError([$e->getMessage()]);
         }

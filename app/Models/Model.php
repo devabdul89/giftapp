@@ -1,50 +1,48 @@
 <?php
+/**
+ * Created by PhpStorm.
+ * User: officeaccount
+ * Date: 01/03/2017
+ * Time: 12:58 PM
+ */
 
-namespace App\Models;
+namespace Models;
 
-use App\Traits\Authenticatable;
-use Illuminate\Database\Eloquent\Model as EloquentModel;
-use Migrations\Migration;
 
-abstract class Model extends EloquentModel
+abstract class Model
 {
 
     /**
-     * @return Migration
-     * */
-    public abstract function tableDefinition();
-    public function setRawAttributes(array $attributes, $sync = false)
+     * This function convert a model to a Json object
+     **/
+    public abstract function toJson();
+
+    /**
+     * Models are by default strict
+     * it means that they will validate them self when you assign values
+     * to there properties. if they feel anything wrong, they will
+     * throw an exception "ValidationErrorException" with the message
+     *
+     * user can set this property to false if he doesn't want to allow
+     * these models to validate data.
+     **/
+    private $strict = true;
+
+    /**
+     * @return mixed
+     */
+    public function strict()
     {
-        foreach($attributes as $key=>$value){
-            if(isset($this->$key)){
-                $this->$key = $value;
-            }
-        }
-        $this->attributes = $attributes;
-        if ($sync) {
-            $this->syncOriginal();
-        }
-        return $this;
+        return $this->strict;
     }
 
-    public function save(array $options = [])
+    /**
+     * @param mixed $strict
+     */
+    public function setStrict($strict)
     {
-        foreach($this->fields() as $field){
-            if($field != 'id'){
-                $this->attributes[$field] = $this->$field;
-            }
-        }
-        parent::save();
-        foreach($this->attributes as $key=>$value){
-            if(isset($this->$key)){
-                $this->$key = $value;
-            }
-        }
-        return true;
+        $this->strict = $strict;
     }
 
-    public function fields()
-    {
-        return $this->tableDefinition()->fields();
-    }
+
 }

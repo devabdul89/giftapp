@@ -6,8 +6,9 @@
  * Time: 10:13 AM
  */
 
-namespace App\Repositories;
+namespace Repositories;
 
+use App\Exceptions\ValidationErrorException;
 use LaraModels\User as DbUser;
 use Models\User;
 
@@ -18,9 +19,11 @@ class UsersRepository extends Repository
         $this->setModel(new DbUser());
     }
 
+
     /**
      * @param User $user
-     * @return User
+     * @return mixed
+     * @throws ValidationErrorException
      */
     public function store($user)
     {

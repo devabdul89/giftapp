@@ -8,7 +8,7 @@
 
 namespace App\Libs\Auth;
 
-use App\Repositories\UsersRepository;
+use Repositories\UsersRepository;
 use Models\User;
 use Illuminate\Support\Facades\Hash;
 class Auth
@@ -27,7 +27,7 @@ class Auth
             return false;
         }
 
-        if(!Hash::check($credentials['password'], $user->password))
+        if(!Hash::check($credentials['password'], $user->getPassword()))
             return false;
 
         return true;
@@ -38,7 +38,7 @@ class Auth
      * @return User
      */
     public static function login(User $authenticatedUser){
-        $authenticatedUser->setSessionToken(bcrypt($authenticatedUser->id));
+        $authenticatedUser->setSessionToken(bcrypt($authenticatedUser->getId()));
         (new UsersRepository())->updateSessionToken($authenticatedUser);
         return $authenticatedUser;
     }

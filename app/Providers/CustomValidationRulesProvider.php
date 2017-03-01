@@ -3,7 +3,7 @@
 namespace App\Providers;
 
 use App\Libs\Auth\Auth;
-use App\Repositories\UsersRepository;
+use Repositories\UsersRepository;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\ServiceProvider;
 

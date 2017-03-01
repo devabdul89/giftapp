@@ -6,7 +6,7 @@
  * Time: 10:13 AM
  */
 
-namespace App\Repositories;
+namespace Repositories;
 
 
 use App\Models\Model;
@@ -32,7 +32,7 @@ class Repository
     }
 
     /**
-     * @param Model $model
+     * @param $model
      * @return mixed
      */
     public function store($model)

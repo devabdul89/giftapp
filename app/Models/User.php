@@ -9,35 +9,45 @@
 namespace Models;
 
 
-class User
+use App\Exceptions\ValidationErrorException;
+
+class User extends Model
 {
 
-    public $id = '';
-    public $fullName = '';
-    public $email = '';
-    public $sessionToken = '';
-    public $password = '';
-    public $profilePicture = '';
-    public $walkthroughCompleted = 0;
-    public $loginBy = '';
-    public $passwordCreated = 0;
-    public $fbId = '';
-    public function __construct(
-        $id = '',
-        $fullName = '', $email = '', $profilePicture = '', $password = '', $sessionToken = '',
-        $walkthroughCompleted = '', $loginBy = '', $passwordCreated='', $fbId = ''
-    )
+    private $id = '';
+    private $fullName = '';
+    private $email = '';
+    private $sessionToken = '';
+    private $password = '';
+    private $profilePicture = '';
+    private $walkthroughCompleted = 0;
+    private $loginBy = '';
+    private $passwordCreated = 0;
+    private $fbId = '';
+
+    public function __construct()
     {
-        $this->setId($id);
-        $this->setFullName($fullName);
-        $this->setEmail($email);
-        $this->setProfilePicture($profilePicture);
-        $this->setPassword($password);
-        $this->setSessionToken($sessionToken);
-        $this->setWalkthroughCompleted($walkthroughCompleted);
-        $this->setLoginBy($loginBy);
-        $this->setPasswordCreated($passwordCreated);
-        $this->setFbId($fbId);
+
+    }
+
+    /**
+     * @return object
+     */
+    public function toJson()
+    {
+        return (object)[
+            'id'=>$this->getId(),
+            'fullName'=>$this->getFullName(),
+            'email' => $this->getEmail(),
+            'password'=>$this->getPassword(),
+            'sessionToken' => $this->getSessionToken(),
+            'profilePicture' =>$this->getProfilePicture(),
+            'walkthroughCompleted' => $this->getWalkthroughCompleted(),
+            'loginBy' => $this->getLoginBy(),
+            'passwordCreated' => $this->getPasswordCreated(),
+            'fbId' => $this->getFbId()
+        ];
+        // TODO: Implement toJson() method.
     }
 
     /**
@@ -50,9 +60,14 @@ class User
 
     /**
      * @param string $id
+     * @throws ValidationErrorException
      */
     public function setId($id)
     {
+        if($this->strict()){
+            if($id == '')
+                throw new ValidationErrorException('Usersl\'s Id cannot b empty');
+        }
         $this->id = intval($id);
     }
 
@@ -85,9 +100,15 @@ class User
 
     /**
      * @param string $fullName
+     * @throws ValidationErrorException
      */
-    public function setFullName($fullName)
+    public function setFullName($fullName, $strict = true)
     {
+        if($this->strict()){
+            if($fullName == ''){
+                throw new ValidationErrorException('users\'s full name cannot be empty');
+            }
+        }
         $this->fullName = $fullName;
     }
 
@@ -101,9 +122,18 @@ class User
 
     /**
      * @param string $email
+     * @throws ValidationErrorException
      */
     public function setEmail($email)
     {
+        if($this->strict()){
+            if(!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+                throw new ValidationErrorException('Email is not valid');
+            }
+            if($email == ''){
+                throw new ValidationErrorException('Email is required');
+            }
+        }
         $this->email = $email;
     }
 
@@ -202,6 +232,4 @@ class User
     {
         $this->passwordCreated = intval($passwordCreated);
     }
-
-
 }

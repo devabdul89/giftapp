@@ -31,10 +31,13 @@ class FbLoginRequest extends Request
     {
         return [
             //TODO: apply rules here.
+            'fb_id'=>'required',
+            'email'=>'required|email',
+            'full_name'=>'required|max:100'
         ];
     }
 
-    public function user(){
+    public function newUser(){
         $user = new User();
         $user->setFbId($this->input('fb_id'));
         $user->setEmail($this->input('email'));
