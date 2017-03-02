@@ -41,7 +41,7 @@ class AuthController extends ParentController
             }else{
                 $this->usersRep->store($request->newUser());
                 return $this->response->respond(['data'=>[
-                    'user'=>$request->newUser()->toJson()
+                    'user'=>Auth::login($request->newUser())->toJson()
                 ]]);
             }
         }catch (ValidationErrorException $e){
@@ -53,8 +53,22 @@ class AuthController extends ParentController
 
     public function login(LoginRequest $request)
     {
-        return $this->response->respond(['data'=>[
-            'user' => new User()
-        ]]);
+        try{
+            if(Auth::attempt(['email'=>$request->input('email'), 'password'=>$request->input('password')])){
+                $loggedInUser = Auth::login($this->usersRep->findByEmail($request->input('email')));
+                return $this->response->respond([
+                    'data'=>[
+                        'user'=>$loggedInUser->toJson()
+                    ],
+                    'access_token'=>$loggedInUser->getSessionToken()
+                ]);
+            }else{
+                return $this->response->respondInvalidCredentials();
+            }
+        }catch (ValidationErrorException $e){
+            return $this->response->respondValidationFails([$e->getMessage()]);
+        }catch (\Exception $e){
+            return $this->response->respondInternalServerError([$e->getMessage()]);
+        }
     }
 }

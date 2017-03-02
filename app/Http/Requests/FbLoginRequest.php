@@ -12,6 +12,7 @@ class FbLoginRequest extends Request
         parent::__construct();
         $this->authenticatable = false;
     }
+
     /**
      * Determine if the user is authorized to make this request.
      *
@@ -32,7 +33,6 @@ class FbLoginRequest extends Request
         return [
             //TODO: apply rules here.
             'fb_id'=>'required',
-            'email'=>'required|email',
             'full_name'=>'required|max:100'
         ];
     }

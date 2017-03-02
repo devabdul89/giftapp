@@ -2,8 +2,6 @@
 
 namespace Requests;
 
-use Requests\Request;
-
 class LoginRequest extends Request
 {
 
@@ -29,7 +27,8 @@ class LoginRequest extends Request
     public function rules()
     {
         return [
-            //
+            'email' => 'required|email|exists:users,email',
+            'password' => 'required'
         ];
     }
 }

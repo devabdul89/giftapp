@@ -61,6 +61,7 @@ class User extends Model
     /**
      * @param string $id
      * @throws ValidationErrorException
+     * @return $this
      */
     public function setId($id)
     {
@@ -69,6 +70,7 @@ class User extends Model
                 throw new ValidationErrorException('Usersl\'s Id cannot b empty');
         }
         $this->id = intval($id);
+        return $this;
     }
 
 
@@ -83,10 +85,12 @@ class User extends Model
 
     /**
      * @param string $fbId
+     * @return $this
      */
     public function setFbId($fbId)
     {
         $this->fbId = $fbId;
+        return $this;
     }
 
 
@@ -127,11 +131,11 @@ class User extends Model
     public function setEmail($email)
     {
         if($this->strict()){
-            if(!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-                throw new ValidationErrorException('Email is not valid');
-            }
             if($email == ''){
                 throw new ValidationErrorException('Email is required');
+            }
+            if(!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+                throw new ValidationErrorException('Email is not valid');
             }
         }
         $this->email = $email;

@@ -44,10 +44,19 @@ class UsersRepository extends Repository
 
     /**
      * @param $email
-     * @return User
+     * @return User|null
      */
     public function findByEmail($email){
         $user = $this->getModel()->where('email',$email)->first();
+        return ($user != null)?$this->mapUser($user):$user;
+    }
+
+    /**
+     * @param $session_token
+     * @return User|null
+     */
+    public function findByToken($session_token){
+        $user = $this->getModel()->where('session_token',$session_token)->first();
         return ($user != null)?$this->mapUser($user):$user;
     }
 
@@ -69,7 +78,9 @@ class UsersRepository extends Repository
         $transformedUser->setProfilePicture($user->profile_picture);
         $transformedUser->setLoginBy($user->login_by);
         $transformedUser->setPasswordCreated($user->password_created);
+        $transformedUser->setPassword($user->password);
         $transformedUser->setWalkthroughCompleted($user->walkthrough_completed);
+        $transformedUser->setSessionToken($user->session_token);
         return $transformedUser;
     }
 
