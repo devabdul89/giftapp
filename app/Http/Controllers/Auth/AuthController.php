@@ -11,6 +11,7 @@ use Repositories\UsersRepository;
 use Models\User;
 use Requests\FbLoginRequest;
 use Requests\LoginRequest;
+use Requests\RegisterRequest;
 
 class AuthController extends ParentController
 {
@@ -49,6 +50,31 @@ class AuthController extends ParentController
         }catch (\Exception $e){
             return $this->response->respondInternalServerError([$e->getMessage()]);
         }
+    }
+
+    public function register(RegisterRequest $request)
+    {
+        try{
+            $user = $request->newUser();
+            if($request->file('profile_picture') != null){
+                $user->setProfilePicture($this->saveProfilePicture($request->file('profile_picture')));
+            }
+            $user = $this->usersRep->store($user);
+            return $this->response->respond(['data'=>[
+                'user' => $user->toJson()
+            ]]);
+        }catch(ValidationErrorException $ve){
+            return $this->response->respondValidationFails([$ve->getMessage()]);
+        }catch (\Exception $e){
+            return $this->response->respondInternalServerError($e->getMessage());
+        }
+    }
+
+    private function saveProfilePicture($image, $path = 'images/profile_pictures/'){
+        $public_path = '/images/profile_pictures/';
+        $filename = uniqid().$image->getClientOriginalName();
+        $image->move(public_path($public_path), $filename);
+        return env('APP_URL').'public'.$public_path.$filename;
     }
 
     public function login(LoginRequest $request)

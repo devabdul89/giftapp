@@ -14,4 +14,5 @@ use Illuminate\Http\Request;
 */
 
 Route::post('/auth/fblogin', 'Auth\AuthController@fblogin')->middleware('requestHandler:FbLoginRequest');
+Route::post('/auth/register', 'Auth\AuthController@register')->middleware('requestHandler:RegisterRequest');
 Route::post('/auth/login', 'Auth\AuthController@login')->middleware('requestHandler:LoginRequest');

@@ -41,7 +41,7 @@ class User extends Model
             'email' => $this->getEmail(),
             'password'=>$this->getPassword(),
             'sessionToken' => $this->getSessionToken(),
-            'profilePicture' =>$this->getProfilePicture(),
+            'profilePicture' => $this->getProfilePicture(),
             'walkthroughCompleted' => $this->getWalkthroughCompleted(),
             'loginBy' => $this->getLoginBy(),
             'passwordCreated' => $this->getPasswordCreated(),
@@ -105,6 +105,7 @@ class User extends Model
     /**
      * @param string $fullName
      * @throws ValidationErrorException
+     * @return $this
      */
     public function setFullName($fullName, $strict = true)
     {
@@ -114,6 +115,7 @@ class User extends Model
             }
         }
         $this->fullName = $fullName;
+        return $this;
     }
 
     /**
@@ -127,6 +129,7 @@ class User extends Model
     /**
      * @param string $email
      * @throws ValidationErrorException
+     * @return $this
      */
     public function setEmail($email)
     {
@@ -139,6 +142,7 @@ class User extends Model
             }
         }
         $this->email = $email;
+        return $this;
     }
 
     /**
@@ -151,10 +155,12 @@ class User extends Model
 
     /**
      * @param string $sessionToken
+     * @return $this;
      */
     public function setSessionToken($sessionToken)
     {
         $this->sessionToken = $sessionToken;
+        return $this;
     }
 
     /**
@@ -167,10 +173,12 @@ class User extends Model
 
     /**
      * @param string $password
+     * @return $this;
      */
     public function setPassword($password)
     {
-        $this->password = $password;
+        $this->password = bcrypt($password);
+        return $this;
     }
 
     /**
@@ -183,10 +191,12 @@ class User extends Model
 
     /**
      * @param string $profilePicture
+     * @return $this;
      */
     public function setProfilePicture($profilePicture)
     {
         $this->profilePicture = $profilePicture;
+        return $this;
     }
 
     /**
@@ -199,10 +209,12 @@ class User extends Model
 
     /**
      * @param string $walkthroughCompleted
+     * @return $this
      */
     public function setWalkthroughCompleted($walkthroughCompleted)
     {
         $this->walkthroughCompleted = intval($walkthroughCompleted);
+        return $this;
     }
 
     /**
@@ -215,10 +227,12 @@ class User extends Model
 
     /**
      * @param string $loginBy
+     * @return $this
      */
     public function setLoginBy($loginBy)
     {
         $this->loginBy = $loginBy;
+        return $this;
     }
 
     /**
@@ -231,9 +245,11 @@ class User extends Model
 
     /**
      * @param string $passwordCreated
+     * @return $this;
      */
     public function setPasswordCreated($passwordCreated)
     {
         $this->passwordCreated = intval($passwordCreated);
+        return $this;
     }
 }
