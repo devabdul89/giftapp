@@ -24,6 +24,11 @@ class User extends Model
     private $loginBy = '';
     private $passwordCreated = 0;
     private $fbId = '';
+    private $birthday = '';
+    private $deviceId = '';
+    private $deviceType = '';
+    private $imageSetted = false;
+    private $address = '';
 
     public function __construct()
     {
@@ -45,10 +50,106 @@ class User extends Model
             'walkthroughCompleted' => $this->getWalkthroughCompleted(),
             'loginBy' => $this->getLoginBy(),
             'passwordCreated' => $this->getPasswordCreated(),
-            'fbId' => $this->getFbId()
+            'fbId' => $this->getFbId(),
+            'birthday' => $this->getBirthday(),
+            'deviceId' => $this->getDeviceId(),
+            'deviceType' => $this->getDeviceType(),
+            'imageSetted' => $this->getImageSetted(),
+            'address' => $this->getAddress()
         ];
         // TODO: Implement toJson() method.
     }
+
+    /**
+     * @return string
+     */
+    public function getBirthday()
+    {
+        return $this->birthday;
+    }
+
+    /**
+     * @param string $birthday
+     * @return $this
+     */
+    public function setBirthday($birthday)
+    {
+        $this->birthday = ($birthday == null)?"":$birthday;
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getDeviceId()
+    {
+        return $this->deviceId;
+    }
+
+    /**
+     * @param string $deviceId
+     * @return $this
+     */
+    public function setDeviceId($deviceId)
+    {
+        $this->deviceId = ($deviceId == null)?"":$deviceId;
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getDeviceType()
+    {
+        return $this->deviceType;
+    }
+
+    /**
+     * @param string $deviceType
+     * @return $this
+     */
+    public function setDeviceType($deviceType)
+    {
+        $this->deviceType = ($deviceType == null)?"":$deviceType;
+        return $this;
+    }
+
+    /**
+     * @return boolean
+     */
+    public function getImageSetted()
+    {
+        return $this->imageSetted;
+    }
+
+    /**
+     * @param string $imageSetted
+     * @return $this
+     */
+    public function setImageSetted($imageSetted)
+    {
+        $this->imageSetted = ($imageSetted == null)?"":$imageSetted;
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getAddress()
+    {
+        return $this->address;
+    }
+
+    /**
+     * @param string $address
+     * @return $this;
+     */
+    public function setAddress($address)
+    {
+        $this->address = ($address == null)?"":$address;
+        return $this;
+    }
+
 
     /**
      * @return string

@@ -22,7 +22,7 @@ class UsersRepository extends Repository
 
     /**
      * @param User $user
-     * @return mixed
+     * @return User $user
      * @throws ValidationErrorException
      */
     public function store($user)
@@ -81,6 +81,16 @@ class UsersRepository extends Repository
         $transformedUser->setPassword($user->password);
         $transformedUser->setWalkthroughCompleted($user->walkthrough_completed);
         $transformedUser->setSessionToken($user->session_token);
+        $transformedUser->setBirthday($user->birthday);
+        $transformedUser->setDeviceId($user->device_id);
+        $transformedUser->setDeviceType($user->device_type);
+        $transformedUser->setAddress($user->address);
+        $transformedUser->setImageSetted($user->image_setted);
+
+        // appending host name for profile picture
+        $transformedUser->setProfilePicture(
+            (!$transformedUser->getImageSetted())?env('APP_URL').$transformedUser->getProfilePicture():
+                $transformedUser->getProfilePicture());
         return $transformedUser;
     }
 

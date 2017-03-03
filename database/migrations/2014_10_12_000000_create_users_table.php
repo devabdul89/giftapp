@@ -24,6 +24,11 @@ class CreateUsersTable extends Migration
             $table->string('session_token')->nullable();
             $table->boolean('walkthrough_completed')->default(0);
             $table->string('login_by')->default('facebook');
+            $table->boolean('image_setted')->default(0);
+            $table->string('address')->nullable();
+            $table->date('birthday')->nullable();
+            $table->string('device_id')->nullable();
+            $table->string('device_type')->nullable();
             $table->rememberToken();
             $table->timestamps();
         });

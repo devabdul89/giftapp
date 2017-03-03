@@ -58,8 +58,14 @@ class AuthController extends ParentController
             $user = $request->newUser();
             if($request->file('profile_picture') != null){
                 $user->setProfilePicture($this->saveProfilePicture($request->file('profile_picture')));
+                $user->setImageSetted(true);
             }
             $user = $this->usersRep->store($user);
+
+            //setting profile picture with base path
+            if($user->getImageSetted()){
+                $user->setProfilePicture(env('APP_URL').$user->getProfilePicture());
+            }
             return $this->response->respond(['data'=>[
                 'user' => $user->toJson()
             ]]);
@@ -71,10 +77,9 @@ class AuthController extends ParentController
     }
 
     private function saveProfilePicture($image, $path = 'images/profile_pictures/'){
-        $public_path = '/images/profile_pictures/';
         $filename = uniqid().$image->getClientOriginalName();
-        $image->move(public_path($public_path), $filename);
-        return env('APP_URL').'public'.$public_path.$filename;
+        $image->move(public_path($path), $filename);
+        return "public/".$path.$filename;
     }
 
     public function login(LoginRequest $request)

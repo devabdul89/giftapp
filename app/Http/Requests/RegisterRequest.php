@@ -3,7 +3,6 @@
 namespace Requests;
 
 use Models\User;
-use Requests\Request;
 
 class RegisterRequest extends Request
 {
@@ -35,7 +34,9 @@ class RegisterRequest extends Request
             'full_name'=>'required|max:100',
             'email'=>'required|unique:users',
             'password' =>'String|required|max:15|min:6',
-            'profile_picture'=>'image'
+            'profile_picture'=>'image',
+            'device_type' => 'String|max:100',
+            'device_id' => 'String|max:100'
         ];
     }
 
@@ -44,6 +45,9 @@ class RegisterRequest extends Request
         $user->setPassword(bcrypt($this->input('password')));
         $user->setEmail($this->input('email'));
         $user->setFullName($this->input('full_name'));
+        $user->setDeviceId($this->input('device_id'));
+        $user->setDeviceType($this->input('device_type'));
+        $user->setAddress($this->input('address'));
         return $user;
     }
 }

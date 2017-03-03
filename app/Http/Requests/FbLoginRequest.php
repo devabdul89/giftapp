@@ -34,7 +34,10 @@ class FbLoginRequest extends Request
             //TODO: apply rules here.
             'fb_id'=>'required',
             'full_name'=>'required|max:100',
-            'profile_picture' => 'String'
+            'profile_picture' => 'String',
+            'address' => 'max:200',
+            'device_type' => 'String|max:100',
+            'device_id' => 'String|max:100'
         ];
     }
 
@@ -44,6 +47,9 @@ class FbLoginRequest extends Request
         $user->setEmail($this->input('email'));
         $user->setProfilePicture($this->input('profile_picture'));
         $user->setFullName($this->input('full_name'));
+        $user->setDeviceId($this->input('device_id'));
+        $user->setDeviceType($this->input('device_type'));
+        $user->setAddress($this->input('address'));
         return $user;
     }
 }
