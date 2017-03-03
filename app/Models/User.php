@@ -177,7 +177,7 @@ class User extends Model
      */
     public function setPassword($password)
     {
-        $this->password = bcrypt($password);
+        $this->password = $password;
         return $this;
     }
 
@@ -195,7 +195,7 @@ class User extends Model
      */
     public function setProfilePicture($profilePicture)
     {
-        $this->profilePicture = $profilePicture;
+        $this->profilePicture = ($profilePicture == null)?'':$profilePicture;
         return $this;
     }
 

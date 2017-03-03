@@ -41,7 +41,7 @@ class RegisterRequest extends Request
 
     public function newUser(){
         $user = new User();
-        $user->setPassword($this->input('password'));
+        $user->setPassword(bcrypt($this->input('password')));
         $user->setEmail($this->input('email'));
         $user->setFullName($this->input('full_name'));
         return $user;
