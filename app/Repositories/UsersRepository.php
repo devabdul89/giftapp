@@ -37,6 +37,26 @@ class UsersRepository extends Repository
         return $user;
     }
 
+    public function update(User $user){
+        $this->getModel()->where('id',$user->getId())->update([
+            'full_name'=>$user->getFullName(),
+            'email' => $user->getEmail(),
+            'password'=>$user->getPassword(),
+            'session_token' => $user->getSessionToken(),
+            'profile_picture' => $user->getProfilePicture(),
+            'walkthrough_completed' => $user->getWalkthroughCompleted(),
+            'login_by' => $user->getLoginBy(),
+            'password_created' => $user->getPasswordCreated(),
+            'fb_id' => $user->getFbId(),
+            'birthday' => $user->getBirthday(),
+            'device_id' => $user->getDeviceId(),
+            'device_type' => $user->getDeviceType(),
+            'image_setted' => $user->getImageSetted(),
+            'address' => $user->getAddress()
+        ]);
+        return $user;
+    }
+
     public function updateSessionToken(User $user){
         $this->updateWhere(['id'=>$user->getId()], ['session_token'=>$user->getSessionToken()]);
         return $user;

@@ -11,4 +11,6 @@
 |
 */
 
-Route::get('/', 'UsersController@foo')->middleware('requestHandler:FooRequest');
+Route::get('/', function (){
+    return 'Welcome to gift app';
+});

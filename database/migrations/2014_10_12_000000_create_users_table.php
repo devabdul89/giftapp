@@ -29,6 +29,11 @@ class CreateUsersTable extends Migration
             $table->date('birthday')->nullable();
             $table->string('device_id')->nullable();
             $table->string('device_type')->nullable();
+            //Billing information
+            $table->string('stripe_id')->nullable();
+            $table->string('card_brand')->nullable();
+            $table->string('card_last_four')->nullable();
+            $table->timestamp('trial_ends_at')->nullable();
             $table->rememberToken();
             $table->timestamps();
         });
