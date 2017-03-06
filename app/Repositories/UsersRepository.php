@@ -108,9 +108,11 @@ class UsersRepository extends Repository
         $transformedUser->setImageSetted($user->image_setted);
 
         // appending host name for profile picture
-        $transformedUser->setProfilePicture(
-            (!$transformedUser->getImageSetted())?env('APP_URL').$transformedUser->getProfilePicture():
-                $transformedUser->getProfilePicture());
+        if($transformedUser->getProfilePicture() != '' && $transformedUser->getProfilePicture() != null){
+            $transformedUser->setProfilePicture(
+                (!$transformedUser->getImageSetted())?env('APP_URL').$transformedUser->getProfilePicture():
+                    $transformedUser->getProfilePicture());
+        }
         return $transformedUser;
     }
 
