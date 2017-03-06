@@ -66,9 +66,12 @@ class AuthController extends ParentController
             if($user->getImageSetted()){
                 $user->setProfilePicture(env('APP_URL').$user->getProfilePicture());
             }
-            return $this->response->respond(['data'=>[
-                'user' => $user->toJson()
-            ]]);
+            return $this->response->respond([
+                'data'=>[
+                    'user' => $user->toJson()
+                ],
+                'access_token' => $user->getSessionToken()
+            ]);
         }catch(ValidationErrorException $ve){
             return $this->response->respondValidationFails([$ve->getMessage()]);
         }catch (\Exception $e){
