@@ -34,7 +34,7 @@ class UsersRepository extends Repository
         $dbUser->full_name = $user->getFullName();
         $dbUser->profile_picture = $user->getProfilePicture();
         $dbUser->save();
-        return $user;
+        return $this->mapUser($dbUser);
     }
 
     public function update(User $user){

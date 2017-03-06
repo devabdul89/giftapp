@@ -60,7 +60,7 @@ class AuthController extends ParentController
                 $user->setProfilePicture($this->saveProfilePicture($request->file('profile_picture')));
                 $user->setImageSetted(true);
             }
-            $user = $this->usersRep->store($user);
+            $user = Auth::login($this->usersRep->store($user));
 
             //setting profile picture with base path
             if($user->getImageSetted()){
