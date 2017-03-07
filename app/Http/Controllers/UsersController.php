@@ -2,15 +2,17 @@
 
 namespace App\Http\Controllers;
 
+use App\Exceptions\ValidationErrorException;
 use App\Http\Response;
-use App\Traits\Transformers\UsersControllerTransformer;
 use Repositories\UsersRepository;
 use Requests\UpdateProfilePictureRequest;
 use Requests\UpdateProfileRequest;
+use Requests\UpdateWalkthroughStatusRequest;
+use Traits\ImageHelper;
 
 class UsersController extends ParentController
 {
-    use UsersControllerTransformer;
+    use ImageHelper;
 
     public $usersRepo = null;
     public $response = null;
@@ -37,9 +39,19 @@ class UsersController extends ParentController
         ]]);
     }
 
-    private function saveProfilePicture($image, $path = 'images/profile_pictures/'){
-        $filename = uniqid().$image->getClientOriginalName();
-        $image->move(public_path($path), $filename);
-        return "public/".$path.$filename;
+    public function updateWalkthroughStatus(UpdateWalkthroughStatusRequest $request)
+    {
+        try{
+            $user = clone($request->user());
+            return $this->response->respond(['data'=>[
+                'user' => $this->usersRepo->update($user->setWalkthroughCompleted($request->input('status')))->toJson()
+            ]]);
+        }catch (ValidationErrorException $ve){
+            return $this->response->respondValidationFails([$ve->getMessage()]);
+        }catch (\Exception $e){
+            return $this->response->respondInternalServerError([$e->getMessage()]);
+        }
+
     }
+
 }

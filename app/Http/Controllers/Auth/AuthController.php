@@ -8,14 +8,15 @@ use App\Http\Controllers\ParentController;
 use App\Http\Response;
 use App\Libs\Auth\Auth;
 use Repositories\UsersRepository;
-use Models\User;
 use Requests\FbLoginRequest;
 use Requests\LoginRequest;
+use Requests\LogoutRequest;
 use Requests\RegisterRequest;
+use Traits\ImageHelper;
 
 class AuthController extends ParentController
 {
-
+    use ImageHelper;
     /**
      * @var UsersRepository|null
      */
@@ -79,12 +80,6 @@ class AuthController extends ParentController
         }
     }
 
-    private function saveProfilePicture($image, $path = 'images/profile_pictures/'){
-        $filename = uniqid().$image->getClientOriginalName();
-        $image->move(public_path($path), $filename);
-        return "public/".$path.$filename;
-    }
-
     public function login(LoginRequest $request)
     {
         try{
@@ -99,6 +94,18 @@ class AuthController extends ParentController
             }else{
                 return $this->response->respondInvalidCredentials();
             }
+        }catch (ValidationErrorException $e){
+            return $this->response->respondValidationFails([$e->getMessage()]);
+        }catch (\Exception $e){
+            return $this->response->respondInternalServerError([$e->getMessage()]);
+        }
+    }
+
+    public function logout(LogoutRequest $request){
+        try{
+            return $this->response->respond(['data'=>[
+                'user' => $this->usersRep->update($request->user()->setSessionToken(null))->toJson()
+            ]]);
         }catch (ValidationErrorException $e){
             return $this->response->respondValidationFails([$e->getMessage()]);
         }catch (\Exception $e){

@@ -25,7 +25,8 @@
             "LaraModels\\":"app/Db/LaraModels",
             "Models\\":"app/Models",
             "Stubs\\":"app/Stubs",
-            "Repositories\\":"app/Repositories"
+            "Repositories\\":"app/Repositories",
+            "Traits\\":"app/Traits"
         }
     },
     "autoload-dev": {
