@@ -39,9 +39,10 @@ class BillingController extends ParentController
     public function addBillingCard(AddBillingCardRequest $request)
     {
         try{
-            $this->billingRepo->storeCardInformation($request->user->getId(), $request->card());
             return $this->response->respond([
-                'data'=>$request->user()->toJson()
+                'data'=>[
+                    'card'=>$this->billingRepo->storeCardInformation($request->user->getId(), $request->card())
+                ]
             ]);
         }catch (ValidationErrorException $e){
             return $this->response->respondValidationFails([$e->getMessage()]);
