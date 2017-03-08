@@ -61,7 +61,6 @@ class AuthController extends ParentController
             }
             $user = Auth::login($this->usersRep->store($user));
 
-            //setting profile picture with base path
             if($user->getImageSetted()){
                 $user->setProfilePicture(env('APP_URL').$user->getProfilePicture());
             }
@@ -81,7 +80,7 @@ class AuthController extends ParentController
     public function login(LoginRequest $request)
     {
         try{
-            if(Auth::attempt(['email'=>$request->input('email'), 'password'=>$request->input('password')])){
+            if(Auth::attempt(['email'=>$request->input('email'), 'password'=> $request->input('password')])){
                 $loggedInUser = Auth::login($this->usersRep->findByEmail($request->input('email')));
                 return $this->response->respond([
                     'data'=>[
@@ -120,9 +119,7 @@ class AuthController extends ParentController
     {
         try{
             return $this->response->respond([
-                    'data'=>[
-
-                    ]
+                    'data'=>[]
                 ]);
         }catch (ValidationErrorException $ve){
             return $this->response->respondValidationFails([$ve->getMessage()]);

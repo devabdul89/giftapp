@@ -51,6 +51,7 @@ class FbLoginRequest extends Request
         $user->setDeviceType($this->input('device_type'));
         $user->setAddress($this->input('address'));
         $user->setBirthday($this->input('birthday'));
+        $user->setLoginBy('facebook');
         return $user;
     }
 }

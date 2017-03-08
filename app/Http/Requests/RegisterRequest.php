@@ -49,6 +49,7 @@ class RegisterRequest extends Request
         $user->setDeviceId($this->input('device_id'));
         $user->setDeviceType($this->input('device_type'));
         $user->setAddress($this->input('address'));
+        $user->setLoginBy('in_app');
         return $user;
     }
 }
