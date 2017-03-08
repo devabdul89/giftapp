@@ -2,12 +2,12 @@
 
 namespace Requests;
 
-
-class LogoutRequest extends Request
+class ForgotPasswordRequest extends Request
 {
 
     public function __construct(){
         parent::__construct();
+        $this->authenticatable = false;
     }
     /**
      * Determine if the user is authorized to make this request.
@@ -27,7 +27,7 @@ class LogoutRequest extends Request
     public function rules()
     {
         return [
-            //
+            'email'=>'required|email|exists:users'
         ];
     }
 }

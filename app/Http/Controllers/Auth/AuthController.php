@@ -9,6 +9,7 @@ use App\Http\Response;
 use App\Libs\Auth\Auth;
 use Repositories\UsersRepository;
 use Requests\FbLoginRequest;
+use Requests\ForgotPasswordRequest;
 use Requests\LoginRequest;
 use Requests\LogoutRequest;
 use Requests\RegisterRequest;
@@ -101,7 +102,8 @@ class AuthController extends ParentController
         }
     }
 
-    public function logout(LogoutRequest $request){
+    public function logout(LogoutRequest $request)
+    {
         try{
             return $this->response->respond(['data'=>[
                 'user' => $this->usersRep->update($request->user()->setSessionToken(null))->toJson()
@@ -111,5 +113,11 @@ class AuthController extends ParentController
         }catch (\Exception $e){
             return $this->response->respondInternalServerError([$e->getMessage()]);
         }
+    }
+
+    public function forgotPassword(ForgotPasswordRequest $request)
+    {
+        //TODO: send mail to set a new password.
+        return $this->response->respond(['data'=>[]]);
     }
 }

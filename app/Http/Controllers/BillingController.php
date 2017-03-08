@@ -5,14 +5,12 @@ namespace App\Http\Controllers;
 
 use App\Exceptions\ValidationErrorException;
 use App\Http\Response;
-use App\Traits\Transformers\UsersControllerTransformer;
 use Repositories\BillingRepository;
 use Repositories\UsersRepository;
 use Requests\AddBillingCardRequest;
 
 class BillingController extends ParentController
 {
-    use UsersControllerTransformer;
 
     /**
      * @var null|UsersRepository
