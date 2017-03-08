@@ -30,7 +30,8 @@ class UpdateProfileRequest extends Request
     {
         return [
             'email' => 'required|email|max:100',
-            'full_name' => 'required|max:100'
+            'full_name' => 'required|max:100',
+            'birthday' => 'required'
         ];
     }
 
@@ -44,6 +45,7 @@ class UpdateProfileRequest extends Request
         return $user
             ->setEmail($this->input('email'))
             ->setFullName($this->input('full_name'))
-            ->setAddress($this->input('address'));
+            ->setAddress($this->input('address'))
+            ->setBirthday($this->input('birthday'));
     }
 }

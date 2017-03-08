@@ -9,7 +9,6 @@ use App\Http\Response;
 use App\Libs\Auth\Auth;
 use Repositories\UsersRepository;
 use Requests\FbLoginRequest;
-use Requests\ForgotPasswordRequest;
 use Requests\LoginRequest;
 use Requests\LogoutRequest;
 use Requests\RegisterRequest;
@@ -37,16 +36,13 @@ class AuthController extends ParentController
     {
         try{
             $existingUser = $this->usersRep->findByEmail($request->newUser()->getEmail());
-            if($existingUser){
-                return $this->response->respond(['data'=>[
-                    'user'=>Auth::login($existingUser)->toJson()
-                ]]);
-            }else{
-                $this->usersRep->store($request->newUser());
-                return $this->response->respond(['data'=>[
-                    'user'=>Auth::login($request->newUser())->toJson()
-                ]]);
-            }
+            $loggedInUser = Auth::login(($existingUser)?$existingUser:$this->usersRep->store($request->newUser()));
+            return $this->response->respond([
+                'data'=>[
+                    'user'=>$loggedInUser->toJson()
+                ],
+                'access_token' => $loggedInUser->getSessionToken()
+            ]);
         }catch (ValidationErrorException $e){
             return $this->response->respondValidationFails([$e->getMessage()]);
         }catch (\Exception $e){
@@ -115,9 +111,4 @@ class AuthController extends ParentController
         }
     }
 
-    public function forgotPassword(ForgotPasswordRequest $request)
-    {
-        //TODO: send mail to set a new password.
-        return $this->response->respond(['data'=>[]]);
-    }
 }

@@ -72,6 +72,15 @@ class UsersRepository extends Repository
     }
 
     /**
+     * @param $id
+     * @return User|null
+     */
+    public function findById($id){
+        $user = parent::findById($id);
+        return ($user != null)?$this->mapUser($user):$user;
+    }
+
+    /**
      * @param $session_token
      * @return User|null
      */

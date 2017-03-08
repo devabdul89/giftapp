@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Exceptions\ValidationErrorException;
 use App\Http\Response;
 use Repositories\UsersRepository;
+use Requests\ResetPasswordRequest;
 use Requests\UpdateProfilePictureRequest;
 use Requests\UpdateProfileRequest;
 use Requests\UpdateWalkthroughStatusRequest;
@@ -32,11 +33,23 @@ class UsersController extends ParentController
         ]]);
     }
 
+    /**
+     * @param UpdateProfileRequest $request
+     * @return \App\Http\json
+     */
     public function updateProfile(UpdateProfileRequest $request)
     {
-        return $this->response->respond(['data'=>[
-            'user'=>$this->usersRepo->update($request->updatedUser())->toJson()
-        ]]);
+        try{
+            return $this->response->respond([
+                    'data'=>[
+                        'user'=>$this->usersRepo->update($request->updatedUser())->toJson()
+                    ]
+                ]);
+        }catch (ValidationErrorException $ve){
+            return $this->response->respondValidationFails([$ve->getMessage()]);
+        }catch (\Exception $e){
+            return $this->response->respondInternalServerError([$e->getMessage()]);
+        }
     }
 
     public function updateWalkthroughStatus(UpdateWalkthroughStatusRequest $request)
@@ -54,4 +67,19 @@ class UsersController extends ParentController
 
     }
 
+    /**
+     * @param ResetPasswordRequest $request
+     * @return \App\Http\json
+     */
+    public function resetPassword(ResetPasswordRequest $request)
+    {
+        try{
+            $this->usersRepo->update($request->user->setPassword(bcrypt($request->input('new_password'))));
+            return $this->response->respond();
+        }catch (ValidationErrorException $ve){
+            return $this->response->respondValidationFails([$ve->getMessage()]);
+        }catch (\Exception $e){
+            return $this->response->respondInternalServerError([$e->getMessage()]);
+        }
+    }
 }
