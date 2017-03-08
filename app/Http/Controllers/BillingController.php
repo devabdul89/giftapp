@@ -41,7 +41,7 @@ class BillingController extends ParentController
         try{
             return $this->response->respond([
                 'data'=>[
-                    'card'=>$this->billingRepo->storeCardInformation($request->user->getId(), $request->card())
+                    'card'=>$this->billingRepo->storeCardInformation($request->user->getId(), $request->card())->toJson()
                 ]
             ]);
         }catch (ValidationErrorException $e){
