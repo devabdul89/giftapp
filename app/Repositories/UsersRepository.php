@@ -33,6 +33,7 @@ class UsersRepository extends Repository
         $dbUser->email = $user->getEmail();
         $dbUser->full_name = $user->getFullName();
         $dbUser->profile_picture = $user->getProfilePicture();
+        $dbUser->login_by = $user->getLoginBy();
         $dbUser->save();
         return $this->mapUser($dbUser);
     }
