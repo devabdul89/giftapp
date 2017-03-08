@@ -9,6 +9,7 @@ use App\Http\Response;
 use App\Libs\Auth\Auth;
 use Repositories\UsersRepository;
 use Requests\FbLoginRequest;
+use Requests\ForgotPasswordRequest;
 use Requests\LoginRequest;
 use Requests\LogoutRequest;
 use Requests\RegisterRequest;
@@ -106,6 +107,25 @@ class AuthController extends ParentController
             ]]);
         }catch (ValidationErrorException $e){
             return $this->response->respondValidationFails([$e->getMessage()]);
+        }catch (\Exception $e){
+            return $this->response->respondInternalServerError([$e->getMessage()]);
+        }
+    }
+
+    /**
+     * @param ForgotPasswordRequest $request
+     * @return \App\Http\json
+     */
+    public function forgotPassword(ForgotPasswordRequest $request)
+    {
+        try{
+            return $this->response->respond([
+                    'data'=>[
+
+                    ]
+                ]);
+        }catch (ValidationErrorException $ve){
+            return $this->response->respondValidationFails([$ve->getMessage()]);
         }catch (\Exception $e){
             return $this->response->respondInternalServerError([$e->getMessage()]);
         }
