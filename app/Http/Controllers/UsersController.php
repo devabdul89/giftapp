@@ -26,7 +26,7 @@ class UsersController extends ParentController
     public function updateProfilePicture(UpdateProfilePictureRequest $request)
     {
         $user = clone($request->user);
-        $user = $this->usersRepo->update($user->setProfilePicture($this->saveProfilePicture($request->file('profile_picture')))->setImageSetted(true));
+        $user = $this->usersRepo->update($user->setProfilePicture($this->saveProfilePicture($request->file('profile_picture'))));
         $user = $user->setProfilePicture(env('APP_URL').$user->getProfilePicture());
         return $this->response->respond(['data'=>[
             'user'=>$user->toJson()

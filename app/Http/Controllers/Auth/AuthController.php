@@ -57,7 +57,6 @@ class AuthController extends ParentController
             $user = $request->newUser();
             if($request->file('profile_picture') != null){
                 $user->setProfilePicture($this->saveProfilePicture($request->file('profile_picture')));
-                $user->setImageSetted(true);
             }
             $user = Auth::login($this->usersRep->store($user));
 

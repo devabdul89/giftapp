@@ -297,6 +297,8 @@ class User extends Model
     public function setProfilePicture($profilePicture)
     {
         $this->profilePicture = ($profilePicture == null)?'':$profilePicture;
+        if($profilePicture != '')
+            $this->setImageSetted(true);
         return $this;
     }
 
