@@ -119,6 +119,7 @@ class UsersRepository extends Repository
 
         // appending host name for profile picture
         if($transformedUser->getProfilePicture() != '' && $transformedUser->getProfilePicture() != null){
+            if($user->login_by == 'in_app')
             $transformedUser->setProfilePicture(
                 (!$transformedUser->getImageSetted())?env('APP_URL').$transformedUser->getProfilePicture():
                     $transformedUser->getProfilePicture());

@@ -63,7 +63,8 @@ class AuthController extends ParentController
 
     public function register(RegisterRequest $request)
     {
-        try{
+        try
+        {
             $user = $request->newUser();
             if($request->file('profile_picture') != null){
                 $user->setProfilePicture($this->saveProfilePicture($request->file('profile_picture')));
