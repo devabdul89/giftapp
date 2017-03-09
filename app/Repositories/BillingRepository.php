@@ -19,6 +19,15 @@ class BillingRepository extends Repository
     }
 
 
+    /**
+     * @param $userId
+     * @return BillingCard
+     */
+    public function findByUserId($userId){
+        $billingCard = $this->getModel()->where('user_id',$userId)->first();
+        return ($billingCard != null)?$this->mapBillingCard($billingCard):$billingCard;
+    }
+
     public function storeCardInformation($userId, BillingCard $billingCard){
         $this->getModel()->create([
             'user_id' => $userId,
@@ -29,5 +38,13 @@ class BillingRepository extends Repository
             'card_expiry'=>$billingCard->getCardExpiry()
         ]);
         return $billingCard;
+    }
+
+    public function mapBillingCard($billingCard){
+        return (new BillingCard())->setCardHolder($billingCard->card_holder)
+            ->setCardType($billingCard->card_type)
+            ->setCardNumber($billingCard->card_number)
+            ->setCvc($billingCard->cvc)
+            ->setCardExpiry($billingCard->card_expiry);
     }
 }

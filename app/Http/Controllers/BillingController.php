@@ -51,4 +51,7 @@ class BillingController extends ParentController
         }
     }
 
+    public function main(){
+
+    }
 }

@@ -7,6 +7,7 @@ use App\Exceptions\ValidationErrorException;
 use App\Http\Controllers\ParentController;
 use App\Http\Response;
 use App\Libs\Auth\Auth;
+use Repositories\BillingRepository;
 use Repositories\UsersRepository;
 use Requests\FbLoginRequest;
 use Requests\ForgotPasswordRequest;
@@ -22,6 +23,12 @@ class AuthController extends ParentController
      * @var UsersRepository|null
      */
     public $usersRep = null;
+
+
+    /**
+     * @var BillingRepository|null
+     */
+    public $billingCardsRepo = null;
     /**
      * @var Response|null
      */
@@ -31,6 +38,7 @@ class AuthController extends ParentController
     {
         $this->usersRep = $usersRepository;
         $this->response = new Response();
+        $this->billingCardsRepo = new BillingRepository();
     }
 
     public function fblogin(FbLoginRequest $request)
@@ -81,9 +89,11 @@ class AuthController extends ParentController
         try{
             if(Auth::attempt(['email'=>$request->input('email'), 'password'=> $request->input('password')])){
                 $loggedInUser = Auth::login($this->usersRep->findByEmail($request->input('email')));
+                $billingCard = $this->billingCardsRepo->findByUserId($loggedInUser->getId());
                 return $this->response->respond([
                     'data'=>[
-                        'user'=>$loggedInUser->toJson()
+                        'user'=>$loggedInUser->toJson(),
+                        'billing_card' => ($billingCard == null)?null:$billingCard->toJson()
                     ],
                     'access_token'=>$loggedInUser->getSessionToken()
                 ]);
