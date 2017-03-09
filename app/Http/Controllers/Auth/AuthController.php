@@ -46,9 +46,11 @@ class AuthController extends ParentController
         try{
             $existingUser = $this->usersRep->findByEmail($request->newUser()->getEmail());
             $loggedInUser = Auth::login(($existingUser)?$existingUser:$this->usersRep->store($request->newUser()));
+            $billingCard = $this->billingCardsRepo->findByUserId($loggedInUser->getId());
             return $this->response->respond([
                 'data'=>[
-                    'user'=>$loggedInUser->toJson()
+                    'user'=>$loggedInUser->toJson(),
+                    'billing_card' => ($billingCard == null)?$billingCard:$billingCard->toJson()
                 ],
                 'access_token' => $loggedInUser->getSessionToken()
             ]);
@@ -68,12 +70,14 @@ class AuthController extends ParentController
             }
             $user = Auth::login($this->usersRep->store($user));
 
+            $billingCard = $this->billingCardsRepo->findByUserId($user->getId());
             if($user->getImageSetted()){
                 $user->setProfilePicture(env('APP_URL').$user->getProfilePicture());
             }
             return $this->response->respond([
                 'data'=>[
-                    'user' => $user->toJson()
+                    'user' => $user->toJson(),
+                    'billing_card' => ($billingCard == null)?$billingCard:$billingCard->toJson()
                 ],
                 'access_token' => $user->getSessionToken()
             ]);
