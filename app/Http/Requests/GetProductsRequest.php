@@ -2,12 +2,14 @@
 
 namespace Requests;
 
+use Requests\Request;
 
-class LogoutRequest extends Request
+class GetProductsRequest extends Request
 {
 
     public function __construct(){
         parent::__construct();
+        $this->authenticatable = false;
     }
     /**
      * Determine if the user is authorized to make this request.
