@@ -25,3 +25,5 @@ Route::post('/update_walkthrough_status', 'UsersController@updateWalkthroughStat
 Route::post('/auth/logout', 'Auth\AuthController@logout')->middleware('requestHandler:LogoutRequest');
 Route::post('/reset_password', 'UsersController@resetPassword')->middleware('requestHandler:ResetPasswordRequest');
 Route::get('/test','ProductsController@getProducts')->middleware('requestHandler:GetProductsRequest');
+
+Route::get('/get/users','UsersController@getUsers')->middleware('requestHandler:GetUsersRequest');

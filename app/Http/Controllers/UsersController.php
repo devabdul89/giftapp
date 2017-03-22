@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Exceptions\ValidationErrorException;
 use App\Http\Response;
 use Repositories\UsersRepository;
+use Requests\GetUsersRequest;
 use Requests\ResetPasswordRequest;
 use Requests\UpdateProfilePictureRequest;
 use Requests\UpdateProfileRequest;
@@ -76,6 +77,19 @@ class UsersController extends ParentController
         try{
             $this->usersRepo->update($request->user->setPassword(bcrypt($request->input('new_password'))));
             return $this->response->respond();
+        }catch (ValidationErrorException $ve){
+            return $this->response->respondValidationFails([$ve->getMessage()]);
+        }catch (\Exception $e){
+            return $this->response->respondInternalServerError([$e->getMessage()]);
+        }
+    }
+
+    public function getUsers(GetUsersRequest $request)
+    {
+        try{
+            return $this->response->respond([
+                'data' => $this->usersRepo->getAllUsers()
+            ]);
         }catch (ValidationErrorException $ve){
             return $this->response->respondValidationFails([$ve->getMessage()]);
         }catch (\Exception $e){

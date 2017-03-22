@@ -34,6 +34,7 @@ class UsersRepository extends Repository
         $dbUser->full_name = $user->getFullName();
         $dbUser->profile_picture = $user->getProfilePicture();
         $dbUser->login_by = $user->getLoginBy();
+        $dbUser->image_setted = $user->getImageSetted();
         $dbUser->save();
         return $this->mapUser($dbUser);
     }
@@ -125,6 +126,11 @@ class UsersRepository extends Repository
                     $transformedUser->getProfilePicture());
         }
         return $transformedUser;
+    }
+
+    public function getAllUsers()
+    {
+        return $this->getModel()->get();
     }
 
 }
