@@ -70,11 +70,7 @@ class AuthController extends ParentController
                 $user->setProfilePicture($this->saveProfilePicture($request->file('profile_picture')));
             }
             $user = Auth::login($this->usersRep->store($user));
-
             $billingCard = $this->billingCardsRepo->findByUserId($user->getId());
-            if($user->getImageSetted()){
-                $user->setProfilePicture(env('APP_URL').$user->getProfilePicture());
-            }
             return $this->response->respond([
                 'data'=>[
                     'user' => $user->toJson(),

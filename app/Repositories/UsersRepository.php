@@ -92,7 +92,7 @@ class UsersRepository extends Repository
     }
 
     public function mapUsersCollection($users){
-
+        return array_map([$this, 'mapUser'], $users);
     }
 
 
@@ -122,7 +122,7 @@ class UsersRepository extends Repository
         if($transformedUser->getProfilePicture() != '' && $transformedUser->getProfilePicture() != null){
             if($user->login_by == 'in_app')
             $transformedUser->setProfilePicture(
-                (!$transformedUser->getImageSetted())?env('APP_URL').$transformedUser->getProfilePicture():
+                ($transformedUser->getImageSetted())?env('APP_URL').$transformedUser->getProfilePicture():
                     $transformedUser->getProfilePicture());
         }
         return $transformedUser;
@@ -130,7 +130,6 @@ class UsersRepository extends Repository
 
     public function getAllUsers()
     {
-        return $this->getModel()->get();
+        return $this->mapUsersCollection($this->getModel()->get()->all());
     }
-
 }

@@ -11,10 +11,11 @@ use Requests\UpdateProfilePictureRequest;
 use Requests\UpdateProfileRequest;
 use Requests\UpdateWalkthroughStatusRequest;
 use Traits\ImageHelper;
+use Traits\ModelToJson;
 
 class UsersController extends ParentController
 {
-    use ImageHelper;
+    use ImageHelper, ModelToJson;
 
     public $usersRepo = null;
     public $response = null;
@@ -88,7 +89,7 @@ class UsersController extends ParentController
     {
         try{
             return $this->response->respond([
-                'data' => $this->usersRepo->getAllUsers()
+                'data' => $this->modelsToJson($this->usersRepo->getAllUsers())
             ]);
         }catch (ValidationErrorException $ve){
             return $this->response->respondValidationFails([$ve->getMessage()]);
