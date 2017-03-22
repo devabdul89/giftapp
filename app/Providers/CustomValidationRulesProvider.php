@@ -3,6 +3,8 @@
 namespace App\Providers;
 
 use App\Libs\Auth\Auth;
+use Illuminate\Support\Facades\Hash;
+use phpDocumentor\Reflection\Types\Boolean;
 use Repositories\UsersRepository;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\ServiceProvider;
@@ -16,8 +18,8 @@ class CustomValidationRulesProvider extends ServiceProvider
      */
     public function boot()
     {
-        Validator::extend('not_already_blocked', function($attribute, $value, $parameters, $validator){
-                return (new UsersRepository())->findBlockedUser(['object_id'=>Auth::user()->id,'subject_id'=>$value]) == null;
+        Validator::extend('match_password', function($attribute, $value, $parameters, $validator){
+            return Hash::check($value, (new UsersRepository())->findById($parameters[0])->getPassword());
         });
     }
 

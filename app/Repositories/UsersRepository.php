@@ -33,7 +33,28 @@ class UsersRepository extends Repository
         $dbUser->email = $user->getEmail();
         $dbUser->full_name = $user->getFullName();
         $dbUser->profile_picture = $user->getProfilePicture();
+        $dbUser->login_by = $user->getLoginBy();
         $dbUser->save();
+        return $this->mapUser($dbUser);
+    }
+
+    public function update(User $user){
+        $this->getModel()->where('id',$user->getId())->update([
+            'full_name'=>$user->getFullName(),
+            'email' => $user->getEmail(),
+            'password'=>$user->getPassword(),
+            'session_token' => $user->getSessionToken(),
+            'profile_picture' => $user->getProfilePicture(),
+            'walkthrough_completed' => $user->getWalkthroughCompleted(),
+            'login_by' => $user->getLoginBy(),
+            'password_created' => $user->getPasswordCreated(),
+            'fb_id' => $user->getFbId(),
+            'birthday' => $user->getBirthday(),
+            'device_id' => $user->getDeviceId(),
+            'device_type' => $user->getDeviceType(),
+            'image_setted' => $user->getImageSetted(),
+            'address' => $user->getAddress()
+        ]);
         return $user;
     }
 
@@ -48,6 +69,15 @@ class UsersRepository extends Repository
      */
     public function findByEmail($email){
         $user = $this->getModel()->where('email',$email)->first();
+        return ($user != null)?$this->mapUser($user):$user;
+    }
+
+    /**
+     * @param $id
+     * @return User|null
+     */
+    public function findById($id){
+        $user = parent::findById($id);
         return ($user != null)?$this->mapUser($user):$user;
     }
 
@@ -88,9 +118,12 @@ class UsersRepository extends Repository
         $transformedUser->setImageSetted($user->image_setted);
 
         // appending host name for profile picture
-        $transformedUser->setProfilePicture(
-            (!$transformedUser->getImageSetted())?env('APP_URL').$transformedUser->getProfilePicture():
-                $transformedUser->getProfilePicture());
+        if($transformedUser->getProfilePicture() != '' && $transformedUser->getProfilePicture() != null){
+            if($user->login_by == 'in_app')
+            $transformedUser->setProfilePicture(
+                (!$transformedUser->getImageSetted())?env('APP_URL').$transformedUser->getProfilePicture():
+                    $transformedUser->getProfilePicture());
+        }
         return $transformedUser;
     }
 

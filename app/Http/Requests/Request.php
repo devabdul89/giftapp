@@ -10,7 +10,7 @@ namespace Requests;
 
 
 use App\Libs\Auth\Auth;
-use App\User;
+use Models\User;
 
 abstract class Request
 {

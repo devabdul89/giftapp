@@ -43,11 +43,13 @@ class RegisterRequest extends Request
     public function newUser(){
         $user = new User();
         $user->setPassword(bcrypt($this->input('password')));
+        $user->setPasswordCreated(1);
         $user->setEmail($this->input('email'));
         $user->setFullName($this->input('full_name'));
         $user->setDeviceId($this->input('device_id'));
         $user->setDeviceType($this->input('device_type'));
         $user->setAddress($this->input('address'));
+        $user->setLoginBy('in_app');
         return $user;
     }
 }

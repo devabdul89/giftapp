@@ -5,7 +5,7 @@
  * Date: 12/8/2016
  * Time: 9:55 AM
  */
-namespace App\Traits\Transformers;
+namespace Traits\Transformers;
 trait UsersControllerTransformer{
     public function transformCheckins($checkins)
     {

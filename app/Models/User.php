@@ -74,7 +74,7 @@ class User extends Model
      */
     public function setBirthday($birthday)
     {
-        $this->birthday = ($birthday == null)?"":$birthday;
+        $this->birthday = ($birthday == "")?null:$birthday;
         return $this;
     }
 
@@ -128,7 +128,7 @@ class User extends Model
      */
     public function setImageSetted($imageSetted)
     {
-        $this->imageSetted = ($imageSetted == null)?"":$imageSetted;
+        $this->imageSetted = ($imageSetted == "" || $imageSetted == null)?0:$imageSetted;
         return $this;
     }
 
@@ -297,6 +297,8 @@ class User extends Model
     public function setProfilePicture($profilePicture)
     {
         $this->profilePicture = ($profilePicture == null)?'':$profilePicture;
+        if($profilePicture != '')
+            $this->setImageSetted(true);
         return $this;
     }
 
