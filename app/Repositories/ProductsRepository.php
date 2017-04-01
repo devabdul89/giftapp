@@ -19,56 +19,39 @@ class ProductsRepository extends Repository
 
     }
 
-    public function amazonProducts(){
-        // Your AWS Access Key ID, as taken from the AWS Your Account page
+    public function searchAmazon($keyword){
+        return $this->amazonProducts($keyword);
+    }
+
+    public function generateSearchRequestUrl($keyword="shoes"){
         $aws_access_key_id = "AKIAJCJIMH2OSDJOMIRQ";
-
-// Your AWS Secret Key corresponding to the above ID, as taken from the AWS Your Account page
         $aws_secret_key = env('APA_SECRET');
-
-// The region you are interested in
         $endpoint = env('APA_ENDPOINT');
-
         $uri = "/onca/xml";
-
         $params = array(
             "Service" => "AWSECommerceService",
             "Operation" => "ItemSearch",
             "AWSAccessKeyId" => "AKIAJCJIMH2OSDJOMIRQ",
             "AssociateTag" => "zeenomlabs-21",
-            "SearchIndex" => "Shoes",
+            "SearchIndex" => "All",
             "ResponseGroup" => "Images,ItemAttributes,Offers",
-            "Keywords" => "shoe",
-            "Brand" => "nike"
+            "Keywords" => $keyword,
         );
-
-// Set current timestamp if not set
         if (!isset($params["Timestamp"])) {
             $params["Timestamp"] = gmdate('Y-m-d\TH:i:s\Z');
         }
-
-// Sort the parameters by key
         ksort($params);
-
         $pairs = array();
-
         foreach ($params as $key => $value) {
             array_push($pairs, rawurlencode($key)."=".rawurlencode($value));
         }
-
-// Generate the canonical query
         $canonical_query_string = join("&", $pairs);
-
-// Generate the string to be signed
         $string_to_sign = "GET\n".$endpoint."\n".$uri."\n".$canonical_query_string;
-
-// Generate the signature required by the Product Advertising API
         $signature = base64_encode(hash_hmac("sha256", $string_to_sign, $aws_secret_key, true));
-
-// Generate the signed URL
-        $request_url = 'http://'.$endpoint.$uri.'?'.$canonical_query_string.'&Signature='.rawurlencode($signature);
-
-        $ch = curl_init($request_url);
+        return 'http://'.$endpoint.$uri.'?'.$canonical_query_string.'&Signature='.rawurlencode($signature);
+    }
+    public function curl($url){
+        $ch = curl_init($url);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
         curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 0);
         curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 0);
@@ -76,7 +59,43 @@ class ProductsRepository extends Repository
         curl_setopt($ch, CURLOPT_TIMEOUT, 10);
         $response = curl_exec($ch);
         curl_close($ch);
-        $xml = Parser::xml($response);
+        return $response;
+    }
+    public function amazonProducts($keyword = "shoes"){
+        $xml = Parser::xml($this->curl($this->generateRequestUrl($keyword)));
+        return $xml['Items']['Item'];
+    }
+
+    public function generateItemLookupUrl($itemId){
+        $aws_access_key_id = "AKIAJCJIMH2OSDJOMIRQ";
+        $aws_secret_key = env('APA_SECRET');
+        $endpoint = env('APA_ENDPOINT');
+        $uri = "/onca/xml";
+        $params = array(
+            "Service" => "AWSECommerceService",
+            "Operation" => "ItemLookup",
+            "AWSAccessKeyId" => "AKIAJCJIMH2OSDJOMIRQ",
+            "AssociateTag" => "zeenomlabs-21",
+            "ItemId" => $itemId,
+            "IdType" => "ASIN",
+            "ResponseGroup" => "Images,ItemAttributes,Offers"
+        );
+        if (!isset($params["Timestamp"])) {
+            $params["Timestamp"] = gmdate('Y-m-d\TH:i:s\Z');
+        }
+        ksort($params);
+        $pairs = array();
+        foreach ($params as $key => $value) {
+            array_push($pairs, rawurlencode($key)."=".rawurlencode($value));
+        }
+        $canonical_query_string = join("&", $pairs);
+        $string_to_sign = "GET\n".$endpoint."\n".$uri."\n".$canonical_query_string;
+        $signature = base64_encode(hash_hmac("sha256", $string_to_sign, $aws_secret_key, true));
+        return 'http://'.$endpoint.$uri.'?'.$canonical_query_string.'&Signature='.rawurlencode($signature);
+    }
+
+    public function amazonProductLookup($ItemId){
+        $xml = Parser::xml($this->curl($this->generateItemLookupUrl($ItemId)));
         return $xml['Items']['Item'];
     }
 
