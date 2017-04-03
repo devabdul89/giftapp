@@ -27,3 +27,5 @@ Route::post('/reset_password', 'UsersController@resetPassword')->middleware('req
 Route::get('/products/get','ProductsController@getProducts')->middleware('requestHandler:GetProductsRequest');
 Route::get('/products/search','ProductsController@searchProducts')->middleware('requestHandler:SearchProductsRequest');
 Route::get('/product/detail','ProductsController@productDetail')->middleware('requestHandler:GetProductDetailsRequest');
+
+Route::post('/event/create','EventsController@create')->middleware('requestHandler:CreateEventsRequest');

@@ -49,7 +49,10 @@ class ProductsController extends ParentController
         try{
             return $this->response->respond([
                 'data'=>[
-                    $this->productsRepo->searchAmazon($request->get('keyword'))
+                    'products'=>[
+                        'amazon'=>$this->productsRepo->searchAmazon($request->get('keyword')),
+                        'in_app'=>[]
+                    ],
                 ]
             ]);
         }catch(ValidationErrorException $ve){
