@@ -23,7 +23,7 @@ class ProductsRepository extends Repository
         return $this->amazonProducts($keyword);
     }
 
-    public function generateSearchRequestUrl($keyword="shoes"){
+    public function generateSearchUrl($keyword="shoes"){
         $aws_access_key_id = "AKIAJCJIMH2OSDJOMIRQ";
         $aws_secret_key = env('APA_SECRET');
         $endpoint = env('APA_ENDPOINT');
