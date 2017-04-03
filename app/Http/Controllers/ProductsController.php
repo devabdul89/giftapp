@@ -20,8 +20,6 @@ class ProductsController extends ParentController
         $this->response = new Response();
     }
 
-
-
     /**
      * @param GetProductsRequest $request
      * @return \App\Http\json
@@ -50,7 +48,7 @@ class ProductsController extends ParentController
             return $this->response->respond([
                 'data'=>[
                     'products'=>[
-                        'amazon'=>$this->productsRepo->searchAmazon($request->get('keyword')),
+                        'amazon'=>$this->productsRepo->searchAmazon($request->get('keyword'),$request->get('page')),
                         'in_app'=>[]
                     ],
                 ]

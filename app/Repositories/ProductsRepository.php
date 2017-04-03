@@ -19,11 +19,14 @@ class ProductsRepository extends Repository
 
     }
 
-    public function searchAmazon($keyword){
-        return $this->amazonProducts($keyword);
+    public function searchAmazon($keyword,$page=1){
+        if($page == null){
+            $page = 1;
+        }
+        return $this->amazonProducts($keyword,$page);
     }
 
-    public function generateSearchUrl($keyword="shoes"){
+    public function generateSearchUrl($keyword="shoes",$page =1){
         $aws_access_key_id = "AKIAJCJIMH2OSDJOMIRQ";
         $aws_secret_key = env('APA_SECRET');
         $endpoint = env('APA_ENDPOINT');
@@ -36,6 +39,7 @@ class ProductsRepository extends Repository
             "SearchIndex" => "All",
             "ResponseGroup" => "Images,ItemAttributes,Offers",
             "Keywords" => $keyword,
+            "ItemPage" => $page
         );
         if (!isset($params["Timestamp"])) {
             $params["Timestamp"] = gmdate('Y-m-d\TH:i:s\Z');
@@ -61,8 +65,8 @@ class ProductsRepository extends Repository
         curl_close($ch);
         return $response;
     }
-    public function amazonProducts($keyword = "shoes"){
-        $xml = Parser::xml($this->curl($this->generateRequestUrl($keyword)));
+    public function amazonProducts($keyword = "shoes",$page=1){
+        $xml = Parser::xml($this->curl($this->generateSearchUrl($keyword,$page)));
         return $xml['Items']['Item'];
     }
 

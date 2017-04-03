@@ -28,4 +28,5 @@ Route::get('/products/get','ProductsController@getProducts')->middleware('reques
 Route::get('/products/search','ProductsController@searchProducts')->middleware('requestHandler:SearchProductsRequest');
 Route::get('/product/detail','ProductsController@productDetail')->middleware('requestHandler:GetProductDetailsRequest');
 
-Route::post('/event/create','EventsController@create')->middleware('requestHandler:CreateEventsRequest');
+Route::post('/event/create','EventsController@create')->middleware('requestHandler:CreateEventRequest');
+Route::get('/events','EventsController@getAllEvents')->middleware('requestHandler:GetAllEventsRequest');

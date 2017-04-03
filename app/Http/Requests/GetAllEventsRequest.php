@@ -4,7 +4,7 @@ namespace Requests;
 
 use Requests\Request;
 
-class CreateEventRequest extends Request
+class GetAllEventsRequest extends Request
 {
 
     public function __construct(){
@@ -29,8 +29,7 @@ class CreateEventRequest extends Request
     public function rules()
     {
         return [
-            'date'=>'required',
-            'title'=>'required'
+            //
         ];
     }
 }
