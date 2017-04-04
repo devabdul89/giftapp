@@ -4,12 +4,11 @@ namespace Requests;
 
 use Requests\Request;
 
-class GetProductDetailsRequest extends Request
+class CreateProductRequest extends Request
 {
 
     public function __construct(){
         parent::__construct();
-	    $this->authenticatable = false;
     }
     /**
      * Determine if the user is authorized to make this request.
@@ -29,8 +28,17 @@ class GetProductDetailsRequest extends Request
     public function rules()
     {
         return [
-            'item_id'=>'required',
-            'vendor' => 'required'
+            'title'=>'required|max:100'
+        ];
+    }
+
+    public function getProductInfo(){
+        return [
+            'title'=>$this->input('title'),
+            'detail'=>$this->input('detail'),
+            'size_available'=>$this->input('size_available'),
+            'material'=>$this->input('material'),
+            'price' =>$this->input('price')
         ];
     }
 }

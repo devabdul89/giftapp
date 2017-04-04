@@ -10,13 +10,20 @@ namespace Repositories;
 
 
 use Illuminate\Support\Facades\DB;
+use LaraModels\Product;
 use Nathanmac\Utilities\Parser\Facades\Parser;
 
 class ProductsRepository extends Repository
 {
+
     public function __construct()
     {
+        $this->setModel(new Product());
+    }
 
+
+    public function create($product){
+        return $this->getModel()->create($product);
     }
 
     public function searchAmazon($keyword,$page=1){
@@ -24,6 +31,10 @@ class ProductsRepository extends Repository
             $page = 1;
         }
         return $this->amazonProducts($keyword,$page);
+    }
+
+    public function searchInAppProducts($keyword='',$page){
+        return $this->getModel()->where('title','like','%'.$keyword.'%')->with('images')->paginate()->all();
     }
 
     public function generateSearchUrl($keyword="shoes",$page =1){
@@ -101,6 +112,10 @@ class ProductsRepository extends Repository
     public function amazonProductLookup($ItemId){
         $xml = Parser::xml($this->curl($this->generateItemLookupUrl($ItemId)));
         return $xml['Items']['Item'];
+    }
+
+    public function inAppProductDetail($itemId){
+        return $this->getModel()->find($itemId);
     }
 
     public function inAppProducts(){

@@ -1,5 +1,5 @@
 <?php
-
+ 
 use Illuminate\Http\Request;
 
 /*
@@ -31,3 +31,10 @@ Route::get('/product/detail','ProductsController@productDetail')->middleware('re
 
 Route::post('/event/create','EventsController@create')->middleware('requestHandler:CreateEventRequest');
 Route::get('/events','EventsController@getAllEvents')->middleware('requestHandler:GetAllEventsRequest');
+
+Route::get('/public/events','EventsController@getPublicEvents')->middleware('requestHandler:GetPublicEventsRequests');
+Route::post('/event/invitation/accept','EventsController@acceptEventInvitation')->middleware('requestHandler:AcceptEventInvitationRequest');
+Route::post('/event/invitation/decline','EventsController@declineEventInvitation')->middleware('requestHandler:DeclineEventInvitationRequest');
+Route::get('/event/detail','EventsController@getEventDetail')->middleware('requestHandler:GetEventDetailRequest');
+Route::get('/event/invitations','EventsController@fetchEventInvitations')->middleware('requestHandler:FetchEventInvitationsRequest');
+Route::post('/product/create','ProductsController@create')->middleware('requestHandler:CreateProductRequest');

@@ -23,7 +23,26 @@ class EventsRepository extends Repository
         return $this->getModel()->with('members')->get();
     }
 
+    public function getPublicEvents($page = 1){
+        return $this->getModel()->where('private',0)->paginate(2);
+    }
     public function create($event){
         return $this->getModel()->create($event);
+    }
+
+    public function acceptEvent($eventId, $userId){
+        return DB::table('event_user')->where('event_id',$eventId)->where('user_id',$userId)->update(['accepted'=>1]);
+    }
+
+    public function declineEvent($eventId, $userId){
+        return DB::table('event_user')->where('event_id',$eventId)->where('user_id',$userId)->delete();
+    }
+
+    public function getEventDetail($eventId){
+        return $this->getModel()->with('members')->find($eventId);
+    }
+
+    public function fetchEventInvitations($eventId){
+        return $this->getModel()->find($eventId)->members;
     }
 }

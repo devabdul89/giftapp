@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Exceptions\ValidationErrorException;
 use App\Http\Response;
 use Repositories\ProductsRepository;
+use Requests\CreateProductRequest;
 use Requests\GetProductDetailsRequest;
 use Requests\GetProductsRequest;
 use Requests\Request;
@@ -20,6 +21,23 @@ class ProductsController extends ParentController
         $this->response = new Response();
     }
 
+    
+    /**
+     * @param CreateProductRequest $request
+     * @return \App\Http\json
+     */
+    public function create(CreateProductRequest $request){
+        try{
+            $this->productsRepo->create($request->getProductInfo());
+            return $this->response->respond([
+                'data'=>[]
+            ]);
+        }catch(ValidationErrorException $ve){
+            return $this->response->respondValidationFails([$ve->getMessage()]);
+        }catch(\Exception $e){
+            return $this->response->respondInternalServerError([$e->getMessage()]);
+        }
+    }
     /**
      * @param GetProductsRequest $request
      * @return \App\Http\json
@@ -38,7 +56,6 @@ class ProductsController extends ParentController
         }
     }
 
-
     /**
      * @param SearchProductsRequest $request
      * @return \App\Http\json
@@ -49,7 +66,7 @@ class ProductsController extends ParentController
                 'data'=>[
                     'products'=>[
                         'amazon'=>$this->productsRepo->searchAmazon($request->get('keyword'),$request->get('page')),
-                        'in_app'=>[]
+                        'in_app'=>$this->productsRepo->searchInAppProducts($request->get('keyword'),$request->get('page'))
                     ],
                 ]
             ]);
@@ -69,7 +86,7 @@ class ProductsController extends ParentController
         try{
             return $this->response->respond([
                 'data'=>[
-                    'item'=>$this->productsRepo->amazonProductLookup($request->get('item_id'))
+                    'item'=>($request->get('vendor') == 'in_app')?$this->productsRepo->inAppProductDetail($request->get('item_id')):$this->productsRepo->amazonProductLookup($request->get('item_id'))
                 ]
             ]);
         }catch(ValidationErrorException $ve){

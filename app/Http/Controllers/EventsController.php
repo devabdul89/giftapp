@@ -9,8 +9,13 @@ use Repositories\EventMembersRepository;
 use Repositories\BillingRepository;
 use Repositories\EventsRepository;
 use Repositories\UsersRepository;
+use Requests\AcceptEventInvitationRequest;
 use Requests\CreateEventRequest;
+use Requests\DeclineEventInvitationRequest;
+use Requests\FetchEventInvitationsRequest;
 use Requests\GetAllEventsRequest;
+use Requests\GetEventDetailRequest;
+use Requests\GetPublicEventsRequests;
 
 class EventsController extends ParentController
 {
@@ -58,6 +63,24 @@ class EventsController extends ParentController
 
 
     /**
+     * @param GetPublicEventsRequests $request
+     * @return \App\Http\json
+     */
+    public function getPublicEvents(GetPublicEventsRequests $request){
+        try{
+            return $this->response->respond([
+                'data'=>[
+                    'events'=>$this->eventsRepo->getPublicEvents($request->get('page'))
+                ]
+            ]);
+        }catch(ValidationErrorException $ve){
+            return $this->response->respondValidationFails([$ve->getMessage()]);
+        }catch(\Exception $e){
+            return $this->response->respondInternalServerError([$e->getMessage()]);
+        }
+    }
+
+    /**
      * @param CreateEventRequest $request
      * @return \App\Http\json
      */
@@ -82,4 +105,78 @@ class EventsController extends ParentController
     public function inviteMembers($eventId,$userIds){
         $this->membersRepo->inviteAll($eventId,$userIds);
     }
+
+    /**
+     * @param  AcceptEventInvitationRequest $request
+     * @return \App\Http\json
+     */
+    public function acceptEventInvitation(AcceptEventInvitationRequest $request){
+
+        try{
+            $this->eventsRepo->acceptEvent($request->input('event_id'),$request->user->getId());
+            return $this->response->respond([
+                'data'=>[]
+            ]);
+        }catch(ValidationErrorException $ve){
+            return $this->response->respondValidationFails([$ve->getMessage()]);
+        }catch(\Exception $e){
+            return $this->response->respondInternalServerError([$e->getMessage()]);
+        }
+    }
+
+
+    /**
+     * @param DeclineEventInvitationRequest $request
+     * @return \App\Http\json
+     */
+    public function declineEventInvitation(DeclineEventInvitationRequest $request){
+        try{
+            $this->eventsRepo->declineEvent($request->input('event_id'),$request->user->getId());
+            return $this->response->respond([
+                'data'=>[]
+            ]);
+        }catch(ValidationErrorException $ve){
+            return $this->response->respondValidationFails([$ve->getMessage()]);
+        }catch(\Exception $e){
+            return $this->response->respondInternalServerError([$e->getMessage()]);
+        }
+    }
+
+   /**
+    * @param GetEventDetailRequest $request
+    * @return \App\Http\json
+    */
+   public function getEventDetail(GetEventDetailRequest $request){
+       try{
+           return $this->response->respond([
+               'data'=>[
+                    'event'=>$this->eventsRepo->getEventDetail($request->get('event_id'))
+               ]
+           ]);
+       }catch(ValidationErrorException $ve){
+           return $this->response->respondValidationFails([$ve->getMessage()]);
+       }catch(\Exception $e){
+           return $this->response->respondInternalServerError([$e->getMessage()]);
+       }
+   }
+
+
+   /**
+    * @param FetchEventInvitationsRequest $request
+    * @return \App\Http\json
+    */
+   public function fetchEventInvitations(FetchEventInvitationsRequest $request){
+       try{
+           return $this->response->respond([
+               'data'=>[
+                   'invitations'=> $this->eventsRepo->fetchEventInvitations($request->get('event_id'))
+               ]
+           ]);
+       }catch(ValidationErrorException $ve){
+           return $this->response->respondValidationFails([$ve->getMessage()]);
+       }catch(\Exception $e){
+           return $this->response->respondInternalServerError([$e->getMessage()]);
+       }
+   }
+
 }
