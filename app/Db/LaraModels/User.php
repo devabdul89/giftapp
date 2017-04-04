@@ -28,4 +28,8 @@ class User extends Authenticatable
     protected $hidden = [
         'password', 'remember_token',
     ];
+
+    public function events(){
+        return $this->belongsToMany(Event::class)->withPivot('accepted');
+    }
 }

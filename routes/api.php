@@ -24,6 +24,10 @@ Route::post('/update_profile', 'UsersController@updateProfile')->middleware('req
 Route::post('/update_walkthrough_status', 'UsersController@updateWalkthroughStatus')->middleware('requestHandler:UpdateWalkthroughStatusRequest');
 Route::post('/auth/logout', 'Auth\AuthController@logout')->middleware('requestHandler:LogoutRequest');
 Route::post('/reset_password', 'UsersController@resetPassword')->middleware('requestHandler:ResetPasswordRequest');
-Route::get('/test','ProductsController@getProducts')->middleware('requestHandler:GetProductsRequest');
-
 Route::get('/get/users','UsersController@getUsers')->middleware('requestHandler:GetUsersRequest');
+Route::get('/products/get','ProductsController@getProducts')->middleware('requestHandler:GetProductsRequest');
+Route::get('/products/search','ProductsController@searchProducts')->middleware('requestHandler:SearchProductsRequest');
+Route::get('/product/detail','ProductsController@productDetail')->middleware('requestHandler:GetProductDetailsRequest');
+
+Route::post('/event/create','EventsController@create')->middleware('requestHandler:CreateEventRequest');
+Route::get('/events','EventsController@getAllEvents')->middleware('requestHandler:GetAllEventsRequest');
