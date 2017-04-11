@@ -9,7 +9,7 @@ class CreateEventRequest extends Request
 
     public function __construct(){
         parent::__construct();
-        $this->authenticatable = false;
+        $this->authenticatable = true;
     }
     /**
      * Determine if the user is authorized to make this request.

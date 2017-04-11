@@ -22,8 +22,7 @@ class Auth
     {
         try{
             $user = (new UsersRepository())->findByEmail($credentials['email']);
-        }
-        catch (\Exception $e){
+        }catch (\Exception $e){
             return false;
         }
 

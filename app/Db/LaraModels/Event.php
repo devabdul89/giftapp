@@ -14,10 +14,14 @@ class Event extends Model
      * @var array
      */
     protected $fillable = [
-        'title', 'description', 'date','private', 'product_id', 'product_vendor','private','minimum_members'
+        'title', 'description','admin_id', 'date', 'product_id', 'product_vendor','private','minimum_members'
     ];
 
     public function members(){
         return $this->belongsToMany(User::class)->withPivot('accepted');
+    }
+
+    public function admin(){
+        return $this->belongsTo(User::class,'admin_id');
     }
 }

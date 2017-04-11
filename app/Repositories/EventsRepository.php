@@ -20,11 +20,11 @@ class EventsRepository extends Repository
     }
 
     public function all(){
-        return $this->getModel()->with('members')->get();
+        return $this->getModel()->with('members')->with('admin')->get();
     }
 
     public function getPublicEvents($page = 1){
-        return $this->getModel()->where('private',0)->paginate(2);
+        return $this->getModel()->where('private',0)->with('members')->with('admin')->paginate(2);
     }
     public function create($event){
         return $this->getModel()->create($event);

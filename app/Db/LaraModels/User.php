@@ -32,4 +32,8 @@ class User extends Authenticatable
     public function events(){
         return $this->belongsToMany(Event::class)->withPivot('accepted');
     }
+
+    public function ownedEvents(){
+        return $this->hasMany(Event::class,'admin_id');
+    }
 }
