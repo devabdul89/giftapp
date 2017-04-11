@@ -91,7 +91,9 @@ class EventsController extends ParentController
                 'description'=>$request->input('description'),
                 'date'=>$request->input('date'),
                 'admin_id' => $request->user->getId(),
-                'private' => ($request->input('private') != null) ? $request->input('private'):0
+                'private' => ($request->input('private') != null) ? $request->input('private'):0,
+                'product_id' => $request->input('product_id'),
+                'price'=>$request->input('price')
             ]);
             $this->inviteMembers($event->id,[$request->user->getId()]);
             return $this->response->respond([

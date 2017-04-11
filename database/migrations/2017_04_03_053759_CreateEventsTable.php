@@ -20,6 +20,7 @@ class CreateEventsTable extends Migration
             $table->integer('admin_id')->unsigned();
             $table->text('description')->nullable();
             $table->string('product_id')->nullable();
+            $table->double('price')->default(0);
             $table->string('product_vendor')->default('amazon');
             $table->boolean('private')->default(0);
             $table->smallInteger('minimum_members')->default(1);
