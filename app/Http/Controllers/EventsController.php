@@ -90,7 +90,8 @@ class EventsController extends ParentController
                 'title'=>$request->input('title'),
                 'description'=>$request->input('description'),
                 'date'=>$request->input('date'),
-                'admin_id' => $request->user->getId()
+                'admin_id' => $request->user->getId(),
+                'private' => ($request->input('private') != null) ? $request->input('private'):0
             ]);
             $this->inviteMembers($event->id,[$request->user->getId()]);
             return $this->response->respond([
