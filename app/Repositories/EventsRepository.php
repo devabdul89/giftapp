@@ -11,6 +11,7 @@ namespace Repositories;
 
 use Illuminate\Support\Facades\DB;
 use LaraModels\Event;
+use LaraModels\User;
 
 class EventsRepository extends Repository
 {
@@ -36,6 +37,14 @@ class EventsRepository extends Repository
         {
             $query->orderBy('created_at', 'desc');
         }))->with('admin')->get());
+    }
+
+    public function getMyEvents($userId){
+        return $this->add_joined_key(User::where('id',$userId)->with(array('events.members'=>function($query)use($userId)
+        {
+            $query->orderBy('created_at', 'desc');
+            $query->where('user_id',$userId);
+        }))->with('events.admin')->first()->events);
     }
 
     public function getPublicEvents($page = 1){

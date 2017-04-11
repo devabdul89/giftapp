@@ -30,7 +30,7 @@ Route::get('/products/search','ProductsController@searchProducts')->middleware('
 Route::get('/product/detail','ProductsController@productDetail')->middleware('requestHandler:GetProductDetailsRequest');
 
 Route::post('/event/create','EventsController@create')->middleware('requestHandler:CreateEventRequest');
-Route::get('/events','EventsController@getAllEvents')->middleware('requestHandler:GetAllEventsRequest');
+Route::get('/events','EventsController@getMyEvents')->middleware('requestHandler:GetMyEventsRequest');
 
 Route::get('/public/events','EventsController@getPublicEvents')->middleware('requestHandler:GetPublicEventsRequests');
 Route::post('/event/invitation/accept','EventsController@acceptEventInvitation')->middleware('requestHandler:AcceptEventInvitationRequest');

@@ -15,6 +15,7 @@ use Requests\DeclineEventInvitationRequest;
 use Requests\FetchEventInvitationsRequest;
 use Requests\GetAllEventsRequest;
 use Requests\GetEventDetailRequest;
+use Requests\GetMyEventsRequest;
 use Requests\GetPublicEventsRequests;
 
 class EventsController extends ParentController
@@ -52,6 +53,24 @@ class EventsController extends ParentController
             return $this->response->respond([
                 'data'=>[
                     'events'=>$this->eventsRepo->all()
+                ]
+            ]);
+        }catch (ValidationErrorException $e){
+            return $this->response->respondValidationFails([$e->getMessage()]);
+        }catch (\Exception $e){
+            return $this->response->respondInternalServerError([$e->getMessage()]);
+        }
+    }
+    /**
+     * @param GetMyEventsRequest $request
+     * @return \App\Http\json
+     */
+    public function getMyEvents(GetMyEventsRequest $request)
+    {
+        try{
+            return $this->response->respond([
+                'data'=>[
+                    'events'=>$this->eventsRepo->getMyEvents($request->user->getId())
                 ]
             ]);
         }catch (ValidationErrorException $e){
