@@ -89,7 +89,8 @@ class EventsController extends ParentController
             $event = $this->eventsRepo->create([
                 'title'=>$request->input('title'),
                 'description'=>$request->input('description'),
-                'date'=>$request->input('date')
+                'date'=>$request->input('date'),
+                'admin_id' => $request->user->getId()
             ]);
             $this->inviteMembers($event->id,[$request->user->getId()]);
             return $this->response->respond([
