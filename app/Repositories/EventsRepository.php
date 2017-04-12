@@ -54,6 +54,9 @@ class EventsRepository extends Repository
         return $this->getModel()->create($event);
     }
 
+    public function joinEvent($eventId, $userId){
+        return true;
+    }
     public function acceptEvent($eventId, $userId){
         return DB::table('event_user')->where('event_id',$eventId)->where('user_id',$userId)->update(['accepted'=>1]);
     }

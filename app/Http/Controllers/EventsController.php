@@ -17,6 +17,7 @@ use Requests\GetAllEventsRequest;
 use Requests\GetEventDetailRequest;
 use Requests\GetMyEventsRequest;
 use Requests\GetPublicEventsRequests;
+use Requests\JoinEventRequest;
 
 class EventsController extends ParentController
 {
@@ -99,6 +100,26 @@ class EventsController extends ParentController
         }
     }
 
+    
+    /**
+     * @param JoinEventRequest $request
+     * @return \App\Http\json
+     */
+    public function joinEvent(JoinEventRequest $request){
+        try{
+            $this->eventsRepo->joinEvent($request->input('event_id'), $request->user->getId());
+            return $this->response->respond([
+                'data'=>[
+                    
+                ]
+            ]);
+        }catch(ValidationErrorException $ve){
+            return $this->response->respondValidationFails([$ve->getMessage()]);
+        }catch(\Exception $e){
+            return $this->response->respondInternalServerError([$e->getMessage()]);
+        }
+    }
+    
     /**
      * @param CreateEventRequest $request
      * @return \App\Http\json
