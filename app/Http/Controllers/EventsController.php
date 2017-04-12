@@ -110,7 +110,7 @@ class EventsController extends ParentController
             $this->eventsRepo->joinEvent($request->input('event_id'), $request->user->getId());
             return $this->response->respond([
                 'data'=>[
-                    
+
                 ]
             ]);
         }catch(ValidationErrorException $ve){

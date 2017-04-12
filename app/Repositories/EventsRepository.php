@@ -11,6 +11,7 @@ namespace Repositories;
 
 use Illuminate\Support\Facades\DB;
 use LaraModels\Event;
+use LaraModels\EventUser;
 use LaraModels\User;
 
 class EventsRepository extends Repository
@@ -55,7 +56,10 @@ class EventsRepository extends Repository
     }
 
     public function joinEvent($eventId, $userId){
-        return true;
+        return EventUser::create([
+            'event_id'=>$eventId,
+            'member_id'=>$userId
+        ]);
     }
     public function acceptEvent($eventId, $userId){
         return DB::table('event_user')->where('event_id',$eventId)->where('user_id',$userId)->update(['accepted'=>1]);
