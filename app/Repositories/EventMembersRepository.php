@@ -22,7 +22,7 @@ class EventMembersRepository extends Repository
     public function inviteAll($eventId, array $userIds){
         $records = [];
         foreach ($userIds as $id){
-            $records[] = ['event_id'=>$eventId,'user_id'=>$id];
+            $records[] = ['event_id'=>$eventId,'user_id'=>$id, 'created_at'=>date('Y-m-d h:i:s')];
         }
         return DB::table('event_user')->insert($records);
     }
