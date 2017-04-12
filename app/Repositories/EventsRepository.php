@@ -43,7 +43,7 @@ class EventsRepository extends Repository
     public function getMyEvents($userId){
         return $this->add_joined_key(User::where('id',$userId)->first()->events()->with('admin')->with((array('members'=>function($query){
             $query->orderBy('created_at','desc');
-        })))->orderBy('created_at','desc')->get());
+        })))->orderBy('created_at','desc')->paginate(10));
     }
 
     public function getPublicEvents($page = 1){

@@ -90,7 +90,7 @@ class EventsController extends ParentController
         try{
             return $this->response->respond([
                 'data'=>[
-                    'events'=>$this->amIinvited($this->eventsRepo->getPublicEvents($request->get('page'))->all(),$request->user->getId())
+                    'events'=>$this->amIinvited($this->eventsRepo->getPublicEvents($request->get('page')),$request->user->getId())
                 ]
             ]);
         }catch(ValidationErrorException $ve){
@@ -100,8 +100,9 @@ class EventsController extends ParentController
         }
     }
 
-    private function amIinvited(array $events, $userId){
-        foreach($events as &$event){
+    private function amIinvited($events, $userId){
+        $updatedEvents = $events->all();
+        foreach($updatedEvents as &$event){
             $event->pivot = null;
             foreach ($event->members as $member){
                 if($member->pivot->user_id == $userId){
@@ -109,6 +110,7 @@ class EventsController extends ParentController
                 }
             }
         }
+        $events->events = $updatedEvents;
         return $events;
     }
     
