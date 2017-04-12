@@ -45,13 +45,13 @@ class EventsRepository extends Repository
         {
             $query->orderBy('created_at', 'desc');
             $query->where('user_id',$userId);
-        }))->with('events.admin')->first()->events);
+        }))->with('events.admin')->first()->events()->orderBy('created_at','desc')->get());
     }
 
     public function getPublicEvents($page = 1){
         return $this->add_joined_key($this->getModel()->where('private',0)->with(array('members'=>function($query){
             $query->orderBy('created_at','desc');
-        }))->with('admin')->paginate(10));
+        }))->with('admin')->orderBy('created_at','desc')->paginate(10));
     }
     public function create($event){
         return $this->getModel()->create($event);
