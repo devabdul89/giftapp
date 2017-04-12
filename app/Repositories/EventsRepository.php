@@ -49,7 +49,9 @@ class EventsRepository extends Repository
     }
 
     public function getPublicEvents($page = 1){
-        return $this->add_joined_key($this->getModel()->where('private',0)->with('members')->with('admin')->paginate(10));
+        return $this->add_joined_key($this->getModel()->where('private',0)->with(array('members'=>function($query){
+            $query->orderBy('created_at','desc');
+        }))->with('admin')->paginate(10));
     }
     public function create($event){
         return $this->getModel()->create($event);
@@ -58,7 +60,8 @@ class EventsRepository extends Repository
     public function joinEvent($eventId, $userId){
         return EventUser::create([
             'event_id'=>$eventId,
-            'user_id'=>$userId
+            'user_id'=>$userId,
+            'accepted' => 1
         ]);
     }
     public function acceptEvent($eventId, $userId){
