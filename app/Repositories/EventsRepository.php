@@ -49,7 +49,7 @@ class EventsRepository extends Repository
     }
 
     public function getPublicEvents($page = 1){
-        return $this->add_joined_key($this->getModel()->where('private',0)->with('members')->with('admin')->paginate(2));
+        return $this->add_joined_key($this->getModel()->where('private',0)->with('members')->with('admin')->paginate(10));
     }
     public function create($event){
         return $this->getModel()->create($event);
