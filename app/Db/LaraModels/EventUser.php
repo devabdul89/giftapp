@@ -14,7 +14,7 @@ class EventUser extends Model
      * @var array
      */
     protected $fillable = [
-        'event_id', 'member_id', 'accepted'
+        'event_id', 'user_id', 'accepted'
     ];
 
 }

@@ -58,7 +58,7 @@ class EventsRepository extends Repository
     public function joinEvent($eventId, $userId){
         return EventUser::create([
             'event_id'=>$eventId,
-            'member_id'=>$userId
+            'user_id'=>$userId
         ]);
     }
     public function acceptEvent($eventId, $userId){
