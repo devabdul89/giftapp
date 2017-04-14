@@ -18,12 +18,13 @@ use Requests\GetEventDetailRequest;
 use Requests\GetMyEventsRequest;
 use Requests\GetPublicEventsRequests;
 use Requests\JoinEventRequest;
+use Requests\UpdateEventRequest;
 
 class EventsController extends ParentController
 {
 
     /**
-     * @var null|UsersRepository
+     * @var null|EventsRepository
      */
     public $eventsRepo = null;
     /**
@@ -62,6 +63,27 @@ class EventsController extends ParentController
             return $this->response->respondInternalServerError([$e->getMessage()]);
         }
     }
+
+
+    /**
+     * @param UpdateEventRequest $request
+     * @return \App\Http\json
+     */
+    public function update(UpdateEventRequest $request){
+        try{
+            $this->eventsRepo->updateWhere(['id'=>$request->input('event_id')],$request->updateableData());
+            return $this->response->respond([
+                'data'=>[
+
+                ]
+            ]);
+        }catch(ValidationErrorException $ve){
+            return $this->response->respondValidationFails([$ve->getMessage()]);
+        }catch(\Exception $e){
+            return $this->response->respondInternalServerError([$e->getMessage()]);
+        }
+    }
+
     /**
      * @param GetMyEventsRequest $request
      * @return \App\Http\json
@@ -146,7 +168,8 @@ class EventsController extends ParentController
                 'admin_id' => $request->user->getId(),
                 'private' => ($request->input('private') != null) ? $request->input('private'):0,
                 'product_id' => $request->input('product_id'),
-                'price'=>$request->input('price')
+                'price'=>$request->input('price'),
+                'shipping_address' => $request->input('shipping_address')
             ]);
             $this->inviteMembers($event->id,[$request->user->getId()]);
             return $this->response->respond([

@@ -39,3 +39,5 @@ Route::get('/event/detail','EventsController@getEventDetail')->middleware('reque
 Route::get('/event/invitations','EventsController@fetchEventInvitations')->middleware('requestHandler:FetchEventInvitationsRequest');
 Route::post('/product/create','ProductsController@create')->middleware('requestHandler:CreateProductRequest');
 Route::post('/event/join','EventsController@joinEvent')->middleware('requestHandler:JoinEventRequest');
+Route::post('/event/update','EventsController@update')->middleware('requestHandler:UpdateEventRequest');
+Route::post('/session/update','Auth\AuthController@updateToken')->middleware('requestHandler:UpdateSessionRequest');

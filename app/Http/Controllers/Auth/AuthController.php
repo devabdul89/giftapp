@@ -14,6 +14,7 @@ use Requests\ForgotPasswordRequest;
 use Requests\LoginRequest;
 use Requests\LogoutRequest;
 use Requests\RegisterRequest;
+use Requests\UpdateSessionRequest;
 use Traits\ImageHelper;
 
 class AuthController extends ParentController
@@ -134,6 +135,30 @@ class AuthController extends ParentController
         }catch (ValidationErrorException $ve){
             return $this->response->respondValidationFails([$ve->getMessage()]);
         }catch (\Exception $e){
+            return $this->response->respondInternalServerError([$e->getMessage()]);
+        }
+    }
+
+
+    /**
+     * @param UpdateSessionRequest $request
+     * @return \App\Http\json
+     */
+    public function updateToken(UpdateSessionRequest $request){
+        try{
+            $this->usersRep->updateWhere(['id'=>$request->user->getId()],['session_token'=>$request->input('session_id')]);
+            $loggedInUser = $this->usersRep->findByToken($request->input('session_id'));
+            $billingCard = $this->billingCardsRepo->findByUserId($loggedInUser->getId());
+            return $this->response->respond([
+                'data'=>[
+                    'user'=>$loggedInUser->toJson(),
+                    'billing_card' => ($billingCard == null)?null:$billingCard->toJson()
+                ],
+                'access_token'=>$loggedInUser->getSessionToken()
+            ]);
+        }catch(ValidationErrorException $ve){
+            return $this->response->respondValidationFails([$ve->getMessage()]);
+        }catch(\Exception $e){
             return $this->response->respondInternalServerError([$e->getMessage()]);
         }
     }

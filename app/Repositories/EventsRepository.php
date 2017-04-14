@@ -51,6 +51,7 @@ class EventsRepository extends Repository
             $query->orderBy('created_at','desc');
         }))->with('admin')->orderBy('created_at','desc')->paginate(10));
     }
+
     public function create($event){
         return $this->getModel()->create($event);
     }
@@ -62,6 +63,7 @@ class EventsRepository extends Repository
             'accepted' => 1
         ]);
     }
+
     public function acceptEvent($eventId, $userId){
         return DB::table('event_user')->where('event_id',$eventId)->where('user_id',$userId)->update(['accepted'=>1]);
     }
