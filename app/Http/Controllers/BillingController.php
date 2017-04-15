@@ -50,8 +50,4 @@ class BillingController extends ParentController
             return $this->response->respondInternalServerError([$e->getMessage()]);
         }
     }
-
-    public function main(){
-
-    }
 }

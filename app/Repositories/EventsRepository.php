@@ -84,4 +84,8 @@ class EventsRepository extends Repository
     public function fetchEventInvitations($eventId){
         return $this->getModel()->find($eventId)->members;
     }
+
+    public function cancelEvent($eventId){
+        $this->deleteById($eventId);
+    }
 }

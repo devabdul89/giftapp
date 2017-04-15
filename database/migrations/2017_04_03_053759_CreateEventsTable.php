@@ -27,7 +27,7 @@ class CreateEventsTable extends Migration
             $table->smallInteger('minimum_members')->default(1);
             $table->timestamps();
 
-            $table->foreign('admin_id')->references('id')->on('users');
+            $table->foreign('admin_id')->references('id')->on('users')->onDelete('cascade');
         });
     }
 

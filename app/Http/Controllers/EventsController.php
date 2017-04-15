@@ -10,6 +10,7 @@ use Repositories\BillingRepository;
 use Repositories\EventsRepository;
 use Repositories\UsersRepository;
 use Requests\AcceptEventInvitationRequest;
+use Requests\CancelEventRequest;
 use Requests\CreateEventRequest;
 use Requests\DeclineEventInvitationRequest;
 use Requests\FetchEventInvitationsRequest;
@@ -252,6 +253,24 @@ class EventsController extends ParentController
                    'invitations'=> $this->eventsRepo->fetchEventInvitations($request->get('event_id'))
                ]
            ]);
+       }catch(ValidationErrorException $ve){
+           return $this->response->respondValidationFails([$ve->getMessage()]);
+       }catch(\Exception $e){
+           return $this->response->respondInternalServerError([$e->getMessage()]);
+       }
+   }
+   
+   
+   /**
+    * @param CancelEventRequest $request
+    * @return \App\Http\json
+    */
+   public function cancel(CancelEventRequest $request){
+       try{
+           $this->eventsRepo->cancelEvent($request->input('event_id'));
+            return $this->response->respond([
+                'data'=>[]
+            ]);
        }catch(ValidationErrorException $ve){
            return $this->response->respondValidationFails([$ve->getMessage()]);
        }catch(\Exception $e){
