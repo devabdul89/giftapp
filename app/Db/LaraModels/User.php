@@ -33,6 +33,10 @@ class User extends Authenticatable
         return $this->belongsToMany(Event::class)->withPivot('accepted');
     }
 
+    public function wishlist(){
+        return $this->belongsToMany(Product::class,'wishlist','user_id','product_id')->withPivot('product_vendor');
+    }
+
     public function ownedEvents(){
         return $this->hasMany(Event::class,'admin_id');
     }

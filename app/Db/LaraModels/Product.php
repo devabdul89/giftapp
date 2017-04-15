@@ -20,5 +20,9 @@ class Product extends Model
     public function images(){
         return $this->hasMany(ProductImage::class,'product_id');
     }
+
+    public function wishers(){
+        return $this->belongsToMany(User::class,'wishlist','product_id','user_id')->withPivot('product_vendor');
+    }
 }
 

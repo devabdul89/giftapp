@@ -8,6 +8,8 @@
 
 namespace Repositories;
 
+use LaraModels\User;
+
 class WishlistRepository extends \Repositories\Repository
 {
     public function __construct()
@@ -24,6 +26,6 @@ class WishlistRepository extends \Repositories\Repository
     }
 
     public function getByUser($userId){
-        return $this->getModel()->where('user_id',$userId)->get();
+        return $this->getModel()->with('product')->get();
     }
 }
