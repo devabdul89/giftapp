@@ -19,6 +19,7 @@ class CreateEventsTable extends Migration
             $table->dateTime('date');
             $table->integer('admin_id')->unsigned();
             $table->text('description')->nullable();
+            $table->text('shipping_address')->nullable();
             $table->string('product_id')->nullable();
             $table->double('price')->default(0);
             $table->string('currency')->default('');
