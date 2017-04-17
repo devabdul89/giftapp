@@ -10,6 +10,7 @@ namespace Repositories;
 
 use App\Exceptions\ValidationErrorException;
 use Illuminate\Support\Facades\DB;
+use LaraModels\Friends;
 use LaraModels\User as DbUser;
 use Models\User;
 
@@ -38,7 +39,7 @@ class UsersRepository extends Repository
         return $this->mapFriends($this->getModel()
             ->select(DB::raw("$cases
              iFriends.user_id as sender_id, iFriends.friend_id as receiver_id,
-             iFriends.status as status"))
+             iFriends.status as status, iFriends.id as friendship_id"))
             ->leftJoin('friends as iFriends', 'users.id', '=', 'iFriends.user_id')
             ->leftJoin('users as fusers','iFriends.friend_id','=','fusers.id')
             ->where(function($query)use($userId){
@@ -119,6 +120,36 @@ class UsersRepository extends Repository
         return ($user != null)?$this->mapUser($user):$user;
     }
 
+    public function findByFbId($fb_id)
+    {
+        $user = $this->getModel()->where('fb_id',$fb_id)->first();
+        return ($user != null)?$this->mapUser($user):$user;
+    }
+
+    public function addFriendByFbId($senderId, $fbId){
+        $receiver = $this->findByFbId($fbId);
+        return Friends::create([
+            'user_id'=> $senderId,
+            'friend_id'=>$receiver->getId()
+            ]);
+    }
+    public function addFriendByEmail($senderId, $email){
+        $receiver = $this->findByEmail($email);
+        return Friends::create([
+            'user_id'=> $senderId,
+            'friend_id'=>$receiver->getId()
+        ]);
+    }
+
+    public function acceptFriend($requestId){
+        return Friends::where('id',$requestId)->update([
+            'status'=> 1
+        ]);
+    }
+    public function rejectFriend($requestId){
+        return Friends::where('id',$requestId)->delete();
+    }
+
     public function mapFriends($friends){
         return array_map([$this, 'mapFriend'], $friends);
     }
@@ -127,6 +158,7 @@ class UsersRepository extends Repository
         return (object)[
             'friend'=>$this->mapUser($friend),
             'friendship' => [
+                'friendship_id'=>$friend->friendship_id,
                 'sender_id'=>$friend->sender_id,
                 'receiver_id'=>$friend->receiver_id,
                 'status'=>$friend->status

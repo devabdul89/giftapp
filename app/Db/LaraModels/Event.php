@@ -14,7 +14,7 @@ class Event extends Model
      * @var array
      */
     protected $fillable = [
-        'title', 'description','admin_id', 'date', 'product_id', 'price','currency', 'shipping_address', 'product_vendor','private','minimum_members'
+        'title', 'description','admin_id', 'date', 'product_id', 'price','currency', 'shipping_address', 'product_vendor','private','minimum_members', 'lat_lng'
     ];
 
     public function members(){

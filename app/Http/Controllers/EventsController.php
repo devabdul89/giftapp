@@ -170,7 +170,9 @@ class EventsController extends ParentController
                 'private' => ($request->input('private') != null) ? $request->input('private'):0,
                 'product_id' => $request->input('product_id'),
                 'price'=>$request->input('price'),
-                'shipping_address' => $request->input('shipping_address')
+                'shipping_address' => $request->input('shipping_address'),
+                'currency' => $request->input('currency'),
+                'lat_lng'=>$request->input('lat_lng')
             ]);
             $this->inviteMembers($event->id,[$request->user->getId()]);
             return $this->response->respond([
@@ -269,7 +271,9 @@ class EventsController extends ParentController
        try{
            $this->eventsRepo->cancelEvent($request->input('event_id'));
             return $this->response->respond([
-                'data'=>[]
+                'data'=>[
+                    'events'=>$this->eventsRepo->getMyEvents($request->user->getId())
+                ]
             ]);
        }catch(ValidationErrorException $ve){
            return $this->response->respondValidationFails([$ve->getMessage()]);

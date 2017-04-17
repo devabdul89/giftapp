@@ -5,12 +5,17 @@ namespace App\Http\Controllers;
 use App\Exceptions\ValidationErrorException;
 use App\Http\Response;
 use Repositories\UsersRepository;
+use Repositories\WishlistRepository;
+use Requests\AcceptFriendRequest;
+use Requests\AddAsFriendRequest;
 use Requests\GetUserFriendsRequest;
 use Requests\GetUsersRequest;
+use Requests\RejectFriendRequest;
 use Requests\ResetPasswordRequest;
 use Requests\UpdateProfilePictureRequest;
 use Requests\UpdateProfileRequest;
 use Requests\UpdateWalkthroughStatusRequest;
+use Requests\UserProfileRequest;
 use Traits\ImageHelper;
 use Traits\ModelToJson;
 
@@ -121,6 +126,86 @@ class UsersController extends ParentController
         }catch (ValidationErrorException $ve){
             return $this->response->respondValidationFails([$ve->getMessage()]);
         }catch (\Exception $e){
+            return $this->response->respondInternalServerError([$e->getMessage()]);
+        }
+    }
+
+
+    /**
+     * @param AddAsFriendRequest $request
+     * @return \App\Http\json
+     */
+    public function addFriend(AddAsFriendRequest $request){
+        try{
+            if($request->input('fb_id')){
+                $this->usersRepo->addFriendByFbId($request->user->getId(),$request->input('fb_id'));
+            }
+            if($request->input('email')){
+                $this->usersRepo->addFriendByEmail($request->user->getId(),$request->input('email'));
+            }
+            return $this->response->respond([
+                'data'=>[
+                    'friends'=>$this->transformFriendsResponse($this->usersRepo->friends($request->user->getId()))
+                ]
+            ]);
+        }catch(ValidationErrorException $ve){
+            return $this->response->respondValidationFails([$ve->getMessage()]);
+        }catch(\Exception $e){
+            return $this->response->respondInternalServerError([$e->getMessage()]);
+        }
+    }
+
+
+    /**
+     * @param AcceptFriendRequest $request
+     * @return \App\Http\json
+     */
+    public function acceptFriend(AcceptFriendRequest $request){
+        try{
+            $this->usersRepo->acceptFriend($request->input('request_id'));
+            return $this->response->respond([
+                'data'=> $this->transformFriendsResponse($this->usersRepo->friends($request->user->getId()))
+            ]);
+        }catch(ValidationErrorException $ve){
+            return $this->response->respondValidationFails([$ve->getMessage()]);
+        }catch(\Exception $e){
+            return $this->response->respondInternalServerError([$e->getMessage()]);
+        }
+    }
+
+
+    /**
+     * @param RejectFriendRequest $request
+     * @return \App\Http\json
+     */
+    public function rejectFriend(RejectFriendRequest $request){
+        try{
+            $this->usersRepo->rejectFriend($request->input('request_id'));
+            return $this->response->respond([
+                'data'=>$this->transformFriendsResponse($this->usersRepo->friends($request->user->getId()))
+            ]);
+        }catch(ValidationErrorException $ve){
+            return $this->response->respondValidationFails([$ve->getMessage()]);
+        }catch(\Exception $e){
+            return $this->response->respondInternalServerError([$e->getMessage()]);
+        }
+    }
+
+    /**
+     * @param UserProfileRequest $request
+     * @return \App\Http\json
+     */
+    public function userProfile(UserProfileRequest $request){
+        try{
+            return $this->response->respond([
+                'data'=>[
+                    'profile'=>$this->usersRepo->findById($request->input('user_id'))->toJson(),
+                    'wishlist'=>(new WishlistRepository())->getByUser($request->input('user_id'))
+                ]
+            ]);
+        }catch(ValidationErrorException $ve){
+            return $this->response->respondValidationFails([$ve->getMessage()]);
+        }catch(\Exception $e){
             return $this->response->respondInternalServerError([$e->getMessage()]);
         }
     }

@@ -26,6 +26,7 @@ class CreateEventsTable extends Migration
             $table->string('product_vendor')->default('amazon');
             $table->boolean('private')->default(0);
             $table->smallInteger('minimum_members')->default(1);
+            $table->string('lat_lng')->nullable();
             $table->timestamps();
 
             $table->foreign('admin_id')->references('id')->on('users')->onDelete('cascade');
