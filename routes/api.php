@@ -17,6 +17,7 @@ Route::post('/auth/fblogin', 'Auth\AuthController@fblogin')->middleware('request
 Route::post('/auth/register', 'Auth\AuthController@register')->middleware('requestHandler:RegisterRequest');
 Route::post('/auth/login', 'Auth\AuthController@login')->middleware('requestHandler:LoginRequest');
 Route::post('/auth/forgot_password', 'Auth\AuthController@forgotPassword')->middleware('requestHandler:ForgotPasswordRequest');
+Route::post('/session/update','Auth\AuthController@updateToken')->middleware('requestHandler:UpdateSessionRequest');
 
 Route::post('/add_billing_card', 'BillingController@AddBillingCard')->middleware('requestHandler:AddBillingCardRequest');
 Route::post('/update_profile_picture', 'UsersController@updateProfilePicture')->middleware('requestHandler:UpdateProfilePictureRequest');
@@ -42,8 +43,9 @@ Route::post('/event/cancel','EventsController@cancel')->middleware('requestHandl
 Route::post('/product/create','ProductsController@create')->middleware('requestHandler:CreateProductRequest');
 Route::post('/event/join','EventsController@joinEvent')->middleware('requestHandler:JoinEventRequest');
 Route::post('/event/update','EventsController@update')->middleware('requestHandler:UpdateEventRequest');
-Route::post('/session/update','Auth\AuthController@updateToken')->middleware('requestHandler:UpdateSessionRequest');
 
 Route::post('/wishlist/add','WishlistController@add')->middleware('requestHandler:AddToWishlistRequest');
 Route::post('/wishlist/remove','WishlistController@remove')->middleware('requestHandler:RemoveFromWishlistRequest');
 Route::get('/wishlist','WishlistController@get')->middleware('requestHandler:GetWishlistRequest');
+
+Route::get('/friends','UsersController@friends')->middleware('requestHandler:GetUserFriendsRequest');

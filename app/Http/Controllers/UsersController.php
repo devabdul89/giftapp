@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Exceptions\ValidationErrorException;
 use App\Http\Response;
 use Repositories\UsersRepository;
+use Requests\GetUserFriendsRequest;
 use Requests\GetUsersRequest;
 use Requests\ResetPasswordRequest;
 use Requests\UpdateProfilePictureRequest;
@@ -23,6 +24,32 @@ class UsersController extends ParentController
     {
         $this->usersRepo = $usersRepository;
         $this->response = new Response();
+    }
+
+
+    /**
+     * @param GetUserFriendsRequest $request
+     * @return \App\Http\json
+     */
+    public function friends(GetUserFriendsRequest $request){
+        try{
+            return $this->response->respond([
+                'data'=>[
+                    'friends'=>$this->transformFriendsResponse($this->usersRepo->friends($request->user->getId()))
+                ]
+            ]);
+        }catch(ValidationErrorException $ve){
+            return $this->response->respondValidationFails([$ve->getMessage()]);
+        }catch(\Exception $e){
+            return $this->response->respondInternalServerError([$e->getMessage()]);
+        }
+    }
+
+    private function transformFriendsResponse($friends){
+        foreach ($friends as &$friend){
+            $friend->friend = $friend->friend->toJson();
+        }
+        return $friends;
     }
 
     public function updateProfilePicture(UpdateProfilePictureRequest $request)

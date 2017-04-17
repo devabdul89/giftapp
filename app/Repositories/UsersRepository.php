@@ -9,6 +9,7 @@
 namespace Repositories;
 
 use App\Exceptions\ValidationErrorException;
+use Illuminate\Support\Facades\DB;
 use LaraModels\User as DbUser;
 use Models\User;
 
@@ -19,6 +20,33 @@ class UsersRepository extends Repository
         $this->setModel(new DbUser());
     }
 
+
+    public function friends($userId){
+        $fields = ['id','fb_id','full_name','email','password','profile_picture','password','password_created','session_token','walkthrough_completed','login_by','image_setted','address','birthday','device_id','device_type','created_at','updated_at'];
+        $cases = "";
+        foreach ($fields as $field){
+            $cases.="
+            CASE
+                WHEN iFriends.user_id = $userId
+                    THEN
+                        fusers.$field
+                    else
+                        users.$field
+                END as $field,
+            ";
+        }
+        return $this->mapFriends($this->getModel()
+            ->select(DB::raw("$cases
+             iFriends.user_id as sender_id, iFriends.friend_id as receiver_id,
+             iFriends.status as status"))
+            ->leftJoin('friends as iFriends', 'users.id', '=', 'iFriends.user_id')
+            ->leftJoin('users as fusers','iFriends.friend_id','=','fusers.id')
+            ->where(function($query)use($userId){
+                $query->where("iFriends.user_id","=",$userId);
+                $query->orWhere("iFriends.friend_id",$userId);
+            })
+            ->get()->all());
+    }
 
     /**
      * @param User $user
@@ -91,10 +119,24 @@ class UsersRepository extends Repository
         return ($user != null)?$this->mapUser($user):$user;
     }
 
+    public function mapFriends($friends){
+        return array_map([$this, 'mapFriend'], $friends);
+    }
+
+    public function mapFriend($friend){
+        return (object)[
+            'friend'=>$this->mapUser($friend),
+            'friendship' => [
+                'sender_id'=>$friend->sender_id,
+                'receiver_id'=>$friend->receiver_id,
+                'status'=>$friend->status
+            ]
+        ];
+    }
+
     public function mapUsersCollection($users){
         return array_map([$this, 'mapUser'], $users);
     }
-
 
     /**
      * @param $user
