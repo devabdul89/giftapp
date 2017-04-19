@@ -10,6 +10,7 @@ use Repositories\BillingRepository;
 use Repositories\EventsRepository;
 use Repositories\UsersRepository;
 use Requests\AcceptEventInvitationRequest;
+use Requests\CancelEventMemberRequest;
 use Requests\CancelEventRequest;
 use Requests\CreateEventRequest;
 use Requests\DeclineEventInvitationRequest;
@@ -18,6 +19,7 @@ use Requests\GetAllEventsRequest;
 use Requests\GetEventDetailRequest;
 use Requests\GetMyEventsRequest;
 use Requests\GetPublicEventsRequests;
+use Requests\InviteMemberRequest;
 use Requests\JoinEventRequest;
 use Requests\UpdateEventRequest;
 
@@ -187,19 +189,44 @@ class EventsController extends ParentController
     
     
     /**
-     * @param InviteMember $request
+     * @param InviteMemberRequest $request
      * @return \App\Http\json
      */
-    public function inviteMemberRequest(InviteMember $request){
+    public function inviteMemberRequest(InviteMemberRequest $request){
         try{
-            
+            $this->inviteMembers($request->input('event_id'),[$request->input('user_id')]);
+            return $this->response->respond([
+                'data'=>[
+                    $this->eventsRepo->getEventMembers($request->input('event_id'))
+                ]
+            ]);
         }catch(ValidationErrorException $ve){
             return $this->response->respondValidationFails([$ve->getMessage()]);
         }catch(\Exception $e){
             return $this->response->respondInternalServerError([$e->getMessage()]);
         }
     }
-    
+
+
+    /**
+     * @param CancelEventMemberRequest $request
+     * @return \App\Http\json
+     */
+    public function cancelEventMember(CancelEventMemberRequest $request){
+        try{
+            $this->eventsRepo->cancelMember($request->input('event_id'),$request->input('user_id'));
+            return $this->response->respond([
+                'data'=>[
+                    $this->eventsRepo->getEventMembers($request->input('event_id'))
+                ]
+            ]);
+        }catch(ValidationErrorException $ve){
+            return $this->response->respondValidationFails([$ve->getMessage()]);
+        }catch(\Exception $e){
+            return $this->response->respondInternalServerError([$e->getMessage()]);
+        }
+    }
+
     public function inviteMembers($eventId,$userIds){
         $this->membersRepo->inviteAll($eventId,$userIds);
     }

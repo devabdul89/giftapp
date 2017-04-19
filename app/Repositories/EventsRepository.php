@@ -44,6 +44,15 @@ class EventsRepository extends Repository
         return $this->getModel()->where('date','<',date('Y-m-d'))->get();
     }
 
+    public function getEventMembers($eventId){
+        return $this->add_joined_key($this->getModel()->with(array('members'=>function($query)
+        {
+            $query->orderBy('created_at', 'desc');
+        }))->where('id',$eventId)->get())[0];
+    }
+    public function cancelMember($eventId, $userId){
+        return EventUser::where('event_id',$eventId)->where('user_id',$userId)->delete();
+    }
     public function getMyEvents($userId){
         return $this->add_joined_key(User::where('id',$userId)->first()->events()->with('admin')->with((array('members'=>function($query){
             $query->orderBy('created_at','desc');

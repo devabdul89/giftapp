@@ -39,7 +39,8 @@ Route::post('/event/invitation/decline','EventsController@declineEventInvitation
 Route::get('/event/detail','EventsController@getEventDetail')->middleware('requestHandler:GetEventDetailRequest');
 Route::get('/event/invitations','EventsController@fetchEventInvitations')->middleware('requestHandler:FetchEventInvitationsRequest');
 Route::post('/event/cancel','EventsController@cancel')->middleware('requestHandler:CancelEventRequest');
-Route::post('/event/member/invite','EventsController@inviteMember')->middleware('requestHandler:InviteMemberRequest');
+Route::post('/event/member/invite','EventsController@inviteMemberRequest')->middleware('requestHandler:InviteMemberRequest');
+Route::post('/event/member/cancel','EventsController@cancelEventMember')->middleware('requestHandler:CancelEventMemberRequest');
 
 Route::post('/product/create','ProductsController@create')->middleware('requestHandler:CreateProductRequest');
 Route::post('/event/join','EventsController@joinEvent')->middleware('requestHandler:JoinEventRequest');
