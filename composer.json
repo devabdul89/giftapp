@@ -9,7 +9,8 @@
         "laravel/framework": "5.4.*",
         "laravel/tinker": "~1.0",
         "laravel/cashier": "~7.0",
-	    "Nathanmac/Parser": "4.*"
+	    "Nathanmac/Parser": "4.*",
+        "davibennun/laravel-push-notification": "dev-laravel5"
     },
     "require-dev": {
         "fzaninotto/faker": "~1.4",
@@ -27,7 +28,8 @@
             "Models\\":"app/Models",
             "Stubs\\":"app/Stubs",
             "Repositories\\":"app/Repositories",
-            "Traits\\":"app/Traits"
+            "Traits\\":"app/Traits",
+            "Libs\\":"app/Libs"
         }
     },
     "autoload-dev": {

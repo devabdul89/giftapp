@@ -4,10 +4,11 @@ namespace LaraModels;
 
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use Laravel\Cashier\Billable;
 
 class User extends Authenticatable
 {
-    use Notifiable;
+    use Billable;
 
     protected $table = 'users';
 

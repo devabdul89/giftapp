@@ -3,6 +3,7 @@
 namespace App\Console;
 
 use App\Console\Commands\MakeRepositoryCommand;
+use App\Console\Commands\ProcessEventsCommand;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
 use App\Console\Commands\RequestMakeCommand;
@@ -16,7 +17,8 @@ class Kernel extends ConsoleKernel
      */
     protected $commands = [
         MakeRepositoryCommand::class,
-        RequestMakeCommand::class
+        RequestMakeCommand::class,
+        ProcessEventsCommand::class
     ];
 
     /**

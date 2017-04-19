@@ -184,7 +184,22 @@ class EventsController extends ParentController
             return $this->response->respondInternalServerError([$e->getMessage()]);
         }
     }
-
+    
+    
+    /**
+     * @param InviteMember $request
+     * @return \App\Http\json
+     */
+    public function inviteMemberRequest(InviteMember $request){
+        try{
+            
+        }catch(ValidationErrorException $ve){
+            return $this->response->respondValidationFails([$ve->getMessage()]);
+        }catch(\Exception $e){
+            return $this->response->respondInternalServerError([$e->getMessage()]);
+        }
+    }
+    
     public function inviteMembers($eventId,$userIds){
         $this->membersRepo->inviteAll($eventId,$userIds);
     }

@@ -178,6 +178,7 @@ return [
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
         Nathanmac\Utilities\Parser\ParserServiceProvider::class,
+        \Davibennun\LaravelPushNotification\LaravelPushNotificationServiceProvider::class,
 
     ],
 
@@ -193,7 +194,6 @@ return [
     */
 
     'aliases' => [
-
         'App' => Illuminate\Support\Facades\App::class,
         'Artisan' => Illuminate\Support\Facades\Artisan::class,
         'Auth' => Illuminate\Support\Facades\Auth::class,
@@ -228,6 +228,7 @@ return [
         'Validator' => Illuminate\Support\Facades\Validator::class,
         'View' => Illuminate\Support\Facades\View::class,
         'Parser' => Nathanmac\Utilities\Parser\Facades\Parser::class,
+        'PushNotification' => \Davibennun\LaravelPushNotification\Facades\PushNotification::class
     ],
 
 ];

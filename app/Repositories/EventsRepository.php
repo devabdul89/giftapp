@@ -40,6 +40,10 @@ class EventsRepository extends Repository
         }))->with('admin')->get());
     }
 
+    public function getReadyEvents(){
+        return $this->getModel()->where('date','<',date('Y-m-d'))->get();
+    }
+
     public function getMyEvents($userId){
         return $this->add_joined_key(User::where('id',$userId)->first()->events()->with('admin')->with((array('members'=>function($query){
             $query->orderBy('created_at','desc');
