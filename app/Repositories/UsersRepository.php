@@ -49,6 +49,40 @@ class UsersRepository extends Repository
             ->get()->all());
     }
 
+
+    public function searchFriends($userId,$keyword){
+        $fields = ['id','fb_id','full_name','email','password','profile_picture','password','password_created','session_token','walkthrough_completed','login_by','image_setted','address','birthday','device_id','device_type','created_at','updated_at'];
+        $cases = "";
+        foreach ($fields as $field){
+            $cases.="
+            CASE
+                WHEN iFriends.user_id = $userId
+                    THEN
+                        fusers.$field
+                    else
+                        users.$field
+                END as $field,
+            ";
+        }
+        $friends = $this->getModel()
+            ->select(DB::raw("$cases
+             iFriends.user_id as sender_id, iFriends.friend_id as receiver_id,
+             iFriends.status as status, iFriends.id as friendship_id"))
+            ->leftJoin('friends as iFriends', 'users.id', '=', 'iFriends.user_id')
+            ->leftJoin('users as fusers','iFriends.friend_id','=','fusers.id')
+            ->where(function($query)use($userId){
+                $query->where("iFriends.user_id","=",$userId);
+                $query->orWhere("iFriends.friend_id",$userId);
+            })
+            ->where(function($query)use($userId, $keyword){
+                $query->where("fusers.full_name","like","%".$keyword."%");
+                $query->orWhere("fusers.email","like","%".$keyword."%");
+            })
+            ->paginate(10);
+        $friends = $this->mapFriends($friends->all());
+        return $friends;
+    }
+
     /**
      * @param User $user
      * @return User $user

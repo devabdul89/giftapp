@@ -12,6 +12,7 @@ use Requests\GetUserFriendsRequest;
 use Requests\GetUsersRequest;
 use Requests\RejectFriendRequest;
 use Requests\ResetPasswordRequest;
+use Requests\SearchFriendsRequest;
 use Requests\UpdateProfilePictureRequest;
 use Requests\UpdateProfileRequest;
 use Requests\UpdateWalkthroughStatusRequest;
@@ -41,6 +42,25 @@ class UsersController extends ParentController
             return $this->response->respond([
                 'data'=>[
                     'friends'=>$this->transformFriendsResponse($this->usersRepo->friends($request->user->getId()))
+                ]
+            ]);
+        }catch(ValidationErrorException $ve){
+            return $this->response->respondValidationFails([$ve->getMessage()]);
+        }catch(\Exception $e){
+            return $this->response->respondInternalServerError([$e->getMessage()]);
+        }
+    }
+
+
+    /**
+     * @param SearchFriendsRequest $request
+     * @return \App\Http\json
+     */
+    public function searchFriends(SearchFriendsRequest $request){
+        try{
+            return $this->response->respond([
+                'data'=>[
+                    'friends'=>$this->transformFriendsResponse($this->usersRepo->searchFriends($request->user->getId(),$request->input('keyword')))
                 ]
             ]);
         }catch(ValidationErrorException $ve){
