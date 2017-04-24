@@ -90,7 +90,10 @@ class WishlistController extends ParentController
                 $this->wishlistRepo->add([
                     'user_id'=>$request->user->getId(),
                     'product_id'=>$request->input('product_id'),
-                    'product_vendor'=>$request->input('product_vendor')
+                    'product_vendor'=>$request->input('product_vendor'),
+                    'image_url'=>$request->input('image_url'),
+                    'price' =>$request->input('price'),
+                    'title'=>$request->input('title')
                 ]);
                 return $this->response->respond([
                     'data'=>[
