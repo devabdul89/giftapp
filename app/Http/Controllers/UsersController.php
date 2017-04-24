@@ -60,7 +60,7 @@ class UsersController extends ParentController
         try{
             return $this->response->respond([
                 'data'=>[
-                    'friends'=>$this->transformFriendsResponse($this->usersRepo->searchFriends($request->user->getId(),$request->input('keyword')))
+                    'friends'=>$this->transformFriendsResponse($this->usersRepo->searchUsers($request->input('keyword')))
                 ]
             ]);
         }catch(ValidationErrorException $ve){
