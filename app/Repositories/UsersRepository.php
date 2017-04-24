@@ -54,7 +54,7 @@ class UsersRepository extends Repository
         return $this->mapUsersCollection($this->getModel()->where(function($query)use( $keyword){
             $query->where("full_name","like","%".$keyword."%");
             $query->orWhere("email","like","%".$keyword."%");
-        })->get());
+        })->get()->all());
     }
     public function searchFriends($userId,$keyword){
         $fields = ['id','fb_id','full_name','email','password','profile_picture','password','password_created','session_token','walkthrough_completed','login_by','image_setted','address','birthday','device_id','device_type','created_at','updated_at'];
