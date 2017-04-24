@@ -18,6 +18,8 @@ class CreateEventUsersTable extends Migration
             $table->integer('event_id')->unsigned();
             $table->integer('user_id')->unsigned();
             $table->boolean('admin')->default(0);
+            $table->string('charge_id')->nullable();
+            $table->boolean('charge_status')->default(0);
             $table->boolean('accepted')->default(0);
             $table->timestamps();
 

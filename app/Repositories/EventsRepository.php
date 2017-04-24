@@ -41,7 +41,7 @@ class EventsRepository extends Repository
     }
 
     public function getReadyEvents(){
-        return $this->getModel()->where('date','<',date('Y-m-d'))->get();
+        return $this->getModel()->where('date','<=',date('Y-m-d'))->where('status',0)->get();
     }
 
     public function getEventMembers($eventId){

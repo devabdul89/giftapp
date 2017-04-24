@@ -10,12 +10,13 @@ namespace Repositories;
 
 
 use Illuminate\Support\Facades\DB;
+use LaraModels\Payment;
 
 class PaymentsRepository extends Repository
 {
     public function __construct()
     {
-        $this->setModel(new Payment);
+        $this->setModel(new Payment());
     }
 
     public function create($payment){

@@ -64,7 +64,7 @@ class EventProcessor
      * process a given event
      * */
     public function process(){
-        $this->cashOut()->createOrder()->updateEventStatus();
+        $this->createOrder()->updateEventStatus();
         return true;
     }
 }
