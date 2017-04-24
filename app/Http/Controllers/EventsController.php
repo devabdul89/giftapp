@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 
 use App\Exceptions\ValidationErrorException;
 use App\Http\Response;
+use Davibennun\LaravelPushNotification\Facades\PushNotification;
 use Repositories\EventMembersRepository;
 use Repositories\BillingRepository;
 use Repositories\EventsRepository;
@@ -239,14 +240,27 @@ class EventsController extends ParentController
 
         try{
             $this->eventsRepo->acceptEvent($request->input('event_id'),$request->user->getId());
-            return $this->response->respond([
-                'data'=>[]
-            ]);
+            $admin = $this->eventsRepo->findById($request->input('event_id'))->admin;
         }catch(ValidationErrorException $ve){
             return $this->response->respondValidationFails([$ve->getMessage()]);
         }catch(\Exception $e){
             return $this->response->respondInternalServerError([$e->getMessage()]);
         }
+        //sending push notification
+        try{
+            PushNotification::app($admin->device_type)
+                ->to($admin->device_id)
+                ->send($request->user->getFullName().' accepted your invitation.',array(
+                    'data' => array(
+
+                    )
+                ));
+        }catch (\Exception $e){
+            return $this->response->respondInternalServerError([$e->getMessage()]);
+        }
+        return $this->response->respond([
+            'data'=>[]
+        ]);
     }
 
 

@@ -44,7 +44,7 @@ class EventProcessor
            'event_id'=>$this->event->id,
             'price'=>$this->event->price
         ]);
-        return $this;
+        return $this->createPayment(['order_id'=>$order->id,'price'=>$order->price]);
     }
 
     public function createPayment($payment){
