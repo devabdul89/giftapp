@@ -14,7 +14,7 @@ class Wishlist extends Model
      * @var array
      */
     protected $fillable = [
-        'user_id', 'product_id', 'product_vendor','price','image_url','title'
+        'user_id', 'product_id', 'product_vendor','price','image_url','title','currency'
     ];
 
     public function user(){

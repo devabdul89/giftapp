@@ -93,7 +93,8 @@ class WishlistController extends ParentController
                     'product_vendor'=>$request->input('product_vendor'),
                     'image_url'=>$request->input('image_url'),
                     'price' =>$request->input('price'),
-                    'title'=>$request->input('title')
+                    'title'=>$request->input('title'),
+                    'currency' => $request->input('currency')
                 ]);
                 return $this->response->respond([
                     'data'=>[
