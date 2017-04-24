@@ -101,4 +101,8 @@ class EventsRepository extends Repository
     public function cancelEvent($eventId){
         $this->deleteById($eventId);
     }
+
+    public function updateStatus($eventId, $status = 1){
+        return $this->getModel()->where('id',$eventId)->update(['status'=>$status]);
+    }
 }

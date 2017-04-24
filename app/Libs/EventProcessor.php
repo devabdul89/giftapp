@@ -10,10 +10,18 @@ namespace Libs;
 
 
 use LaraModels\User;
+use Repositories\EventsRepository;
+use Repositories\OrdersRepository;
 
 class EventProcessor
 {
     public $event = null;
+    public function __construct($event = null)
+    {
+        $this->event = $event;
+        return $this;
+    }
+
     public function setEvent($event){
         $this->event = $event;
         return $this;
@@ -23,7 +31,7 @@ class EventProcessor
      * stripe payments for all event invited members
      * */
     private function cashOut(){
-        (new User())->charge(100);
+        //(new User())->charge(100);
         return $this;
     }
 
@@ -31,7 +39,10 @@ class EventProcessor
      * create a new order for the under-process event
      * */
     public function createOrder(){
-        //todo: implement
+        $order = (new OrdersRepository())->createOrder([
+           'event_id'=>$this->event->id,
+            'price'=>$this->event->price
+        ]);
         return $this;
     }
 
@@ -39,7 +50,7 @@ class EventProcessor
      * update event status as processed in events table.
      * */
     public function updateEventStatus(){
-        //todo: implement
+        (new EventsRepository())->updateStatus($this->event->id, 1);
         return $this;
     }
 

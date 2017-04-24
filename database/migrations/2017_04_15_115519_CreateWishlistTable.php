@@ -17,6 +17,10 @@ class CreateWishlistTable extends Migration
             $table->increments('id');
             $table->integer('user_id')->unsigned();
             $table->string('product_id')->default("");
+            $table->string('image_url')->nullable();
+            $table->string('title')->nullable();
+            $table->double('price')->default(0.00);
+            $table->string('currency')->nullable();
             $table->string('product_vendor')->default("in_app");
             $table->timestamps();
 

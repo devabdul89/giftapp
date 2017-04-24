@@ -24,4 +24,8 @@ class Event extends Model
     public function admin(){
         return $this->belongsTo(User::class,'admin_id');
     }
+
+    public function order(){
+        return $this->hasOne(Order::class);
+    }
 }
