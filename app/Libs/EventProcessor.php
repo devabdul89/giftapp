@@ -12,6 +12,7 @@ namespace Libs;
 use LaraModels\User;
 use Repositories\EventsRepository;
 use Repositories\OrdersRepository;
+use Repositories\PaymentsRepository;
 
 class EventProcessor
 {
@@ -43,6 +44,11 @@ class EventProcessor
            'event_id'=>$this->event->id,
             'price'=>$this->event->price
         ]);
+        return $this;
+    }
+
+    public function createPayment($payment){
+        (new PaymentsRepository())->create($payment);
         return $this;
     }
 

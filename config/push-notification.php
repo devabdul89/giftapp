@@ -3,7 +3,7 @@
 return array(
 
     'ios' => array(
-        'environment' => 'production',
+        'environment' => 'development',
         'certificate' => config_path('pem/giftapp.pem'),
         'passPhrase'  => '12345678',
         'service'     => 'apns'

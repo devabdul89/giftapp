@@ -104,6 +104,8 @@ class UsersRepository extends Repository
         $dbUser->profile_picture = $user->getProfilePicture();
         $dbUser->login_by = $user->getLoginBy();
         $dbUser->image_setted = $user->getImageSetted();
+        $dbUser->device_id = $user->getDeviceId();
+        $dbUser->device_type = $user->getDeviceType();
         $dbUser->save();
         return $this->mapUser($dbUser);
     }
