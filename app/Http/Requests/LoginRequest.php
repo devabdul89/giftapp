@@ -28,7 +28,9 @@ class LoginRequest extends Request
     {
         return [
             'email' => 'required|email|exists:users,email',
-            'password' => 'required'
+            'password' => 'required',
+            'device_id' => 'required',
+            'device_type' => 'required'
         ];
     }
 }
