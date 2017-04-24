@@ -92,9 +92,9 @@ class AuthController extends ParentController
             if(Auth::attempt(['email'=>$request->input('email'), 'password'=> $request->input('password')])){
                 $loggedInUser = Auth::login($this->usersRep->findByEmail($request->input('email')));
                 // update device id and type
-                $this->usersRep->updateWhere(['email'=>$request->input('email')],['device_id'=>$request->input('device_id'), 'device_type'=>$request->input('type')]);
+                $this->usersRep->updateWhere(['email'=>$request->input('email')],['device_id'=>$request->input('device_id'), 'device_type'=>$request->input('device_type')]);
                 $loggedInUser = $loggedInUser->setDeviceId($request->input('device_id'))->setDeviceType($request->input('device_type'));
-                //fething billing card information
+                //fetching billing card information
                 $billingCard = $this->billingCardsRepo->findByUserId($loggedInUser->getId());
                 return $this->response->respond([
                     'data'=>[
