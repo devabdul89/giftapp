@@ -47,6 +47,6 @@ class ProcessEventsCommand extends Command
     }
 
     public function fetchUnProcessedEvents(){
-        return (new EventsRepository())->getReadyEvents();
+        return dd((new EventsRepository())->getReadyEvents());
     }
 }

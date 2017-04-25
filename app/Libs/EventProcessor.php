@@ -69,7 +69,8 @@ class EventProcessor
             (new NotificationsRepository())->saveNotification([
                 'title' => $title,
                 'data' => json_encode($admin),
-                'user_id'=>$admin->id
+                'user_id'=>$admin->id,
+                'type'=>'event_processing'
             ]);
             PushNotification::app($admin->device_type)
                 ->to($admin->device_id)

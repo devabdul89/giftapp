@@ -173,49 +173,31 @@ class UsersController extends ParentController
             return $this->response->respondInternalServerError([$e->getMessage()]);
         }
 
-
-        if($request->input('fb_id')){
-            $targetedUser = $this->usersRepo->findByFbId($request->input('fb_id'));
-        }else{
-            $targetedUser = $this->usersRepo->findByEmail($request->input('email'));
-        }
-        $title = $request->user->getFullName().' sent you a friend request.';
-        $this->notificationsRepo->saveNotification([
-            'title' => $title,
-            'data' => json_encode($targetedUser->toJson()),
-            'user_id'=>$targetedUser->getId()
-        ]);
-        PushNotification::app($targetedUser->getDeviceType())
-            ->to($targetedUser->getDeviceId())
-            ->send($request->user->getFullName().' sent you a friend request.',array(
-                'data' => array(
-                    //'sender'=>$this->usersRepo->findById($request->user)->toJson()
-                )
-            ));
-//        try{
-//            if($request->input('fb_id')){
-//                $targetedUser = $this->usersRepo->findByFbId($request->input('fb_id'));
-//            }else{
-//                $targetedUser = $this->usersRepo->findByEmail($request->input('email'));
-//            }
-//            $title = $request->user->getFullName().' sent you a friend request.';
-//            $this->notificationsRepo->saveNotification([
-//                'title' => $title,
-//                'data' => json_encode($targetedUser->toJson()),
-//                'user_id'=>$targetedUser->getId()
-//            ]);
-//            PushNotification::app($targetedUser->getDeviceType())
-//                ->to($targetedUser->getDeviceId())
-//                ->send($request->user->getFullName().' sent you a friend request.',array(
-//                    'data' => array(
+        try{
+            if($request->input('fb_id')){
+                $targetedUser = $this->usersRepo->findByFbId($request->input('fb_id'));
+            }else{
+                $targetedUser = $this->usersRepo->findByEmail($request->input('email'));
+            }
+            $title = $request->user->getFullName().' sent you a friend request.';
+            $this->notificationsRepo->saveNotification([
+                'title' => $title,
+                'data' => json_encode($targetedUser->toJson()),
+                'user_id'=>$targetedUser->getId(),
+                'type'=>'add_friend'
+            ]);
+            PushNotification::app($targetedUser->getDeviceType())
+                ->to($targetedUser->getDeviceId())
+                ->send($request->user->getFullName().' sent you a friend request.',array(
+                    'data' => array(
 //                        'sender'=>$this->usersRepo->findById($request->user)->toJson()
-//                    )
-//                ));
-//        }catch (\Exception $e){
-//            return $this->response->respond(['data'=>[
-//                'friends'=>$e->getMessage()
-//            ]]);
-//        }
+                    )
+                ));
+        }catch (\Exception $e){
+            return $this->response->respond(['data'=>[
+                'friends'=>$e->getMessage()
+            ]]);
+        }
         return $this->response->respond(['data'=>[
             'friends'=>$this->transformFriendsResponse($this->usersRepo->friends($request->user->getId()))
         ]]);

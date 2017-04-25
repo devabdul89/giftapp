@@ -259,7 +259,8 @@ class EventsController extends ParentController
             $this->notificationsRepo->saveNotification([
                 'title' => $title,
                 'data' => json_encode($event),
-                'user_id'=>$admin->id
+                'user_id'=>$admin->id,
+                'type'=>'accept_event_invitation'
             ]);
             PushNotification::app($admin->device_type)
                 ->to($admin->device_id)
@@ -296,7 +297,8 @@ class EventsController extends ParentController
             $this->notificationsRepo->saveNotification([
                 'title' => $title,
                 'data' => json_encode($event),
-                'user_id'=>$admin->id
+                'user_id'=>$admin->id,
+                'type'=>'decline_event_invitation'
             ]);
             PushNotification::app($admin->device_type)
                 ->to($admin->device_id)
