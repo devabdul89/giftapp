@@ -194,7 +194,7 @@ class UsersController extends ParentController
                 ));
         }catch (\Exception $e){
             return $this->response->respond(['data'=>[
-                'friends'=>$this->transformFriendsResponse($this->usersRepo->friends($request->user->getId()))
+                'friends'=>$e->getMessage()
             ]]);
         }
         return $this->response->respond(['data'=>[
