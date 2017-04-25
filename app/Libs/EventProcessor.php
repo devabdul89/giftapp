@@ -75,7 +75,7 @@ class EventProcessor
             dd('helo');
             return $this;
         }catch (\Exception $e){
-            dd('hi');
+            dd($e->getMessage());
             return $this;
         }
     }
