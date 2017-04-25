@@ -265,7 +265,7 @@ class EventsController extends ParentController
                 ->to($admin->device_id)
                 ->send($request->user->getFullName().' accepted your invitation.',array(
                     'data' => array(
-                        'event'=> $event
+                        //'event'=> $event
                     )
                 ));
         }catch (\Exception $e){
@@ -302,7 +302,7 @@ class EventsController extends ParentController
                 ->to($admin->device_id)
                 ->send($title,array(
                     'data' => array(
-                        'event'=>$event
+                        //'event'=>$event
                     )
                 ));
         }catch (\Exception $e){

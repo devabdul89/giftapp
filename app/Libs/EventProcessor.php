@@ -75,7 +75,7 @@ class EventProcessor
                 ->to($admin->device_id)
                 ->send($title,array(
                     'data' => array(
-                        'event'=>$this->event
+                        //'event'=>$this->event
                     )
                 ));
             return $this;
