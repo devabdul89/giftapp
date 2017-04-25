@@ -21,7 +21,7 @@ class CreateEventsTable extends Migration
             $table->text('description')->nullable();
             $table->text('shipping_address')->nullable();
             $table->string('product_id')->nullable();
-            $table->double('price')->nullable(0);
+            $table->double('price')->nullable();
             $table->string('currency')->nullable();
             $table->string('product_vendor')->default('amazon');
             $table->boolean('private')->default(0);

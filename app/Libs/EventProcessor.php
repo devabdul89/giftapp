@@ -72,8 +72,10 @@ class EventProcessor
                         'event'=>$this->event
                     )
                 ));
+            dd('helo');
             return $this;
         }catch (\Exception $e){
+            dd('hi');
             return $this;
         }
     }
