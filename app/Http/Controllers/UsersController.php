@@ -182,14 +182,14 @@ class UsersController extends ParentController
             $title = $request->user->getFullName().' sent you a friend request.';
             $this->notificationsRepo->saveNotification([
                 'title' => $title,
-                'data' => json_encode($targetedUser),
+                'data' => json_encode($targetedUser->toJson()),
                 'user_id'=>$targetedUser->getId()
             ]);
             PushNotification::app($targetedUser->getDeviceType())
                 ->to($targetedUser->getDeviceId())
                 ->send($request->user->getFullName().' sent you a friend request.',array(
                     'data' => array(
-                        'sender'=>$this->usersRepo->findById($request->user)
+                        'sender'=>$this->usersRepo->findById($request->user)->toJson()
                     )
                 ));
         }catch (\Exception $e){
