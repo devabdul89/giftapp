@@ -19,7 +19,7 @@ class CreateProductsTable extends Migration
             $table->longText('detail')->nullable();
             $table->string('material')->nullable();
             $table->double('price')->nullable();
-            $table->string('currency')->nullable();
+            $table->string('currency')->default('$');
             $table->string('size_available')->nullable();
             $table->timestamps();
         });

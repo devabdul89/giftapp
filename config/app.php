@@ -136,7 +136,6 @@ return [
     */
 
     'providers' => [
-
         /*
          * Laravel Framework Service Providers...
          */
@@ -179,7 +178,6 @@ return [
         App\Providers\RouteServiceProvider::class,
         Nathanmac\Utilities\Parser\ParserServiceProvider::class,
         \Davibennun\LaravelPushNotification\LaravelPushNotificationServiceProvider::class,
-
     ],
 
     /*
