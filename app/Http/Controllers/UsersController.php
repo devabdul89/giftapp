@@ -185,12 +185,11 @@ class UsersController extends ParentController
             'data' => json_encode($targetedUser->toJson()),
             'user_id'=>$targetedUser->getId()
         ]);
-        
         PushNotification::app($targetedUser->getDeviceType())
             ->to($targetedUser->getDeviceId())
             ->send($request->user->getFullName().' sent you a friend request.',array(
                 'data' => array(
-                    'sender'=>json_encode($this->usersRepo->findById($request->user)->toJson())
+                    'sender'=>$this->usersRepo->findById($request->user)->toJson()
                 )
             ));
 //        try{
@@ -218,7 +217,7 @@ class UsersController extends ParentController
 //            ]]);
 //        }
         return $this->response->respond(['data'=>[
-            'friends'=>$this->transformFriendsResponse($this->usersRepo->friends($request->user->getId()))
+            //'friends'=>$this->transformFriendsResponse($this->usersRepo->friends($request->user->getId()))
         ]]);
     }
 
