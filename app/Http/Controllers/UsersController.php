@@ -174,7 +174,11 @@ class UsersController extends ParentController
         }
 
         try{
-            $targetedUser = $this->usersRepo->findByFbId($request->input('fb_id'));
+            if($request->input('fb_id')){
+                $targetedUser = $this->usersRepo->findByFbId($request->input('fb_id'));
+            }else{
+                $targetedUser = $this->usersRepo->findByFbId($request->input('email'));
+            }
             $title = $request->user->getFullName().' sent you a friend request.';
             $this->notificationsRepo->saveNotification([
                 'title' => $title,
