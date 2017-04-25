@@ -57,3 +57,4 @@ Route::post('/friend/accept','UsersController@acceptFriend')->middleware('reques
 Route::post('/friend/reject','UsersController@rejectFriend')->middleware('requestHandler:RejectFriendRequest');
 Route::post('/friendship/cancel','UsersController@rejectFriend')->middleware('requestHandler:RejectFriendRequest');
 Route::get('/user/profile','UsersController@userProfile')->middleware('requestHandler:UserProfileRequest');
+Route::get('/orders/completed','EventsController@userCompletedEvents')->middleware('requestHandler:GetUserCompletedOrders');

@@ -20,6 +20,7 @@ use Requests\GetAllEventsRequest;
 use Requests\GetEventDetailRequest;
 use Requests\GetMyEventsRequest;
 use Requests\GetPublicEventsRequests;
+use Requests\GetUserCompletedOrders;
 use Requests\InviteMemberRequest;
 use Requests\JoinEventRequest;
 use Requests\UpdateEventRequest;
@@ -177,9 +178,11 @@ class EventsController extends ParentController
                 'currency' => $request->input('currency'),
                 'lat_lng'=>$request->input('lat_lng')
             ]);
-            $this->inviteMembers($event->id,[$request->user->getId()]);
+            $this->inviteMembers($event->id,$request->getMemberIds());
             return $this->response->respond([
-                'data'=>[]
+                'data'=>[
+                    'event'=>$event
+                ]
             ]);
         }catch(ValidationErrorException $ve){
             return $this->response->respondValidationFails([$ve->getMessage()]);
@@ -252,15 +255,13 @@ class EventsController extends ParentController
                 ->to($admin->device_id)
                 ->send($request->user->getFullName().' accepted your invitation.',array(
                     'data' => array(
-
+                        'event'=>$this->eventsRepo->findById($request->input('event_id'))
                     )
                 ));
         }catch (\Exception $e){
-            return $this->response->respondInternalServerError([$e->getMessage()]);
+            return $this->response->respond(['data'=>[]]);
         }
-        return $this->response->respond([
-            'data'=>[]
-        ]);
+        return $this->response->respond(['data'=>[]]);
     }
 
 
@@ -271,14 +272,24 @@ class EventsController extends ParentController
     public function declineEventInvitation(DeclineEventInvitationRequest $request){
         try{
             $this->eventsRepo->declineEvent($request->input('event_id'),$request->user->getId());
-            return $this->response->respond([
-                'data'=>[]
-            ]);
+            $admin = $this->eventsRepo->findById($request->input('event_id'))->admin;
         }catch(ValidationErrorException $ve){
             return $this->response->respondValidationFails([$ve->getMessage()]);
         }catch(\Exception $e){
             return $this->response->respondInternalServerError([$e->getMessage()]);
         }
+        try{
+            PushNotification::app($admin->device_type)
+                ->to($admin->device_id)
+                ->send($request->user->getFullName().' rejected your invitation.',array(
+                    'data' => array(
+                        'event'=>$this->eventsRepo->findById($request->input('event_id'))
+                    )
+                ));
+        }catch (\Exception $e){
+            return $this->response->respond(['data'=>[]]);
+        }
+        return $this->response->respond(['data'=>[]]);
     }
 
    /**
@@ -331,6 +342,24 @@ class EventsController extends ParentController
                     'events'=>$this->eventsRepo->getMyEvents($request->user->getId())
                 ]
             ]);
+       }catch(ValidationErrorException $ve){
+           return $this->response->respondValidationFails([$ve->getMessage()]);
+       }catch(\Exception $e){
+           return $this->response->respondInternalServerError([$e->getMessage()]);
+       }
+   }
+
+   /**
+    * @param GetUserCompletedOrders $request
+    * @return \App\Http\json
+    */
+   public function userCompletedEvents(GetUserCompletedOrders $request){
+       try{
+           return $this->response->respond([
+               'data'=>[
+                   'events'=> $this->eventsRepo->userCompletedEvents($request->user->getId())
+               ]
+           ]);
        }catch(ValidationErrorException $ve){
            return $this->response->respondValidationFails([$ve->getMessage()]);
        }catch(\Exception $e){

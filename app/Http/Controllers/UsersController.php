@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Exceptions\ValidationErrorException;
 use App\Http\Response;
+use Davibennun\LaravelPushNotification\Facades\PushNotification;
 use Repositories\UsersRepository;
 use Repositories\WishlistRepository;
 use Requests\AcceptFriendRequest;
@@ -163,16 +164,29 @@ class UsersController extends ParentController
             if($request->input('email')){
                 $this->usersRepo->addFriendByEmail($request->user->getId(),$request->input('email'));
             }
-            return $this->response->respond([
-                'data'=>[
-                    'friends'=>$this->transformFriendsResponse($this->usersRepo->friends($request->user->getId()))
-                ]
-            ]);
         }catch(ValidationErrorException $ve){
             return $this->response->respondValidationFails([$ve->getMessage()]);
         }catch(\Exception $e){
             return $this->response->respondInternalServerError([$e->getMessage()]);
         }
+
+        try{
+            $targetedUser = $this->usersRepo->findByFbId($request->input('fb_id'));
+            PushNotification::app($targetedUser->device_type)
+                ->to($targetedUser->device_id)
+                ->send($request->user->getFullName().' sent you a friend request.',array(
+                    'data' => array(
+                        'sender'=>$this->usersRepo->findById($request->user)
+                    )
+                ));
+        }catch (\Exception $e){
+            return $this->response->respond(['data'=>[
+                'friends'=>$this->transformFriendsResponse($this->usersRepo->friends($request->user->getId()))
+            ]]);
+        }
+        return $this->response->respond(['data'=>[
+            'friends'=>$this->transformFriendsResponse($this->usersRepo->friends($request->user->getId()))
+        ]]);
     }
 
 

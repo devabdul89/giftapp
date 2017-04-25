@@ -60,11 +60,15 @@ class EventProcessor
         return $this;
     }
 
+    public function sendNotifications(){
+        //todo: send notification to all members.
+    }
+
     /*
      * process a given event
      * */
     public function process(){
-        $this->createOrder()->updateEventStatus();
+        $this->createOrder()->updateEventStatus()->sendNotifications();
         return true;
     }
 }

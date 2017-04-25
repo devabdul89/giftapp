@@ -26,4 +26,8 @@ class OrdersRepository extends Repository
     public function createOrder($order){
         return $this->getModel()->create($order);
     }
+
+    public function getUserCompletedOrders(){
+        return $this->getModel()->where('status','!=', 0)->get();
+    }
 }
