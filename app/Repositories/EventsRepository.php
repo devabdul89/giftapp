@@ -114,9 +114,9 @@ class EventsRepository extends Repository
     }
 
     public function userCompletedEvents($userId){
-        return $this->getModel()->select(DB::raw("events.*"))->where('events.status','!=', 0)->where('event_user.user_id',$userId)
+        return $this->add_joined_key($this->getModel()->select(DB::raw("events.*"))->where('events.status','!=', 0)->where('event_user.user_id',$userId)
             ->leftJoin('event_user','event_user.event_id','=','events.id')
-            ->with('members')->with('admin')->get();
+            ->with('members')->with('admin')->get());
     }
 
     public function expireOutDatedEvents(){
