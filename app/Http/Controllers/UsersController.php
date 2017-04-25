@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Exceptions\ValidationErrorException;
 use App\Http\Response;
 use Davibennun\LaravelPushNotification\Facades\PushNotification;
+use Repositories\NotificationsRepository;
 use Repositories\UsersRepository;
 use Repositories\WishlistRepository;
 use Requests\AcceptFriendRequest;
@@ -31,6 +32,7 @@ class UsersController extends ParentController
     {
         $this->usersRepo = $usersRepository;
         $this->response = new Response();
+        $this->notificationsRepo = new NotificationsRepository();
     }
 
 
@@ -172,6 +174,12 @@ class UsersController extends ParentController
 
         try{
             $targetedUser = $this->usersRepo->findByFbId($request->input('fb_id'));
+            $title = $request->user->getFullName().' sent you a friend request.';
+            $this->notificationsRepo->saveNotification([
+                'title' => $title,
+                'data' => json_encode($targetedUser),
+                'user_id'=>$targetedUser->getId()
+            ]);
             PushNotification::app($targetedUser->device_type)
                 ->to($targetedUser->device_id)
                 ->send($request->user->getFullName().' sent you a friend request.',array(

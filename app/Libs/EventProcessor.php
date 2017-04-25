@@ -12,6 +12,7 @@ namespace Libs;
 use Davibennun\LaravelPushNotification\Facades\PushNotification;
 use LaraModels\User;
 use Repositories\EventsRepository;
+use Repositories\NotificationsRepository;
 use Repositories\OrdersRepository;
 use Repositories\PaymentsRepository;
 
@@ -62,20 +63,23 @@ class EventProcessor
     }
 
     public function sendNotifications(){
-        //todo: send notification to all members.
         try{
             $admin = $this->event->admin;
+            $title = 'Your event \''.$this->event->title.'\' is being processed. ';
+            (new NotificationsRepository())->saveNotification([
+                'title' => $title,
+                'data' => json_encode($admin),
+                'user_id'=>$admin->id
+            ]);
             PushNotification::app($admin->device_type)
                 ->to($admin->device_id)
-                ->send('Your event \''.$this->event->title.'\' is being processed. ',array(
+                ->send($title,array(
                     'data' => array(
                         'event'=>$this->event
                     )
                 ));
-            dd('helo');
             return $this;
         }catch (\Exception $e){
-            dd($e->getMessage());
             return $this;
         }
     }

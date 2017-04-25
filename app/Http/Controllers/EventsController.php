@@ -9,6 +9,7 @@ use Davibennun\LaravelPushNotification\Facades\PushNotification;
 use Repositories\EventMembersRepository;
 use Repositories\BillingRepository;
 use Repositories\EventsRepository;
+use Repositories\NotificationsRepository;
 use Repositories\UsersRepository;
 use Requests\AcceptEventInvitationRequest;
 use Requests\CancelEventMemberRequest;
@@ -48,6 +49,7 @@ class EventsController extends ParentController
         $this->eventsRepo = $eventsRepository;
         $this->response = new Response();
         $this->membersRepo = new EventMembersRepository();
+        $this->notificationsRepo = new NotificationsRepository();
     }
 
     /**
@@ -249,13 +251,21 @@ class EventsController extends ParentController
         }catch(\Exception $e){
             return $this->response->respondInternalServerError([$e->getMessage()]);
         }
+
         //sending push notification
         try{
+            $event = $this->eventsRepo->findById($request->input('event_id'));
+            $title = $request->user->getFullName().' accepted your invitation.';
+            $this->notificationsRepo->saveNotification([
+                'title' => $title,
+                'data' => json_encode($event),
+                'user_id'=>$admin->id
+            ]);
             PushNotification::app($admin->device_type)
                 ->to($admin->device_id)
                 ->send($request->user->getFullName().' accepted your invitation.',array(
                     'data' => array(
-                        'event'=>$this->eventsRepo->findById($request->input('event_id'))
+                        'event'=> $event
                     )
                 ));
         }catch (\Exception $e){
@@ -281,11 +291,18 @@ class EventsController extends ParentController
             return $this->response->respondInternalServerError([$e->getMessage()]);
         }
         try{
+            $title = $request->user->getFullName().' rejected your invitation.';
+            $event = $this->eventsRepo->findById($request->input('event_id'));
+            $this->notificationsRepo->saveNotification([
+                'title' => $title,
+                'data' => json_encode($event),
+                'user_id'=>$admin->id
+            ]);
             PushNotification::app($admin->device_type)
                 ->to($admin->device_id)
-                ->send($request->user->getFullName().' rejected your invitation.',array(
+                ->send($title,array(
                     'data' => array(
-                        'event'=>$this->eventsRepo->findById($request->input('event_id'))
+                        'event'=>$event
                     )
                 ));
         }catch (\Exception $e){
@@ -368,5 +385,4 @@ class EventsController extends ParentController
            return $this->response->respondInternalServerError([$e->getMessage()]);
        }
    }
-
 }
