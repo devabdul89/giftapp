@@ -260,7 +260,7 @@ class EventsController extends ParentController
                 ));
         }catch (\Exception $e){
             return $this->response->respond(['data'=>[
-                'pushnotification'
+                $e->getMessage()
             ]]);
         }
         return $this->response->respond(['data'=>[]]);
