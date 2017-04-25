@@ -44,9 +44,11 @@ class ProcessEventsCommand extends Command
         foreach ($this->fetchUnProcessedEvents() as $event){
             $eventProcessor->setEvent($event)->process();
         }
+
+        (new EventsRepository())->expireOutDatedEvents();
     }
 
     public function fetchUnProcessedEvents(){
-        return dd((new EventsRepository())->getReadyEvents());
+        return (new EventsRepository())->getReadyEvents();
     }
 }

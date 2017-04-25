@@ -22,6 +22,6 @@ class NotificationsRepository extends Repository
     }
 
     public function fetchUserNotification($userId){
-        return $this->getModel()->where('user_id',$userId)->get();
+        return $this->getModel()->where('user_id',$userId)->orderBy('created_at','desc')->get();
     }
 }

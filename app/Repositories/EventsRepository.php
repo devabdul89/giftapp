@@ -118,4 +118,15 @@ class EventsRepository extends Repository
             ->leftJoin('event_user','event_user.event_id','=','events.id')
             ->with('members')->with('admin')->get();
     }
+
+    public function expireOutDatedEvents(){
+        $events = $this->getModel()->where('date','<=',date('Y-m-d'))->with('members')->where('status',0)->get();
+        $final_events = [];
+        foreach($events as $event){
+            if(count($event->members) < $event->minimum_members){
+                array_push($final_events,$event->id);
+            }
+        }
+        return DB::table('events')->whereIn('id', $final_events)->update(['status'=>2]);
+    }
 }
