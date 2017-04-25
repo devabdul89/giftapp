@@ -58,3 +58,4 @@ Route::post('/friend/reject','UsersController@rejectFriend')->middleware('reques
 Route::post('/friendship/cancel','UsersController@rejectFriend')->middleware('requestHandler:RejectFriendRequest');
 Route::get('/user/profile','UsersController@userProfile')->middleware('requestHandler:UserProfileRequest');
 Route::get('/orders/completed','EventsController@userCompletedEvents')->middleware('requestHandler:GetUserCompletedOrders');
+Route::get('/notifications','UsersController@getNotifications')->middleware('requestHandler:GetUserNotificationsRequest');

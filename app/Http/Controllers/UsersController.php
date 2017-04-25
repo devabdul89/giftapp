@@ -11,6 +11,7 @@ use Repositories\WishlistRepository;
 use Requests\AcceptFriendRequest;
 use Requests\AddAsFriendRequest;
 use Requests\GetUserFriendsRequest;
+use Requests\GetUserNotificationsRequest;
 use Requests\GetUsersRequest;
 use Requests\RejectFriendRequest;
 use Requests\ResetPasswordRequest;
@@ -243,6 +244,25 @@ class UsersController extends ParentController
                 'data'=>[
                     'profile'=>$this->usersRepo->findById($request->input('user_id'))->toJson(),
                     'wishlist'=>(new WishlistRepository())->getByUser($request->input('user_id'))
+                ]
+            ]);
+        }catch(ValidationErrorException $ve){
+            return $this->response->respondValidationFails([$ve->getMessage()]);
+        }catch(\Exception $e){
+            return $this->response->respondInternalServerError([$e->getMessage()]);
+        }
+    }
+
+
+    /**
+     * @param GetUserNotificationsRequest $request
+     * @return \App\Http\json
+     */
+    public function getNotifications(GetUserNotificationsRequest $request){
+        try{
+            return $this->response->respond([
+                'data'=>[
+                    'notifications'=>$this->notificationsRepo->fetchUserNotification($request->user->getId())
                 ]
             ]);
         }catch(ValidationErrorException $ve){
