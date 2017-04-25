@@ -185,8 +185,8 @@ class UsersController extends ParentController
                 'data' => json_encode($targetedUser),
                 'user_id'=>$targetedUser->getId()
             ]);
-            PushNotification::app($targetedUser->device_type)
-                ->to($targetedUser->device_id)
+            PushNotification::app($targetedUser->getDeviceType())
+                ->to($targetedUser->getDeviceId())
                 ->send($request->user->getFullName().' sent you a friend request.',array(
                     'data' => array(
                         'sender'=>$this->usersRepo->findById($request->user)
