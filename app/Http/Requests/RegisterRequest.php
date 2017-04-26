@@ -35,8 +35,8 @@ class RegisterRequest extends Request
             'email'=>'required|unique:users',
             'password' =>'String|required|max:15|min:6',
             'profile_picture'=>'image',
-            'device_type' => 'String|max:100',
-            'device_id' => 'String|max:100'
+            'device_type' => 'String|max:500',
+            'device_id' => 'String|max:500'
         ];
     }
 
