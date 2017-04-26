@@ -178,7 +178,8 @@ class EventsController extends ParentController
                 'price'=>$request->input('price'),
                 'shipping_address' => $request->input('shipping_address'),
                 'currency' => $request->input('currency'),
-                'lat_lng'=>$request->input('lat_lng')
+                'lat_lng'=>$request->input('lat_lng'),
+                'minimum_members'=>$request->input('minimum_members')
             ]);
             $this->inviteMembers($event->id,$request->getMemberIds());
             return $this->response->respond([
@@ -270,9 +271,7 @@ class EventsController extends ParentController
                     )
                 ));
         }catch (\Exception $e){
-            return $this->response->respond(['data'=>[
-                $e->getMessage()
-            ]]);
+            return $this->response->respond(['data'=>[]]);
         }
         return $this->response->respond(['data'=>[]]);
     }
