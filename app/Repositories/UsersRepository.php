@@ -116,7 +116,7 @@ class UsersRepository extends Repository
             'email' => $user->getEmail(),
             'password'=>$user->getPassword(),
             'session_token' => $user->getSessionToken(),
-            'profile_picture' => $user->getProfilePicture(),
+            'profile_picture' => str_replace(env('APP_URL'),'',$user->getProfilePicture()),
             'walkthrough_completed' => $user->getWalkthroughCompleted(),
             'login_by' => $user->getLoginBy(),
             'password_created' => $user->getPasswordCreated(),
