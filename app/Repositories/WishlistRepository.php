@@ -26,6 +26,6 @@ class WishlistRepository extends \Repositories\Repository
     }
 
     public function getByUser($userId){
-        return $this->getModel()->with('product')->get();
+        return $this->getModel()->where('user_id',$userId)->with('product')->get();
     }
 }
