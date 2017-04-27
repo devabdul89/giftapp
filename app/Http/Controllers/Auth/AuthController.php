@@ -133,7 +133,7 @@ class AuthController extends ParentController
      */
     public function forgotPassword(ForgotPasswordRequest $request)
     {
-        try{
+//        try{
             Mail::send('forgot_pass', ['password'=>substr(md5($request->input('email')), 0, 5)], function ($m) use ($request) {
                 $m->from(env('MAIL_USERNAME'), 'Group Gift');
                 $m->to($request->input('email'))->subject('Forget Password');
@@ -141,11 +141,11 @@ class AuthController extends ParentController
             return $this->response->respond([
                     'data'=>[]
                 ]);
-        }catch (ValidationErrorException $ve){
-            return $this->response->respondValidationFails([$ve->getMessage()]);
-        }catch (\Exception $e){
-            return $this->response->respondInternalServerError([$e->getMessage()]);
-        }
+//        }catch (ValidationErrorException $ve){
+//            return $this->response->respondValidationFails([$ve->getMessage()]);
+//        }catch (\Exception $e){
+//            return $this->response->respondInternalServerError([$e->getMessage()]);
+//        }
     }
 
 
