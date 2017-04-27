@@ -70,6 +70,7 @@ class UsersRepository extends Repository
                 END as $field,
             ";
         }
+
         $friends = $this->getModel()
             ->select(DB::raw("$cases
              iFriends.user_id as sender_id, iFriends.friend_id as receiver_id,

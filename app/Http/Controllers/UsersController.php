@@ -182,7 +182,7 @@ class UsersController extends ParentController
             $title = $request->user->getFullName().' sent you a friend request.';
             $this->notificationsRepo->saveNotification([
                 'title' => $title,
-                'data' => json_encode($targetedUser->toJson()),
+                'data' => json_encode($request->user->toJson()),
                 'user_id'=>$targetedUser->getId(),
                 'type'=>'add_friend'
             ]);

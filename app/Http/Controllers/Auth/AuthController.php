@@ -148,7 +148,6 @@ class AuthController extends ParentController
         }
     }
 
-
     /**
      * @param UpdateSessionRequest $request
      * @return \App\Http\json
