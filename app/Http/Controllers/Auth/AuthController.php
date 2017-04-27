@@ -7,6 +7,7 @@ use App\Exceptions\ValidationErrorException;
 use App\Http\Controllers\ParentController;
 use App\Http\Response;
 use App\Libs\Auth\Auth;
+use Illuminate\Support\Facades\Mail;
 use Repositories\BillingRepository;
 use Repositories\UsersRepository;
 use Requests\FbLoginRequest;
@@ -133,6 +134,10 @@ class AuthController extends ParentController
     public function forgotPassword(ForgotPasswordRequest $request)
     {
         try{
+            Mail::send('forgot_pass', ['password'=>'xyzabc'], function ($m) use ($request) {
+                $m->from(env('MAIL_USERNAME'), 'Group Gift');
+                $m->to($request->input('email'))->subject('Forget Password');
+            });
             return $this->response->respond([
                     'data'=>[]
                 ]);
