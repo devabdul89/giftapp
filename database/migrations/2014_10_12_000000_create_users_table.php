@@ -28,7 +28,7 @@ class CreateUsersTable extends Migration
             $table->string('address')->nullable();
             $table->date('birthday')->nullable();
             $table->longText('device_id')->nullable();
-            $table->longText('device_type')->nullable();
+            $table->string('device_type')->nullable();
             //Billing information
             $table->string('stripe_id')->nullable();
             $table->string('card_brand')->nullable();

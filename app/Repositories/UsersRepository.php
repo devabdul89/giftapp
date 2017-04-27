@@ -101,7 +101,7 @@ class UsersRepository extends Repository
         $dbUser->password = $user->getPassword();
         $dbUser->email = $user->getEmail();
         $dbUser->full_name = $user->getFullName();
-        $dbUser->profile_picture = $user->getProfilePicture();
+        $dbUser->profile_picture = str_replace(env('APP_URL'),'',$user->getProfilePicture());
         $dbUser->login_by = $user->getLoginBy();
         $dbUser->image_setted = $user->getImageSetted();
         $dbUser->device_id = $user->getDeviceId();

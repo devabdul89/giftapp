@@ -37,7 +37,7 @@ class FbLoginRequest extends Request
             'profile_picture' => 'String',
             'address' => 'max:200',
             'device_type' => 'String|max:100',
-            'device_id' => 'String|max:100'
+            'device_id' => 'String|max:1000'
         ];
     }
 
