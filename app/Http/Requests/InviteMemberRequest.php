@@ -27,9 +27,14 @@ class InviteMemberRequest extends Request
      */
     public function rules()
     {
-        return [
-            'event_id'=>'required|exists:events,id',
-            'user_id'=>'required|exists:users,id'
-        ];
+        $rules = ['event_id'=>'required|exists:events,id'];
+        if($this->input('user_id') != null){
+            $rules[] = ['user_id'=>'exists:users,id'];
+        }else if($this->input('fb_id') != null){
+            $rules[] = ['fb_id'=>'exists:users,fb_id'];
+        }else{
+            $rules[] = ['user_id'=>'required'];
+        }
+        return $rules;
     }
 }

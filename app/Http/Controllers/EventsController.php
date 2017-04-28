@@ -182,6 +182,7 @@ class EventsController extends ParentController
                 'minimum_members'=>$request->input('minimum_members')
             ]);
             $this->inviteMembers($event->id,$request->getMemberIds());
+            $this->inviteFbMembers($event->id, $request->getFbMemberIds());
             return $this->response->respond([
                 'data'=>[
                     'event'=>$event
@@ -201,7 +202,10 @@ class EventsController extends ParentController
      */
     public function inviteMemberRequest(InviteMemberRequest $request){
         try{
-            $this->inviteMembers($request->input('event_id'),[$request->input('user_id')]);
+            if($request->input('user_id') != null)
+                $this->inviteMembers($request->input('event_id'),[$request->input('user_id')]);
+            if($request->input('fb_id') != null)
+                $this->inviteFbMembers($request->input('event_id'), [$request->input('fb_id')]);
             return $this->response->respond([
                 'data'=>[
                     $this->eventsRepo->getEventMembers($request->input('event_id'))
@@ -236,6 +240,9 @@ class EventsController extends ParentController
 
     public function inviteMembers($eventId,$userIds){
         $this->membersRepo->inviteAll($eventId,$userIds);
+    }
+    public function inviteFbMembers($eventId,$fb_ids){
+        $this->membersRepo->inviteAllByFbIds($eventId,$fb_ids);
     }
 
     /**

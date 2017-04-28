@@ -39,4 +39,8 @@ class CreateEventRequest extends Request
         array_push($members, $this->user->getId());
         return $members;
     }
+
+    public function getFbMemberIds(){
+        return ($this->input('fb_members') != null)?explode(',',$this->input('fb_members')):[];
+    }
 }

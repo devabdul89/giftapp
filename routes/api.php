@@ -50,7 +50,7 @@ Route::post('/wishlist/add','WishlistController@add')->middleware('requestHandle
 Route::post('/wishlist/remove','WishlistController@remove')->middleware('requestHandler:RemoveFromWishlistRequest');
 Route::get('/wishlist','WishlistController@get')->middleware('requestHandler:GetWishlistRequest');
 
-Route::get('/friends','UsersController@friends')->middleware('requestHandler:GetUserFriendsRequest');
+Route::get('/friends','UsersController@friends')->middleware``('requestHandler:GetUserFriendsRequest');
 Route::get('/friends/search','UsersController@searchFriends')->middleware('requestHandler:SearchFriendsRequest');
 Route::post('/friend/add','UsersController@addFriend')->middleware('requestHandler:AddAsFriendRequest');
 Route::post('/friend/accept','UsersController@acceptFriend')->middleware('requestHandler:AcceptFriendRequest');
