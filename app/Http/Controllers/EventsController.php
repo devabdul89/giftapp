@@ -181,8 +181,12 @@ class EventsController extends ParentController
                 'lat_lng'=>$request->input('lat_lng'),
                 'minimum_members'=>$request->input('minimum_members')
             ]);
-            $this->inviteMembers($event->id,$request->getMemberIds());
-            $this->inviteFbMembers($event->id, $request->getFbMemberIds());
+            if(sizeof($request->getMemberIds()) > 0)
+                $this->inviteMembers($event->id,$request->getMemberIds());
+            if(sizeof($request->getFbMemberIds()) > 0)
+                $this->inviteFbMembers($event->id, $request->getFbMemberIds());
+            if(sizeof($request->getMemberEmails()) > 0)
+                $this->inviteEmailMembers($event->id, $request->getMemberEmails());
             return $this->response->respond([
                 'data'=>[
                     'event'=>$event
@@ -206,6 +210,8 @@ class EventsController extends ParentController
                 $this->inviteMembers($request->input('event_id'),[$request->input('user_id')]);
             if($request->input('fb_id') != null)
                 $this->inviteFbMembers($request->input('event_id'), [$request->input('fb_id')]);
+            if($request->getEmailMember() != null)
+                $this->inviteEmailMembers($request->input('event_id'), [$request->getEmailMember()]);
             return $this->response->respond([
                 'data'=>[
                     $this->eventsRepo->getEventMembers($request->input('event_id'))
@@ -225,7 +231,12 @@ class EventsController extends ParentController
      */
     public function cancelEventMember(CancelEventMemberRequest $request){
         try{
-            $this->eventsRepo->cancelMember($request->input('event_id'),$request->input('user_id'));
+            if($request->input('user_id') != null){
+                $this->eventsRepo->cancelMember($request->input('event_id'),$request->input('user_id'));
+            }
+            if($request->input('awaiting_member_id') != null){
+                $this->eventsRepo->cancelAwaitingMember($request->input('awaiting_member_id'));
+            }
             return $this->response->respond([
                 'data'=>[
                     $this->eventsRepo->getEventMembers($request->input('event_id'))
@@ -243,6 +254,10 @@ class EventsController extends ParentController
     }
     public function inviteFbMembers($eventId,$fb_ids){
         $this->membersRepo->inviteAllByFbIds($eventId,$fb_ids);
+    }
+
+    public function inviteEmailMembers($eventId, $emailMembers){
+        $this->membersRepo->inviteAllByEmailIds($eventId,$emailMembers);
     }
 
     /**

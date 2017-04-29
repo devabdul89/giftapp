@@ -10,6 +10,7 @@ namespace Repositories;
 
 
 use Illuminate\Support\Facades\DB;
+use LaraModels\AwaitingMember;
 use LaraModels\Event;
 use LaraModels\EventUser;
 use LaraModels\User;
@@ -37,11 +38,11 @@ class EventsRepository extends Repository
         return $this->add_joined_key($this->getModel()->with(array('members'=>function($query)
         {
             $query->orderBy('created_at', 'desc');
-        }))->with('admin')->get());
+        }))->with('awaiting_members')->with('admin')->get());
     }
 
     public function getReadyEvents(){
-        $events = $this->getModel()->where('date','<=',date('Y-m-d'))->with('members')->where('status',0)->get();
+        $events = $this->getModel()->where('date','<=',date('Y-m-d'))->with('members')->with('awaiting_members')->where('status',0)->get();
         $final_events = [];
         foreach($events as $event){
             if(count($event->members) >= $event->minimum_members){
@@ -55,19 +56,19 @@ class EventsRepository extends Repository
         return $this->add_joined_key($this->getModel()->with(array('members'=>function($query)
         {
             $query->orderBy('created_at', 'desc');
-        }))->where('id',$eventId)->get())[0];
+        }))->with('awaiting_members')->where('id',$eventId)->get())[0];
     }
     public function cancelMember($eventId, $userId){
         return EventUser::where('event_id',$eventId)->where('user_id',$userId)->delete();
     }
     public function getMyEvents($userId){
-        return $this->add_joined_key(User::where('id',$userId)->first()->events()->with('admin')->with((array('members'=>function($query){
+        return $this->add_joined_key(User::where('id',$userId)->first()->events()->with('admin')->with('awaiting_members')->with((array('members'=>function($query){
             $query->orderBy('created_at','desc');
         })))->orderBy('created_at','desc')->paginate(10));
     }
 
     public function getPublicEvents($page = 1){
-        return $this->add_joined_key($this->getModel()->where('private',0)->with(array('members'=>function($query){
+        return $this->add_joined_key($this->getModel()->where('private',0)->with('awaiting_members')->with(array('members'=>function($query){
             $query->orderBy('created_at','desc');
         }))->with('admin')->orderBy('created_at','desc')->paginate(10));
     }
@@ -128,5 +129,9 @@ class EventsRepository extends Repository
             }
         }
         return DB::table('events')->whereIn('id', $final_events)->update(['status'=>2]);
+    }
+
+    public function cancelAwaitingMember($id){
+        return AwaitingMember::where('id',$id)->delete();
     }
 }

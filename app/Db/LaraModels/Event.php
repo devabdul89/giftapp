@@ -21,6 +21,10 @@ class Event extends Model
         return $this->belongsToMany(User::class)->withPivot('accepted');
     }
 
+    public function awaiting_members(){
+        return $this->hasMany(AwaitingMember::class,'event_id');
+    }
+
     public function admin(){
         return $this->belongsTo(User::class,'admin_id');
     }

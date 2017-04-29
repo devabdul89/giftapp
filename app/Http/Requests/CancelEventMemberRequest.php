@@ -29,7 +29,8 @@ class CancelEventMemberRequest extends Request
     {
         return [
             'event_id'=>'required|exists:events,id',
-            'user_id'=>'required|exists:users,id'
+            'user_id'=>'exists:users,id',
+            'awaiting_member_id'=>'exists:awaiting_members,id'
         ];
     }
 }

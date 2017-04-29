@@ -29,12 +29,26 @@ class InviteMemberRequest extends Request
     {
         $rules = ['event_id'=>'required|exists:events,id'];
         if($this->input('user_id') != null){
-            $rules[] = ['user_id'=>'exists:users,id'];
+            $rules['user_id'] = 'exists:users,id';
         }else if($this->input('fb_id') != null){
-            $rules[] = ['fb_id'=>'exists:users,fb_id'];
+            $rules['fb_id'] = 'exists:users,fb_id';
+        }else if($this->input('email') != null){
+
         }else{
-            $rules[] = ['user_id'=>'required'];
+            $rules['user_id'] = 'required';
         }
         return $rules;
+    }
+
+    public function getEmailMember(){
+        $member = null;
+        if($this->input('email') != null){
+            $exploded = explode(',',$this->input('email'));
+            $member = [
+                'email'=>$exploded[0],
+                'full_name'=>$exploded[1]
+            ];
+        }
+        return $member;
     }
 }

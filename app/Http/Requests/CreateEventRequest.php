@@ -43,4 +43,19 @@ class CreateEventRequest extends Request
     public function getFbMemberIds(){
         return ($this->input('fb_members') != null)?explode(',',$this->input('fb_members')):[];
     }
+
+    public function getMemberEmails(){
+        $emails = [];
+        if($this->input('emails') != null){
+            $exploded = explode('&&',$this->input('emails'));
+            foreach ($exploded as $item){
+                $email_name = explode(',',$item);
+                $emails[] = [
+                    'email'=>$email_name[0],
+                    'full_name'=>$email_name[1]
+                ];
+            }
+        }
+        return $emails;
+    }
 }

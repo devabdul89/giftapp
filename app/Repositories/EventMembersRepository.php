@@ -34,4 +34,13 @@ class EventMembersRepository extends Repository
         }
         return DB::table('event_user')->insert($records);
     }
+
+    public function inviteAllByEmailIds($eventId, $emailMembers){
+        $insertableArray = [];
+        foreach ($emailMembers as $member){
+            $member['event_id'] = $eventId;
+            $insertableArray[] = $member;
+        }
+        return DB::table('awaiting_members')->insert($insertableArray);
+    }
 }
