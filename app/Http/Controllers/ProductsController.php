@@ -66,7 +66,7 @@ class ProductsController extends ParentController
         try{
             $products = [];
             if($request->get('vendor') == 'in_app')
-                $products = $this->productsRepo->inAppProducts($request->get('page'));
+                $products = $this->productsRepo->searchInAppProducts(($request->get('keyword') == null)?"":$request->get('keyword'),$request->get('page'));
             else if($request->get('vendor') == 'amazon')
                 $products = $this->productsRepo->amazonProducts(($request->get('keyword') == null)?"shoes":$request->get('keyword'), $request->get('page'));
 
