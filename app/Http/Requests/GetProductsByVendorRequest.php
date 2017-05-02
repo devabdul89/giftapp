@@ -2,7 +2,9 @@
 
 namespace Requests;
 
-class LoginRequest extends Request
+use Requests\Request;
+
+class GetProductsByVendorRequest extends Request
 {
 
     public function __construct(){
@@ -27,10 +29,7 @@ class LoginRequest extends Request
     public function rules()
     {
         return [
-            'email' => 'required|email|exists:users,email',
-            'password' => 'required',
-            'device_id' => 'required',
-            'device_type' => 'required'
+            'vendor'=>'required'
         ];
     }
 }

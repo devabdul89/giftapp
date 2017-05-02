@@ -28,6 +28,8 @@ Route::post('/reset_password', 'UsersController@resetPassword')->middleware('req
 Route::get('/get/users','UsersController@getUsers')->middleware('requestHandler:GetUsersRequest');
 Route::get('/products/get','ProductsController@getProducts')->middleware('requestHandler:GetProductsRequest');
 Route::get('/products/search','ProductsController@searchProducts')->middleware('requestHandler:SearchProductsRequest');
+Route::get('/products/get-by-vendor','ProductsController@getProductsByVendor')->middleware('requestHandler:GetProductsByVendorRequest');
+Route::get('/products/search-by-vendor','ProductsController@searchByVendor')->middleware('requestHandler:SearchProductsByVendorRequest');
 Route::get('/product/detail','ProductsController@productDetail')->middleware('requestHandler:GetProductDetailsRequest');
 
 Route::post('/event/create','EventsController@create')->middleware('requestHandler:CreateEventRequest');

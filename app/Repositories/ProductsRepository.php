@@ -118,9 +118,8 @@ class ProductsRepository extends Repository
         return $this->getModel()->find($itemId);
     }
 
-    public function inAppProducts(){
-        return [
-
-        ];
+    public function inAppProducts($page){
+        return $this->getModel()->paginate(10);
     }
+
 }
