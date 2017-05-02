@@ -65,10 +65,10 @@ class ProductsController extends ParentController
     public function getProductsByVendor(GetProductsByVendorRequest $request){
         try{
             $products = [];
-            if($request->input('vendor') == 'in_app')
+            if($request->get('vendor') == 'in_app')
                 $products = $this->productsRepo->inAppProducts($request->get('page'));
-            else if($request->input('vendor') == 'amazon')
-                $products = $this->productsRepo->amazonProducts();
+            else if($request->get('vendor') == 'amazon')
+                $products = $this->productsRepo->amazonProducts($request->get('keyword'), $request->get('page'));
 
             return $this->response->respond([
                 'data'=>[
