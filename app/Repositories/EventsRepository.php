@@ -134,4 +134,7 @@ class EventsRepository extends Repository
     public function cancelAwaitingMember($id){
         return AwaitingMember::where('id',$id)->delete();
     }
+    public function cancelAwaitingMemberByEmail($email){
+        return AwaitingMember::where('email',$email)->delete();
+    }
 }

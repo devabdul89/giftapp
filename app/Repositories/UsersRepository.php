@@ -8,8 +8,10 @@
 
 namespace Repositories;
 
+use App\Events\UserRegistered;
 use App\Exceptions\ValidationErrorException;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Event;
 use LaraModels\Friends;
 use LaraModels\User as DbUser;
 use Models\User;
@@ -109,7 +111,9 @@ class UsersRepository extends Repository
         $dbUser->device_id = $user->getDeviceId();
         $dbUser->device_type = $user->getDeviceType();
         $dbUser->save();
-        return $this->mapUser($dbUser);
+        $mapedUser =$this->mapUser($dbUser);
+        Event::fire(new UserRegistered($mapedUser));
+        return $mapedUser;
     }
 
     public function update(User $user){
