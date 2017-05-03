@@ -114,6 +114,11 @@ class UsersController extends ParentController
     {
         try{
             $user = clone($request->user());
+            $user->setWalkthroughCompleted($request->input('status'));
+            $this->usersRepo->update($user);
+            return $this->response->respond([
+                'data'=>[]
+            ]);
         }catch (ValidationErrorException $ve){
             return $this->response->respondValidationFails([$ve->getMessage()]);
         }catch (\Exception $e){
