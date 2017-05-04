@@ -53,11 +53,12 @@ class ProductsRepository extends Repository
             "ItemPage" => $page
         );
         if(isset($config['sort'])){
-            $params['Sort'] = $config['Sort'];
+            $params['Sort'] = $config['sort'];
         }
         if (!isset($params["Timestamp"])) {
             $params["Timestamp"] = gmdate('Y-m-d\TH:i:s\Z');
         }
+        dd($params);
         ksort($params);
         $pairs = array();
         foreach ($params as $key => $value) {

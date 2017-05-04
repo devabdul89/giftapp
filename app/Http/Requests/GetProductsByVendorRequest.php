@@ -44,7 +44,6 @@ class GetProductsByVendorRequest extends Request
         if($this->get('sort') != null){
             $configs['sort'] = $this->get('sort');
         }
-
         return $configs;
     }
 }
