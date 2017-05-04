@@ -124,7 +124,7 @@ class ProductsRepository extends Repository
     }
 
     public function inAppProductDetail($itemId){
-        return $this->getModel()->find($itemId);
+        return $this->getModel()->with('images')->find($itemId);
     }
 
     public function inAppProducts($page){
