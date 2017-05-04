@@ -188,6 +188,7 @@ class UsersController extends ParentController
                 'user_id'=>$targetedUser->getId(),
                 'type'=>'add_friend'
             ]);
+            if($targetedUser->getDeviceId() != null && $targetedUser->getDeviceType() != null){
             PushNotification::app($targetedUser->getDeviceType())
                 ->to($targetedUser->getDeviceId())
                 ->send($request->user->getFullName().' sent you a friend request.',array(
@@ -195,6 +196,7 @@ class UsersController extends ParentController
 //                        'sender'=>$this->usersRepo->findById($request->user)->toJson()
                     )
                 ));
+            }
         }catch (\Exception $e){
             return $this->response->respond(['data'=>[
                 'friends'=>$this->transformFriendsResponse($this->usersRepo->friends($request->user->getId()))

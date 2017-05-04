@@ -179,7 +179,8 @@ class EventsController extends ParentController
                 'shipping_address' => $request->input('shipping_address'),
                 'currency' => $request->input('currency'),
                 'lat_lng'=>$request->input('lat_lng'),
-                'minimum_members'=>$request->input('minimum_members')
+                'minimum_members'=>$request->input('minimum_members'),
+                'product_vendor' => $request->input('product_vendor')
             ]);
             if(sizeof($request->getMemberIds()) > 0)
                 $this->inviteMembers($event->id,$request->getMemberIds());
@@ -285,13 +286,15 @@ class EventsController extends ParentController
                 'user_id'=>$admin->id,
                 'type'=>'accept_event_invitation'
             ]);
-            PushNotification::app($admin->device_type)
-                ->to($admin->device_id)
-                ->send($request->user->getFullName().' accepted your invitation.',array(
-                    'data' => array(
-                        //'event'=> $event
-                    )
-                ));
+            if($admin->device_id != null && $admin->device_type != null){
+                PushNotification::app($admin->device_type)
+                    ->to($admin->device_id)
+                    ->send($request->user->getFullName().' accepted your invitation.',array(
+                        'data' => array(
+                            //'event'=> $event
+                        )
+                    ));
+            }
         }catch (\Exception $e){
             return $this->response->respond(['data'=>[]]);
         }
@@ -321,13 +324,14 @@ class EventsController extends ParentController
                 'user_id'=>$admin->id,
                 'type'=>'decline_event_invitation'
             ]);
-            PushNotification::app($admin->device_type)
-                ->to($admin->device_id)
-                ->send($title,array(
-                    'data' => array(
-                        //'event'=>$event
-                    )
-                ));
+            if($admin->device_id != null && $admin->device_type != null) {
+                PushNotification::app($admin->device_type)
+                    ->to($admin->device_id)
+                    ->send($title, array(
+                        'data' => array(//'event'=>$event
+                        )
+                    ));
+            }
         }catch (\Exception $e){
             return $this->response->respond(['data'=>[]]);
         }

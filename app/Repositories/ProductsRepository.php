@@ -26,18 +26,18 @@ class ProductsRepository extends Repository
         return $this->getModel()->create($product);
     }
 
-    public function searchAmazon($keyword,$page=1){
+    public function searchAmazon($config,$page=1){
         if($page == null){
             $page = 1;
         }
-        return $this->amazonProducts($keyword,$page);
+        return $this->amazonProducts($config,$page);
     }
 
     public function searchInAppProducts($keyword='',$page){
         return $this->getModel()->where('title','like','%'.$keyword.'%')->with('images')->paginate()->all();
     }
 
-    public function generateSearchUrl($keyword="shoes",$page =1){
+    public function generateSearchUrl($config = [],$page =1){
         $aws_access_key_id = "AKIAJCJIMH2OSDJOMIRQ";
         $aws_secret_key = env('APA_SECRET');
         $endpoint = env('APA_ENDPOINT');
@@ -47,11 +47,14 @@ class ProductsRepository extends Repository
             "Operation" => "ItemSearch",
             "AWSAccessKeyId" => "AKIAJCJIMH2OSDJOMIRQ",
             "AssociateTag" => "zeenomlabs-21",
-            "SearchIndex" => "All",
+            "SearchIndex" => (isset($config['category']))?$config['category']:"All",
             "ResponseGroup" => "Images,ItemAttributes,Offers",
-            "Keywords" => $keyword,
+            "Keywords" => (isset($config['keyword']))?$config['keyword']:"shoes",
             "ItemPage" => $page
         );
+        if(isset($config['sort'])){
+            $params['Sort'] = $config['Sort'];
+        }
         if (!isset($params["Timestamp"])) {
             $params["Timestamp"] = gmdate('Y-m-d\TH:i:s\Z');
         }
@@ -76,8 +79,14 @@ class ProductsRepository extends Repository
         curl_close($ch);
         return $response;
     }
-    public function amazonProducts($keyword = "shoes",$page=1){
-        $xml = Parser::xml($this->curl($this->generateSearchUrl($keyword,$page)));
+
+//    public function amazonProducts($keyword = "shoes",$page=1){
+//        $xml = Parser::xml($this->curl($this->generateSearchUrl($keyword,$page)));
+//        return $xml['Items']['Item'];
+//    }
+
+    public function amazonProducts($configs=['keyword'=>'shoes'], $page = 1){
+        $xml = Parser::xml($this->curl($this->generateSearchUrl($configs,$page)));
         return $xml['Items']['Item'];
     }
 

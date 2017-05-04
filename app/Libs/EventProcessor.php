@@ -72,13 +72,14 @@ class EventProcessor
                 'user_id'=>$admin->id,
                 'type'=>'event_processing'
             ]);
-            PushNotification::app($admin->device_type)
-                ->to($admin->device_id)
-                ->send($title,array(
-                    'data' => array(
-                        //'event'=>$this->event
-                    )
-                ));
+            if($admin->device_id != null && $admin->device_type != null) {
+                PushNotification::app($admin->device_type)
+                    ->to($admin->device_id)
+                    ->send($title, array(
+                        'data' => array(//'event'=>$this->event
+                        )
+                    ));
+            }
             return $this;
         }catch (\Exception $e){
             return $this;

@@ -32,4 +32,16 @@ class GetProductsByVendorRequest extends Request
             'vendor'=>'required'
         ];
     }
+
+    public function getConfigs(){
+        $configs = [];
+        if($this->get('keyword') != null){
+            $configs['keyword'] = $this->get('keyword');
+        }
+        if($this->get('category')){
+            $configs['category'] = $this->get('category');
+        }
+
+        return $configs;
+    }
 }
