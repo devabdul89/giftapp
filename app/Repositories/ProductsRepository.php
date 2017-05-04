@@ -37,7 +37,7 @@ class ProductsRepository extends Repository
         return $this->getModel()->where('title','like','%'.$keyword.'%')->with('images')->paginate()->all();
     }
 
-    public function generateSearchUrl($config = [],$page =1){
+    public function generateAmazonSearchUrl($config = [],$page =1){
         $aws_access_key_id = "AKIAJCJIMH2OSDJOMIRQ";
         $aws_secret_key = env('APA_SECRET');
         $endpoint = env('APA_ENDPOINT');
@@ -58,7 +58,7 @@ class ProductsRepository extends Repository
         if (!isset($params["Timestamp"])) {
             $params["Timestamp"] = gmdate('Y-m-d\TH:i:s\Z');
         }
-        
+
         ksort($params);
         $pairs = array();
         foreach ($params as $key => $value) {
@@ -81,17 +81,12 @@ class ProductsRepository extends Repository
         return $response;
     }
 
-//    public function amazonProducts($keyword = "shoes",$page=1){
-//        $xml = Parser::xml($this->curl($this->generateSearchUrl($keyword,$page)));
-//        return $xml['Items']['Item'];
-//    }
-
     public function amazonProducts($configs=['keyword'=>'shoes'], $page = 1){
-        $xml = Parser::xml($this->curl($this->generateSearchUrl($configs,$page)));
+        $xml = Parser::xml($this->curl($this->generateAmazonSearchUrl($configs,$page)));
         return $xml['Items']['Item'];
     }
 
-    public function generateItemLookupUrl($itemId){
+    public function generateAmazonItemLookupUrl($itemId){
         $aws_access_key_id = "AKIAJCJIMH2OSDJOMIRQ";
         $aws_secret_key = env('APA_SECRET');
         $endpoint = env('APA_ENDPOINT');
@@ -120,7 +115,7 @@ class ProductsRepository extends Repository
     }
 
     public function amazonProductLookup($ItemId){
-        $xml = Parser::xml($this->curl($this->generateItemLookupUrl($ItemId)));
+        $xml = Parser::xml($this->curl($this->generateAmazonItemLookupUrl($ItemId)));
         return $xml['Items']['Item'];
     }
 
@@ -132,4 +127,18 @@ class ProductsRepository extends Repository
         return $this->getModel()->paginate(10);
     }
 
+    public function bestBuyItemLookup($itemId){
+        return null;
+    }
+
+    public function getBestBuyProducts($config=[], $page = 1){
+        $params = "search=gift";
+        if(isset($config['keyword'])){
+            $params="search=".$config['keyword'];
+        }
+        if(isset($config['category'])){
+            $params.="&type=".$config['category'];
+        }
+        return json_decode($this->curl("https://api.bestbuy.com/v1/products(".$params.")?format=json&apiKey=mOzjp3gKBgt1YKF4cmlVcvom"));
+    }
 }

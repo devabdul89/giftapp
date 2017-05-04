@@ -69,6 +69,8 @@ class ProductsController extends ParentController
                 $products = $this->productsRepo->searchInAppProducts(($request->get('keyword') == null)?"":$request->get('keyword'),$request->get('page'));
             else if($request->get('vendor') == 'amazon')
                 $products = $this->productsRepo->amazonProducts($request->getConfigs(), $request->get('page'));
+            else if($request->get('vendor') == 'bestbuy')
+                $products = $this->productsRepo->getBestBuyProducts($request->getConfigs(), $request->get('page'));
 
             return $this->response->respond([
                 'data'=>[
@@ -137,6 +139,24 @@ class ProductsController extends ParentController
             return $this->response->respond([
                 'data'=>[
                     'item'=>($request->get('vendor') == 'in_app')?$this->productsRepo->inAppProductDetail($request->get('item_id')):$this->productsRepo->amazonProductLookup($request->get('item_id'))
+                ]
+            ]);
+        }catch(ValidationErrorException $ve){
+            return $this->response->respondValidationFails([$ve->getMessage()]);
+        }catch(\Exception $e){
+            return $this->response->respondInternalServerError([$e->getMessage()]);
+        }
+    }
+
+
+    /**
+     * @return \App\Http\json
+     */
+    public function getBestBuyProducts(){
+        try{
+            return $this->response->respond([
+                'data'=>[
+                    'products'=>json_decode($this->productsRepo->getBestBuyProducts())
                 ]
             ]);
         }catch(ValidationErrorException $ve){

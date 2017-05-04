@@ -14,3 +14,5 @@
 Route::get('/', function (){
     return 'Welcome to gift app';
 });
+
+Route::get('/test','ProductsController@getBestBuyProducts');
