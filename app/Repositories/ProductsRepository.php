@@ -94,8 +94,8 @@ class ProductsRepository extends Repository
         $params = array(
             "Service" => "AWSECommerceService",
             "Operation" => "ItemLookup",
-            "AWSAccessKeyId" => "AKIAJCJIMH2OSDJOMIRQ",
-            "AssociateTag" => "zeenomlabs-21",
+            "AWSAccessKeyId" => env('APA_KEY'),
+            "AssociateTag" => env('APA_ASSOCIATE_TAG'),
             "ItemId" => $itemId,
             "IdType" => "ASIN",
             "ResponseGroup" => "Images,ItemAttributes,Offers"

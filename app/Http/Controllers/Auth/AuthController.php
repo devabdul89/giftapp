@@ -21,16 +21,17 @@ use Traits\ImageHelper;
 class AuthController extends ParentController
 {
     use ImageHelper;
+
     /**
      * @var UsersRepository|null
      */
     public $usersRep = null;
 
-
     /**
      * @var BillingRepository|null
      */
     public $billingCardsRepo = null;
+
     /**
      * @var Response|null
      */
@@ -113,6 +114,7 @@ class AuthController extends ParentController
             return $this->response->respondInternalServerError([$e->getMessage()]);
         }
     }
+
 
     public function logout(LogoutRequest $request)
     {
