@@ -136,7 +136,7 @@ class UsersRepository extends Repository
         return $user;
     }
 
-    public function updatePassword($email, $newPass){
+    public function updatePasswordByEmail($email, $newPass){
         return $this->getModel()->where('email',$email)->update([
             'password'=>$newPass
         ]);
