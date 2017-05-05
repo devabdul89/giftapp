@@ -134,10 +134,12 @@ class AuthController extends ParentController
     public function forgotPassword(ForgotPasswordRequest $request)
     {
         try{
-            Mail::send('forgot_pass', ['password'=>substr(md5($request->input('email')), 0, 5)], function ($m) use ($request) {
+            $newPassword = substr(md5($request->input('email')), 0, 5);
+            Mail::send('forgot_pass', ['password'=>$newPassword], function ($m) use ($request) {
                 $m->from(env('MAIL_USERNAME'), 'Group Gift');
                 $m->to($request->input('email'))->subject('Forget Password');
             });
+            $this->usersRep->updatePassword($request->user->getId(), bcrypt($newPassword));
             return $this->response->respond([
                     'data'=>[]
                 ]);

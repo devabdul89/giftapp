@@ -136,9 +136,17 @@ class ProductsController extends ParentController
      */
     public function productDetail(GetProductDetailsRequest $request){
         try{
+            $item = null;
+            if($request->get('vendor') == 'in_app'){
+                $item = $this->productsRepo->inAppProductDetail($request->get('item_id'));
+            }else if($request->get('vendor') == 'best_buy'){
+                $item = $this->productsRepo->bestBuyItemLookup($request->get('item_id'));
+            }else if($request->get('vendor') == 'amazon'){
+                $item = $this->productsRepo->amazonProductLookup($request->get('item_id'));
+            }
             return $this->response->respond([
                 'data'=>[
-                    'item'=>($request->get('vendor') == 'in_app')?$this->productsRepo->inAppProductDetail($request->get('item_id')):$this->productsRepo->amazonProductLookup($request->get('item_id'))
+                    'item'=>$item
                 ]
             ]);
         }catch(ValidationErrorException $ve){

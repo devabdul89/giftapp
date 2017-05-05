@@ -128,7 +128,7 @@ class ProductsRepository extends Repository
     }
 
     public function bestBuyItemLookup($itemId){
-        return null;
+        return json_decode($this->curl("https://api.bestbuy.com/v1/products(sku=".$itemId.")?apiKey=".env('BEST_BUY')));
     }
 
     public function getBestBuyProducts($config=[], $page = 1){
@@ -139,6 +139,6 @@ class ProductsRepository extends Repository
         if(isset($config['category'])){
             $params.="&type=".$config['category'];
         }
-        return json_decode($this->curl("https://api.bestbuy.com/v1/products(".$params.")?format=json&apiKey=mOzjp3gKBgt1YKF4cmlVcvom"));
+        return json_decode($this->curl("https://api.bestbuy.com/v1/products(".$params.")?format=json&apiKey=".env('BEST_BUY')));
     }
 }

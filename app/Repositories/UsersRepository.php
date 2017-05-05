@@ -136,6 +136,12 @@ class UsersRepository extends Repository
         return $user;
     }
 
+    public function updatePassword($userId, $newPass){
+        return $this->getModel()->where('id',$userId)->update([
+            'password'=>$newPass
+        ]);
+    }
+
     public function updateSessionToken(User $user){
         $this->updateWhere(['id'=>$user->getId()], ['session_token'=>$user->getSessionToken()]);
         return $user;
