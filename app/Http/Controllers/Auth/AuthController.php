@@ -139,7 +139,8 @@ class AuthController extends ParentController
                 $m->from(env('MAIL_USERNAME'), 'Group Gift');
                 $m->to($request->input('email'))->subject('Forget Password');
             });
-            $this->usersRep->updatePassword($request->user->getId(), bcrypt($newPassword));
+            $this->usersRep->updatePasswordByEmail($request->input('email'), bcrypt($newPassword));
+
             return $this->response->respond([
                     'data'=>[]
                 ]);
