@@ -139,7 +139,7 @@ class ProductsController extends ParentController
             $item = null;
             if($request->get('vendor') == 'in_app'){
                 $item = $this->productsRepo->inAppProductDetail($request->get('item_id'));
-            }else if($request->get('vendor') == 'best_buy'){
+            }else if($request->get('vendor') == 'bestbuy'){
                 $item = $this->productsRepo->bestBuyItemLookup($request->get('item_id'));
             }else if($request->get('vendor') == 'amazon'){
                 $item = $this->productsRepo->amazonProductLookup($request->get('item_id'));
