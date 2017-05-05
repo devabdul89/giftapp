@@ -45,8 +45,8 @@ class ProductsRepository extends Repository
         $params = array(
             "Service" => "AWSECommerceService",
             "Operation" => "ItemSearch",
-            "AWSAccessKeyId" => "AKIAJCJIMH2OSDJOMIRQ",
-            "AssociateTag" => "zeenomlabs-21",
+            "AWSAccessKeyId" => env('APA_KEY'),
+            "AssociateTag" => env('APA_ASSOCIATE_TAG'),
             "SearchIndex" => (isset($config['category']))?$config['category']:"All",
             "ResponseGroup" => "Images,ItemAttributes,Offers",
             "Keywords" => (isset($config['keyword']))?$config['keyword']:"shoes",
