@@ -139,6 +139,6 @@ class ProductsRepository extends Repository
         if(isset($config['category'])){
             $params.="&type=".$config['category'];
         }
-        return json_decode($this->curl("https://api.bestbuy.com/v1/products(".$params.")?format=json&apiKey=".env('BEST_BUY')));
+        return json_decode($this->curl("https://api.bestbuy.com/v1/products(".$params.")?format=json&page=".$page."&apiKey=".env('BEST_BUY')));
     }
 }
