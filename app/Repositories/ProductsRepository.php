@@ -128,7 +128,7 @@ class ProductsRepository extends Repository
     }
 
     public function bestBuyItemLookup($itemId){
-        return json_decode($this->curl("https://api.bestbuy.com/v1/products(sku=".$itemId.")?apiKey=".env('BEST_BUY')));
+        return json_decode($this->curl("https://api.bestbuy.com/v1/products(sku=".$itemId.")?&format=json&apiKey=".env('BEST_BUY')));
     }
 
     public function getBestBuyProducts($config=[], $page = 1){
