@@ -132,6 +132,8 @@ class ProductsRepository extends Repository
     }
 
     public function getBestBuyProducts($config=[], $page = 1){
+        if($page == null)
+            $page = 1;
         $params = "search=gift";
         if(isset($config['keyword'])){
             $params="search=".$config['keyword'];
