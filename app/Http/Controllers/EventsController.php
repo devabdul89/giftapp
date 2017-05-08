@@ -282,7 +282,8 @@ class EventsController extends ParentController
             $title = $request->user->getFullName().' accepted your invitation.';
             $this->notificationsRepo->saveNotification([
                 'title' => $title,
-                'data' => json_encode($event),
+                'event'=>json_encode($event),
+                'data' => json_encode($request->user->toJson()),
                 'user_id'=>$admin->id,
                 'type'=>'accept_event_invitation'
             ]);
@@ -320,7 +321,8 @@ class EventsController extends ParentController
             $event = $this->eventsRepo->findById($request->input('event_id'));
             $this->notificationsRepo->saveNotification([
                 'title' => $title,
-                'data' => json_encode($event),
+                'event'=>json_encode($event),
+                'data' => json_encode($request->user->toJson()),
                 'user_id'=>$admin->id,
                 'type'=>'decline_event_invitation'
             ]);
