@@ -73,6 +73,10 @@ class AuthController extends ParentController
                 $user->setProfilePicture($this->saveProfilePicture($request->file('profile_picture')));
             }
             $user = Auth::login($this->usersRep->store($user));
+            Mail::send('registration_success_mail', ['data'=>null], function ($m) use ($request) {
+                $m->from(env('MAIL_USERNAME'), 'Group Gift');
+                $m->to($request->input('email'))->subject('Registration Success!');
+            });
             $billingCard = $this->billingCardsRepo->findByUserId($user->getId());
             return $this->response->respond([
                 'data'=>[
@@ -142,7 +146,6 @@ class AuthController extends ParentController
                 $m->to($request->input('email'))->subject('Forget Password');
             });
             $this->usersRep->updatePasswordByEmail($request->input('email'), bcrypt($newPassword));
-
             return $this->response->respond([
                     'data'=>[]
                 ]);
