@@ -44,5 +44,6 @@ class SendMailsToAwaitingMembers extends Command
                 $m->to($member->email)->subject('Invited On GroupGift');
             });
         }
+        (new AwaitingMember())->update(['email_sent'=>1]);
     }
 }
