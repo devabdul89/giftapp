@@ -68,7 +68,7 @@ class EventsRepository extends Repository
     }
 
     public function getPublicEvents($page = 1){
-        return $this->add_joined_key($this->getModel()->where('private',0)->with('awaiting_members')->with(array('members'=>function($query){
+        return $this->add_joined_key($this->getModel()->where('private',0)->where('status',0)->with('awaiting_members')->with(array('members'=>function($query){
             $query->orderBy('created_at','desc');
         }))->with('admin')->orderBy('created_at','desc')->paginate(10));
     }

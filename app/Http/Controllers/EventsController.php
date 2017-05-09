@@ -204,8 +204,8 @@ class EventsController extends ParentController
     }
 
     private function sendNotificationsToCreatedEventMembers($invitedMembers, $event, $admin){
-        foreach ($invitedMembers as $member){
-            if($member->id != $admin->id){
+        foreach ($invitedMembers->members as $member){
+            if($member->id != $admin->getId()){
                 $title = $member->full_name." add you in an event '".$event->title."'";
                 $this->notificationsRepo->saveNotification([
                     'title' => $title,
