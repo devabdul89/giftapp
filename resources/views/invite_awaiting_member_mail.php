@@ -8,6 +8,6 @@
 
 ?>
 <h3>
-    You are invited on an event  in GroupGift.
+    You are invited on an event '<?= $data->title ?>' in GroupGift.
 </h3>
 
