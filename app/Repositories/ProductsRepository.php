@@ -132,6 +132,7 @@ class ProductsRepository extends Repository
     }
 
     public function getBestBuyProducts($config=[], $page = 1){
+        $sort = "";
         if($page == null)
             $page = 1;
         $params = "search=gift";
@@ -141,6 +142,10 @@ class ProductsRepository extends Repository
         if(isset($config['category'])){
             $params.="&type=".$config['category'];
         }
-        return json_decode($this->curl("https://api.bestbuy.com/v1/products(".$params.")?format=json&page=".$page."&apiKey=".env('BEST_BUY')));
+        if(isset($config['sort'])){
+            $sort = "&sort=".$config['sort'];
+        }
+        return json_decode($this->curl("https://api.bestbuy.com/v1/products(".$params.")?format=json&page=".$page."&apiKey=".env('BEST_BUY').$sort));
     }
+
 }

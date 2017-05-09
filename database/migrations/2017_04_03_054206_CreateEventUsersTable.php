@@ -21,6 +21,7 @@ class CreateEventUsersTable extends Migration
             $table->string('charge_id')->nullable();
             $table->boolean('charge_status')->default(0);
             $table->boolean('accepted')->default(0);
+            $table->unique(array('event_id','user_id'));
             $table->timestamps();
 
             $table->foreign('event_id')->references('id')->on('events')->onDelete('cascade');
