@@ -62,13 +62,13 @@ class EventsRepository extends Repository
         return EventUser::where('event_id',$eventId)->where('user_id',$userId)->delete();
     }
     public function getMyEvents($userId){
-        return $this->add_joined_key(User::where('id',$userId)->first()->events()->with('admin')->with('awaiting_members')->with((array('members'=>function($query){
+        return $this->add_joined_key(User::where('id',$userId)->first()->events()->where('status','!=',3)->with('admin')->with('awaiting_members')->with((array('members'=>function($query){
             $query->orderBy('created_at','desc');
         })))->orderBy('created_at','desc')->paginate(10));
     }
 
     public function getPublicEvents($page = 1){
-        return $this->add_joined_key($this->getModel()->where('private',0)->where('status',0)->with('awaiting_members')->with(array('members'=>function($query){
+        return $this->add_joined_key($this->getModel()->where('private',0)->where('status','!=',3)->with('awaiting_members')->with(array('members'=>function($query){
             $query->orderBy('created_at','desc');
         }))->with('admin')->orderBy('created_at','desc')->paginate(10));
     }
@@ -115,13 +115,14 @@ class EventsRepository extends Repository
     }
 
     public function userCompletedEvents($userId){
-        return $this->add_joined_key($this->getModel()->select(DB::raw("events.*"))->where('events.status',1)->where('event_user.user_id',$userId)
+        return $this->add_joined_key($this->getModel()->select(DB::raw("events.*"))->where('events.status',3)->where('event_user.user_id',$userId)
             ->leftJoin('event_user','event_user.event_id','=','events.id')
             ->with('members')->with('admin')->get());
     }
 
     public function expireOutDatedEvents(){
         $events = $this->getModel()->where('date','<=',date('Y-m-d'))->with('members')->where('status',0)->get();
+        //todo: handle those members also who haven't joined yet.
         $final_events = [];
         foreach($events as $event){
             if(count($event->members) < $event->minimum_members){
