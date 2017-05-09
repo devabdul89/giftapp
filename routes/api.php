@@ -61,3 +61,12 @@ Route::post('/friendship/cancel','UsersController@rejectFriend')->middleware('re
 Route::get('/user/profile','UsersController@userProfile')->middleware('requestHandler:UserProfileRequest');
 Route::get('/orders/completed','EventsController@userCompletedEvents')->middleware('requestHandler:GetUserCompletedOrders');
 Route::get('/notifications','UsersController@getNotifications')->middleware('requestHandler:GetUserNotificationsRequest');
+Route::get('/test',function(){
+    $members = \LaraModels\AwaitingMember::where('email_sent','0')->get();
+    foreach ($members->all() as $member){
+        \Illuminate\Support\Facades\Mail::send('invite_awaiting_member_mail', ['data'=>$member->event], function($m)use($member) {
+            $m->from(env('MAIL_USERNAME'), 'Group Gift');
+            $m->to($member)->subject('Invited On GroupGift');
+        });
+    }
+});
