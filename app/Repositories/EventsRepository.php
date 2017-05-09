@@ -45,7 +45,14 @@ class EventsRepository extends Repository
         $events = $this->getModel()->where('date','<=',date('Y-m-d'))->with('members')->with('awaiting_members')->where('status',0)->get();
         $final_events = [];
         foreach($events as $event){
-            if(count($event->members) >= $event->minimum_members){
+            $joinedMembers = 0;
+            foreach ($event->members as $member){
+                if($member->pivot->accepted > 0){
+                    $joinedMembers++;
+                }
+            }
+
+            if($joinedMembers >= $event->minimum_members){
                 array_push($final_events,$event);
             }
         }
@@ -125,7 +132,14 @@ class EventsRepository extends Repository
         //todo: handle those members also who haven't joined yet.
         $final_events = [];
         foreach($events as $event){
-            if(count($event->members) < $event->minimum_members){
+            $joinedMembers = 0;
+            foreach ($event->members as $member){
+                if($member->pivot->accepted > 0){
+                    $joinedMembers++;
+                }
+            }
+
+            if($joinedMembers < $event->minimum_members){
                 array_push($final_events,$event->id);
             }
         }
