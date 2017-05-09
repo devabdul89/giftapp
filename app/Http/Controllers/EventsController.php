@@ -205,22 +205,24 @@ class EventsController extends ParentController
 
     private function sendNotificationsToCreatedEventMembers($invitedMembers, $event, $admin){
         foreach ($invitedMembers as $member){
-            $title = $member->full_name." add you in an event '".$event->title."'";
-            $this->notificationsRepo->saveNotification([
-                'title' => $title,
-                'event'=>json_encode($event),
-                'data' => json_encode($admin->toJson()),
-                'user_id'=>$member->id,
-                'type'=>'accept_event_invitation'
-            ]);
-            if($member->device_id != null && $member->device_type != null){
-                PushNotification::app($member->device_type)
-                    ->to($member->device_id)
-                    ->send($title,array(
-                        'data' => array(
-                            //'event'=> $event
-                        )
-                    ));
+            if($member->id != $admin->id){
+                $title = $member->full_name." add you in an event '".$event->title."'";
+                $this->notificationsRepo->saveNotification([
+                    'title' => $title,
+                    'event'=>json_encode($event),
+                    'data' => json_encode($admin->toJson()),
+                    'user_id'=>$member->id,
+                    'type'=>'accept_event_invitation'
+                ]);
+                if($member->device_id != null && $member->device_type != null){
+                    PushNotification::app($member->device_type)
+                        ->to($member->device_id)
+                        ->send($title,array(
+                            'data' => array(
+                                //'event'=> $event
+                            )
+                        ));
+                }
             }
         }
     }
