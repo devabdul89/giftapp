@@ -178,5 +178,4 @@ class AuthController extends ParentController
             return $this->response->respondInternalServerError([$e->getMessage()]);
         }
     }
-
 }

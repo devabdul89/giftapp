@@ -18,6 +18,7 @@ class CreateAwaitingMembersTable extends Migration
             $table->integer('event_id')->unsigned();
             $table->string('full_name')->nullable();
             $table->string('email')->nullable();
+            $table->boolean('email_sent')->default(0);
             $table->timestamps();
 
             $table->foreign('event_id')->references('id')->on('events')->onDelete('cascade');
