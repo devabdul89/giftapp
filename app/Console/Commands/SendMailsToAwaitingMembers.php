@@ -41,7 +41,7 @@ class SendMailsToAwaitingMembers extends Command
         foreach ($members->all() as $member){
             Mail::send('invite_awaiting_member_mail', ['data'=>$member->event], function($m)use($member) {
                 $m->from(env('MAIL_USERNAME'), 'Group Gift');
-                $m->to($member)->subject('Invited On GroupGift');
+                $m->to($member->email)->subject('Invited On GroupGift');
             });
         }
     }
