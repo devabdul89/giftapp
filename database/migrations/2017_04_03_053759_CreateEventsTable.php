@@ -27,7 +27,7 @@ class CreateEventsTable extends Migration
             $table->boolean('private')->default(0);
             $table->smallInteger('minimum_members')->default(1);
             $table->string('lat_lng')->nullable();
-            $table->string('status')->default(0);
+            $table->string('status')->default(0); //0:pending 1:completed 2:expired
             $table->timestamps();
 
             $table->foreign('admin_id')->references('id')->on('users')->onDelete('cascade');
