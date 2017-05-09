@@ -188,6 +188,8 @@ class EventsController extends ParentController
                 $this->inviteFbMembers($event->id, $request->getFbMemberIds());
             if(sizeof($request->getMemberEmails()) > 0)
                 $this->inviteEmailMembers($event->id, $request->getMemberEmails());
+            //accepting admin member
+            $this->eventsRepo->acceptEvent($event->id,$request->user->getId());
 
             $this->sendNotificationsToCreatedEventMembers($this->eventsRepo->getEventMembers($event->id), $event, $request->user);
 
