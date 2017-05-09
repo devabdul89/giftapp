@@ -68,6 +68,7 @@ class EventProcessor
             $title = 'Your event \''.$this->event->title.'\' is being processed. ';
             (new NotificationsRepository())->saveNotification([
                 'title' => $title,
+                'event'=>$this->event,
                 'data' => json_encode($admin),
                 'user_id'=>$admin->id,
                 'type'=>'event_processing'
