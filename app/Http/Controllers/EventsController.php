@@ -188,6 +188,9 @@ class EventsController extends ParentController
                 $this->inviteFbMembers($event->id, $request->getFbMemberIds());
             if(sizeof($request->getMemberEmails()) > 0)
                 $this->inviteEmailMembers($event->id, $request->getMemberEmails());
+
+            $this->sendNotificationsToCreatedEventMembers($this->eventsRepo->getEventMembers($event->id), $event, $request->user);
+
             return $this->response->respond([
                 'data'=>[
                     'event'=>$event
@@ -199,7 +202,28 @@ class EventsController extends ParentController
             return $this->response->respondInternalServerError([$e->getMessage()]);
         }
     }
-    
+
+    private function sendNotificationsToCreatedEventMembers($invitedMembers, $event, $admin){
+        foreach ($invitedMembers as $member){
+            $title = $member->full_name." add you in an event '".$event->title."'";
+            $this->notificationsRepo->saveNotification([
+                'title' => $title,
+                'event'=>json_encode($event),
+                'data' => json_encode($admin->toJson()),
+                'user_id'=>$member->id,
+                'type'=>'accept_event_invitation'
+            ]);
+            if($member->device_id != null && $member->device_type != null){
+                PushNotification::app($member->device_type)
+                    ->to($member->device_id)
+                    ->send($title,array(
+                        'data' => array(
+                            //'event'=> $event
+                        )
+                    ));
+            }
+        }
+    }
     
     /**
      * @param InviteMemberRequest $request
