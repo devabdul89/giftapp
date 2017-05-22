@@ -19,6 +19,7 @@ class CreateUsersTable extends Migration
             $table->string('full_name');
             $table->string('email');
             $table->string('profile_picture')->nullable();
+            $table->boolean('tutorial_popup_check_1')->nullable();
             $table->string('password');
             $table->boolean('password_created')->default(0);
             $table->string('session_token')->nullable();

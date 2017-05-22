@@ -245,6 +245,8 @@ class UsersRepository extends Repository
         $transformedUser->setDeviceType($user->device_type);
         $transformedUser->setAddress($user->address);
         $transformedUser->setImageSetted($user->image_setted);
+        $transformedUser->setTutorialPopUpCheck($user->tutorial_popup_check_1);
+
 
         // appending host name for profile picture
         if($transformedUser->getProfilePicture() != '' && $transformedUser->getProfilePicture() != null){

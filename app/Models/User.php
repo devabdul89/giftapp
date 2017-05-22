@@ -29,6 +29,7 @@ class User extends Model
     private $deviceType = '';
     private $imageSetted = false;
     private $address = '';
+    private $tutorialPopUpChcek = false;
 
     public function __construct()
     {
@@ -55,7 +56,8 @@ class User extends Model
             'deviceId' => $this->getDeviceId(),
             'deviceType' => $this->getDeviceType(),
             'imageSetted' => $this->getImageSetted(),
-            'address' => $this->getAddress()
+            'address' => $this->getAddress(),
+            'tutorial_popup_check' => $this->getTutorialPopUpCheck()
         ];
         // TODO: Implement toJson() method.
     }
@@ -354,5 +356,13 @@ class User extends Model
     {
         $this->passwordCreated = intval($passwordCreated);
         return $this;
+    }
+    public function setTutorialPopUpCheck($tutorialPopUpChcek)
+    {
+        $this->tutorialPopUpChcek = $tutorialPopUpChcek;
+        return $this;
+    }
+    public function getTutorialPopUpCheck(){
+        return $this->tutorialPopUpChcek;
     }
 }

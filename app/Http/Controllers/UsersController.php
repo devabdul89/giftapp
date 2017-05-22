@@ -16,6 +16,7 @@ use Requests\GetUsersRequest;
 use Requests\RejectFriendRequest;
 use Requests\ResetPasswordRequest;
 use Requests\SearchFriendsRequest;
+use Requests\UpdatePopUpRequest;
 use Requests\UpdateProfilePictureRequest;
 use Requests\UpdateProfileRequest;
 use Requests\UpdateWalkthroughStatusRequest;
@@ -279,5 +280,18 @@ class UsersController extends ParentController
         }catch(\Exception $e){
             return $this->response->respondInternalServerError([$e->getMessage()]);
         }
+    }
+
+    public function setPopUpValue(UpdatePopUpRequest $request){
+
+        try{
+            $this->usersRepo->updateWhere(['id'=>$request->user->getId()],['tutorial_popup_check_1'=>$request->input('tutorial_popup_check_1')]);
+            return $this->response->respond();
+        }catch(ValidationErrorException $ve){
+            return $this->response->respondValidationFails([$ve->getMessage()]);
+        }catch(\Exception $e){
+            return $this->response->respondInternalServerError([$e->getMessage()]);
+        }
+
     }
 }

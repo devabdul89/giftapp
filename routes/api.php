@@ -18,6 +18,7 @@ Route::post('/auth/register', 'Auth\AuthController@register')->middleware('reque
 Route::post('/auth/login', 'Auth\AuthController@login')->middleware('requestHandler:LoginRequest');
 Route::post('/auth/forgot_password', 'Auth\AuthController@forgotPassword')->middleware('requestHandler:ForgotPasswordRequest');
 Route::post('/session/update','Auth\AuthController@updateToken')->middleware('requestHandler:UpdateSessionRequest');
+Route::post('/pop_up/update','UsersController@setPopUpValue')->middleware('requestHandler:UpdatePopUpRequest');
 
 Route::post('/add_billing_card', 'BillingController@AddBillingCard')->middleware('requestHandler:AddBillingCardRequest');
 Route::post('/update_profile_picture', 'UsersController@updateProfilePicture')->middleware('requestHandler:UpdateProfilePictureRequest');
