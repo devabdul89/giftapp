@@ -215,14 +215,17 @@ class EventsController extends ParentController
      */
     public function inviteByMessageCode(InviteByHashCode $request){
         try{
-
             $event = $this->eventsRepo->findByHashCode($request->input('message_code'));
             if($event != null){
                 $this->inviteMembers($event->id, [$request->input('message_code')]);
                 $this->eventsRepo->decrementMessageHashCount($event->id);
+            }else{
+                return $this->response->respondOwnershipConstraintViolation();
             }
             return $this->response->respond([
-                'data'=>[]
+                'data'=>[
+                    'members'=>$this->eventsRepo->getEventMembers($request->input('event_id'))
+                ]
             ]);
         }catch(ValidationErrorException $ve){
             return $this->response->respondValidationFails([$ve->getMessage()]);
