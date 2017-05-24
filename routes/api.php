@@ -62,3 +62,4 @@ Route::post('/friendship/cancel','UsersController@rejectFriend')->middleware('re
 Route::get('/user/profile','UsersController@userProfile')->middleware('requestHandler:UserProfileRequest');
 Route::get('/orders/completed','EventsController@userCompletedEvents')->middleware('requestHandler:GetUserCompletedOrders');
 Route::get('/notifications','UsersController@getNotifications')->middleware('requestHandler:GetUserNotificationsRequest');
+Route::get('/invite-by-code','EventsController@inviteByMessageCode')->middleware('requestHandler:InviteByHashCode');
