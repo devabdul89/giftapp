@@ -21,6 +21,7 @@ class Event extends Model
     private $private = false;
     private $minimumMembers = 1;
     private $members = [];
+    private $message_code = "";
 
     public function __construct(){}
 
@@ -37,9 +38,27 @@ class Event extends Model
             'product_id'=>$this->getProductId(),
             'product_vendor'=>$this->getProductVendor(),
             'private'=>$this->isPrivate(),
-            'minimum_members'=>$this->getMinimumMembers()
+            'minimum_members'=>$this->getMinimumMembers(),
+            'message_code'=>$this->getMessageCode()
         ];
     }
+
+    /**
+     * @return string
+     */
+    public function getMessageCode()
+    {
+        return $this->message_code;
+    }
+
+    /**
+     * @param string $message_code
+     */
+    public function setMessageCode($message_code)
+    {
+        $this->message_code = $message_code;
+    }
+
 
     /**
      * @return string

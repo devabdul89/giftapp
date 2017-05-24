@@ -22,6 +22,7 @@ use Requests\GetEventDetailRequest;
 use Requests\GetMyEventsRequest;
 use Requests\GetPublicEventsRequests;
 use Requests\GetUserCompletedOrders;
+use Requests\InviteByHashCode;
 use Requests\InviteMemberRequest;
 use Requests\JoinEventRequest;
 use Requests\UpdateEventRequest;
@@ -180,7 +181,9 @@ class EventsController extends ParentController
                 'currency' => $request->input('currency'),
                 'lat_lng'=>$request->input('lat_lng'),
                 'minimum_members'=>$request->input('minimum_members'),
-                'product_vendor' => $request->input('product_vendor')
+                'product_vendor' => $request->input('product_vendor'),
+                'message_code'=>$request->input('message_code'),
+                'message_invite_count'=>$request->input('message_invite_count')
             ]);
             if(sizeof($request->getMemberIds()) > 0)
                 $this->inviteMembers($event->id,$request->getMemberIds());
@@ -197,6 +200,29 @@ class EventsController extends ParentController
                 'data'=>[
                     'event'=>$event
                 ]
+            ]);
+        }catch(ValidationErrorException $ve){
+            return $this->response->respondValidationFails([$ve->getMessage()]);
+        }catch(\Exception $e){
+            return $this->response->respondInternalServerError([$e->getMessage()]);
+        }
+    }
+
+
+    /**
+     * @param InviteByHashCode $request
+     * @return \App\Http\json
+     */
+    public function inviteByMessageCode(InviteByHashCode $request){
+        try{
+
+            $event = $this->eventsRepo->findByHashCode($request->input('message_code'));
+            if($event != null){
+                $this->inviteMembers($event->id, [$request->input('message_code')]);
+                $this->eventsRepo->decrementMessageHashCount($event->id);
+            }
+            return $this->response->respond([
+                'data'=>[]
             ]);
         }catch(ValidationErrorException $ve){
             return $this->response->respondValidationFails([$ve->getMessage()]);

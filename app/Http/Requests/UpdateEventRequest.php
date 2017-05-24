@@ -61,6 +61,12 @@ class UpdateEventRequest extends Request
         if($this->input('minimum_members') != null){
             $data['minimum_members'] = $this->input('minimum_members');
         }
+        if($this->input('message_code') != null){
+            $data['message_code'] = $this->input('message_code');
+        }
+        if($this->input('message_invite_count') != null){
+            $data['message_invite_count'] = $this->input('message_invite_count');
+        }
         return $data;
     }
 }

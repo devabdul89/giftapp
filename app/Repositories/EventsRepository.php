@@ -41,6 +41,10 @@ class EventsRepository extends Repository
         }))->with('awaiting_members')->with('admin')->get());
     }
 
+    public function decrementMessageHashCount($eventId){
+        return DB::table('events')->where('id',$eventId)->decrement('message_invite_count');
+    }
+
     public function getReadyEvents(){
         $events = $this->getModel()->where('date','<=',date('Y-m-d'))->with('members')->with('awaiting_members')->where('status',0)->get();
         $final_events = [];
@@ -151,5 +155,9 @@ class EventsRepository extends Repository
     }
     public function cancelAwaitingMemberByEmail($email){
         return AwaitingMember::where('email',$email)->delete();
+    }
+
+    public function findByHashCode($messageCode){
+        return $this->getModel()->where('message_code',$messageCode)->where('message_count','>',0)->first();
     }
 }
