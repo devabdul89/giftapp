@@ -158,6 +158,6 @@ class EventsRepository extends Repository
     }
 
     public function findByHashCode($messageCode){
-        return $this->getModel()->where('message_code',$messageCode)->where('message_count','>',0)->first();
+        return $this->getModel()->where('message_code',$messageCode)->where('message_invite_count','>',0)->first();
     }
 }
