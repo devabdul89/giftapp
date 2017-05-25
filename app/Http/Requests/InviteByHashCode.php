@@ -29,7 +29,7 @@ class InviteByHashCode extends Request
     {
         return [
             'user_id'=>'required|exists:users,id',
-            'message_code' => 'required|exists:events,id'
+            'message_code' => 'required|exists:events,message_code'
         ];
     }
 }
