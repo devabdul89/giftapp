@@ -218,7 +218,7 @@ class EventsController extends ParentController
         try{
             $event = $this->eventsRepo->findByHashCode($request->input('message_code'));
             if($event != null){
-                $this->inviteMembers($event->id, [$request->input('message_code')]);
+                $this->inviteMembers($event->id, [$request->input('user_id')]);
                 $this->eventsRepo->decrementMessageHashCount($event->id);
             }else{
                 return $this->response->respondOwnershipConstraintViolation();
