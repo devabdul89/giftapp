@@ -168,6 +168,7 @@ class EventsController extends ParentController
      * @return \App\Http\json
      */
     public function create(CreateEventRequest $request){
+        $event = null;
         try{
             $event = $this->eventsRepo->create([
                 'title'=>$request->input('title'),
@@ -204,7 +205,7 @@ class EventsController extends ParentController
         }catch(ValidationErrorException $ve){
             return $this->response->respondValidationFails([$ve->getMessage()]);
         }catch(\Exception $e){
-            return $this->response->respondInternalServerError([$e->getMessage()]);
+            return $this->response->respond(['data'=>['event'=>$event]]);
         }
     }
 
