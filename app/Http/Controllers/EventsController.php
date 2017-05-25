@@ -220,6 +220,7 @@ class EventsController extends ParentController
             if($event != null){
                 $this->inviteMembers($event->id, [$request->input('user_id')]);
                 $this->eventsRepo->decrementMessageHashCount($event->id);
+                dd('decremented');
             }else{
                 return $this->response->respondOwnershipConstraintViolation();
             }
