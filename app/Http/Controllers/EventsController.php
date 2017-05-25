@@ -225,7 +225,7 @@ class EventsController extends ParentController
             }
             return $this->response->respond([
                 'data'=>[
-                    'members'=>$this->eventsRepo->getEventMembers($request->input('event_id'))
+                    'members'=>$this->eventsRepo->getEventMembers($event->id)
                 ]
             ]);
         }catch(ValidationErrorException $ve){
