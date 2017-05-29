@@ -271,7 +271,7 @@ class EventsController extends ParentController
                 $this->inviteFbMembers($request->input('event_id'), [$request->input('fb_id')]);
             if($request->getEmailMember() != null)
                 $this->inviteEmailMembers($request->input('event_id'), [$request->getEmailMember()]);
-            if($request->input('invite_by_code')){
+            if($request->input('invited_by_code') == 1){
                 $this->eventsRepo->incrementMessageHashCount($request->input('event_id'));
             }
             return $this->response->respond([
