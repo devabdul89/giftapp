@@ -94,7 +94,6 @@ class UsersRepository extends Repository
     }
 
     /**
-     * @param User $user
      * @return User $user
      * @throws ValidationErrorException
      */

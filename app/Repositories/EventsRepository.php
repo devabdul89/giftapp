@@ -45,6 +45,10 @@ class EventsRepository extends Repository
         return DB::table('events')->where('id',$eventId)->decrement('message_invite_count');
     }
 
+    public function incrementMessageHashCount($eventId){
+        return DB::table('events')->where('id',$eventId)->increment('message_invite_count');
+    }
+
     public function getReadyEvents(){
         $events = $this->getModel()->where('date','<=',date('Y-m-d'))->with('members')->with('awaiting_members')->where('status',0)->get();
         $final_events = [];
