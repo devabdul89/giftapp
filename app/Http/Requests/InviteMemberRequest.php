@@ -32,10 +32,6 @@ class InviteMemberRequest extends Request
             $rules['user_id'] = 'exists:users,id';
         }else if($this->input('fb_id') != null){
             $rules['fb_id'] = 'exists:users,fb_id';
-        }else if($this->input('email') != null){
-
-        }else{
-            $rules['user_id'] = 'required';
         }
         return $rules;
     }
