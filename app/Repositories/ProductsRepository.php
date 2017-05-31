@@ -147,5 +147,6 @@ class ProductsRepository extends Repository
         }
         return json_decode($this->curl("https://api.bestbuy.com/v1/products(".$params.")?format=json&page=".$page."&apiKey=".env('BEST_BUY').$sort));
     }
+    
 
 }

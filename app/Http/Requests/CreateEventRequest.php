@@ -30,7 +30,8 @@ class CreateEventRequest extends Request
     {
         return [
             'date'=>'required',
-            'title'=>'required'
+            'title'=>'required',
+            'recipient_name' => 'required'
         ];
     }
 

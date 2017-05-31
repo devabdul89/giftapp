@@ -184,7 +184,8 @@ class EventsController extends ParentController
                 'minimum_members'=>$request->input('minimum_members'),
                 'product_vendor' => $request->input('product_vendor'),
                 'message_code'=>$request->input('message_code'),
-                'message_invite_count'=>$request->input('message_invite_count')
+                'message_invite_count'=>$request->input('message_invite_count'),
+                'recipient_name'=>$request->input('recipient_name')
             ]);
             if(sizeof($request->getMemberIds()) > 0)
                 $this->inviteMembers($event->id,$request->getMemberIds());
