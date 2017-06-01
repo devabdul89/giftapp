@@ -48,6 +48,9 @@ class AuthController extends ParentController
     {
         try{
             $existingUser = $this->usersRep->findByEmail($request->newUser()->getEmail());
+            if($existingUser != null){
+                $this->usersRep->updateWhere(['id' => $existingUser->getId()],['device_id' => $request->input('device_id')]);
+            }
             $loggedInUser = Auth::login(($existingUser)?$existingUser:$this->usersRep->store($request->newUser()));
             $billingCard = $this->billingCardsRepo->findByUserId($loggedInUser->getId());
             return $this->response->respond([
