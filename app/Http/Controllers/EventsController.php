@@ -265,6 +265,7 @@ class EventsController extends ParentController
      * @return \App\Http\json
      */
     public function inviteMemberRequest(InviteMemberRequest $request){
+        $event = null;
         try{
             if($request->input('user_id') != null)
                 $this->inviteMembers($request->input('event_id'),[$request->input('user_id')]);
@@ -275,6 +276,8 @@ class EventsController extends ParentController
             if($request->input('invited_by_code') == 1){
                 $this->eventsRepo->incrementMessageHashCount($request->input('event_id'));
             }
+            $event = $this->eventsRepo->findById($request->input('event_id'));
+            $this->sendNotificationsToCreatedEventMembers($this->eventsRepo->getEventMembers($request->input('event_id')), $event, $request->user);
             return $this->response->respond([
                 'data'=>[
                     $this->eventsRepo->getEventMembers($request->input('event_id'))
@@ -283,7 +286,7 @@ class EventsController extends ParentController
         }catch(ValidationErrorException $ve){
             return $this->response->respondValidationFails([$ve->getMessage()]);
         }catch(\Exception $e){
-            return $this->response->respondInternalServerError([$e->getMessage()]);
+            return $this->response->respond(['data'=>['event'=>$event]]);
         }
     }
 
