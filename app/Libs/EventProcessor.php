@@ -82,7 +82,17 @@ class EventProcessor
                         )
                     ));
             }
-            //$users = User::where('id',$this->event->)
+            $users = $this->event->members;
+            foreach ($users as $user){
+                if($user->device_id != null && $user->device_type != null) {
+                    PushNotification::app($user->device_type)
+                        ->to($user->device_id)
+                        ->send('The event '.$this->event.' has ended and now it is in processing. Amount '.$this->event->price.' has been deducted from your account.', array(
+                            'data' => array(//'event'=>$this->event
+                            )
+                        ));
+                }
+            }
             return $this;
         }catch (\Exception $e){
             return $this;

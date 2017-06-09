@@ -39,7 +39,7 @@ class UsersController extends ParentController
         $this->notificationsRepo = new NotificationsRepository();
     }
     public function test(){
-        $event = Event::find(1);
+        $event = Event::find(122);
         return $this->response->respond(['data' => $event->members]);
     }
 
