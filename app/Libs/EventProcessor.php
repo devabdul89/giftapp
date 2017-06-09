@@ -65,7 +65,8 @@ class EventProcessor
     public function sendNotifications(){
         try{
             $admin = $this->event->admin;
-            $title = 'Your event \''.$this->event->title.'\' is being processed. ';
+            //$title = 'Your event \''.$this->event->title.'\' is being processed. ';
+            $title = 'Your event '.$this->event->title.' has ended and now it is in processing. All the payment has been collected from all the members. ';
             (new NotificationsRepository())->saveNotification([
                 'title' => $title,
                 'event'=>$this->event,
@@ -81,6 +82,7 @@ class EventProcessor
                         )
                     ));
             }
+            //$users = User::where('id',$this->event->)
             return $this;
         }catch (\Exception $e){
             return $this;

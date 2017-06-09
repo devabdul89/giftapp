@@ -78,7 +78,7 @@ class AuthController extends ParentController
             $user = Auth::login($this->usersRep->store($user));
             Mail::send('registration_success_mail', ['data'=>null], function ($m) use ($request) {
                 $m->from(env('MAIL_USERNAME'), 'Group Gift');
-                $m->to($request->input('email'))->subject('Registration Success!');
+                $m->to($request->input('email'))->subject('Welcome to GroupGift');
             });
             $billingCard = $this->billingCardsRepo->findByUserId($user->getId());
             return $this->response->respond([
@@ -146,7 +146,7 @@ class AuthController extends ParentController
             $newPassword = substr(uniqid(), 6, 6);
             Mail::send('forgot_pass', ['password'=>$newPassword], function ($m) use ($request) {
                 $m->from(env('MAIL_USERNAME'), 'Group Gift');
-                $m->to($request->input('email'))->subject('Forget Password');
+                $m->to($request->input('email'))->subject('Forgot password');
             });
             $this->usersRep->updatePasswordByEmail($request->input('email'), bcrypt($newPassword));
             return $this->response->respond([

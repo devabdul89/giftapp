@@ -239,7 +239,8 @@ class EventsController extends ParentController
     private function sendNotificationsToCreatedEventMembers($invitedMembers, $event, $admin){
         foreach ($invitedMembers->members as $member){
             if($member->id != $admin->getId()){
-                $title = $admin->getFullName()." invited you to an event '".$event->title."'";
+                //$title = $admin->getFullName()." invited you to an event '".$event->title."'";
+                $title = 'You have been added to an event, please go to the GroupGift application to view the event.';
                 $this->notificationsRepo->saveNotification([
                     'title' => $title,
                     'event'=>json_encode($event),

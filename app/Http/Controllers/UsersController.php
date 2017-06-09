@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Exceptions\ValidationErrorException;
 use App\Http\Response;
 use Davibennun\LaravelPushNotification\Facades\PushNotification;
+use Illuminate\Support\Facades\Mail;
+use LaraModels\Event;
 use Repositories\NotificationsRepository;
 use Repositories\UsersRepository;
 use Repositories\WishlistRepository;
@@ -36,7 +38,10 @@ class UsersController extends ParentController
         $this->response = new Response();
         $this->notificationsRepo = new NotificationsRepository();
     }
-
+    public function test(){
+        $event = Event::find(1);
+        return $this->response->respond(['data' => $event->members]);
+    }
 
     /**
      * @param GetUserFriendsRequest $request
@@ -135,7 +140,11 @@ class UsersController extends ParentController
     public function resetPassword(ResetPasswordRequest $request)
     {
         try{
-            $this->usersRepo->update($request->user->setPassword(bcrypt($request->input('new_password'))));
+            $user = $this->usersRepo->update($request->user->setPassword(bcrypt($request->input('new_password'))));
+            Mail::send('password_changed',['data'=>null], function ($m) use ($user) {
+                $m->from(env('MAIL_USERNAME'), 'Group Gift');
+                $m->to($user->getEmail())->subject('Your password has been changed');
+            });
             return $this->response->respond();
         }catch (ValidationErrorException $ve){
             return $this->response->respondValidationFails([$ve->getMessage()]);

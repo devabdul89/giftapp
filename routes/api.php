@@ -12,7 +12,7 @@ use Illuminate\Http\Request;
 | is assigned the "api" middleware group. Enjoy building your API!
 |
 */
-
+Route::post('/test', 'UsersController@test');
 Route::post('/auth/fblogin', 'Auth\AuthController@fblogin')->middleware('requestHandler:FbLoginRequest');
 Route::post('/auth/register', 'Auth\AuthController@register')->middleware('requestHandler:RegisterRequest');
 Route::post('/auth/login', 'Auth\AuthController@login')->middleware('requestHandler:LoginRequest');
