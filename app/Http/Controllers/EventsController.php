@@ -6,6 +6,8 @@ namespace App\Http\Controllers;
 use App\Exceptions\ValidationErrorException;
 use App\Http\Response;
 use Davibennun\LaravelPushNotification\Facades\PushNotification;
+use LaraModels\Event;
+use LaraModels\User;
 use Repositories\EventMembersRepository;
 use Repositories\BillingRepository;
 use Repositories\EventsRepository;
@@ -151,16 +153,38 @@ class EventsController extends ParentController
     public function joinEvent(JoinEventRequest $request){
         try{
             $this->eventsRepo->joinEvent($request->input('event_id'), $request->user->getId());
-            return $this->response->respond([
-                'data'=>[
 
-                ]
-            ]);
         }catch(ValidationErrorException $ve){
             return $this->response->respondValidationFails([$ve->getMessage()]);
         }catch(\Exception $e){
             return $this->response->respondInternalServerError([$e->getMessage()]);
         }
+        try{
+        $event = Event::where('id',$request->input('event_id'))->first();
+        $admin = User::where('id',$event->admin_id)->first();
+        $title = $request->user->getFullName().' joined the event that you created.';
+        $this->notificationsRepo->saveNotification([
+            'title' => $title,
+            'event'=>json_encode($event),
+            'data' => json_encode($request->user->toJson()),
+            'user_id'=>$admin->id,
+            'type'=>'join_event_invitation'
+        ]);
+
+        if($admin->device_id != null && $admin->device_type != null){
+            PushNotification::app($admin->device_type)
+                ->to($admin->device_id)
+                ->send($title,array(
+                    'data' => array(
+                        //'event'=> $event
+                    )
+                ));
+        }
+        }catch (\Exception $e){
+            return $this->response->respond(['data'=>[]]);
+        }
+        return $this->response->respond(['data'=>[]]);
+
     }
     
     /**
